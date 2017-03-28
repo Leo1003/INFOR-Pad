@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
+</head>
+<body>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io.connect();
+    </script>
     <h1><%= title %></h1>
     <p>EJS Welcome to <%= title %></p>
-  </body>
+</body>
 </html>
