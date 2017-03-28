@@ -21,6 +21,7 @@
     "koa-router": "^7.0.1",
     "koa-static": "^3.0.0",
     "koa-views": "^5.2.1",
+    "mongoose": "^4.9.2",
     "socket.io": "^1.7.3"
   },
   "devDependencies": {
