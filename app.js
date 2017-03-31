@@ -37,8 +37,27 @@ app.use(index.routes(), index.allowedMethods());
 app.use(users.routes(), users.allowedMethods());
 
 app.io = io;
-io.on('connection', socket => {
-    debug('Client connected');
+io.of('lxtester').use((socket, next) => {
+    if (socket.request.headers.passtoken === 'jizz') return next();
+    next(new Error('Authentication error'));
+});
+io.of('lxtester').on('connection', socket => {
+    debug('Lxtester connected.');
+    socket.emit('Job', {
+        id : 1,
+        language : 'CPP',
+        exefile : '1',
+        srcfile : '1.cpp',
+        code : `
+#include <iostream>
+using namespace std;
+int main(){cout<<"jizz"<<endl;}
+`
+    });
+    socket.on('Result', data => {
+        console.log(data);
+        socket.emit("CallBack", {});
+    });
 });
 
 module.exports = app;
