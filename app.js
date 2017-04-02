@@ -36,6 +36,40 @@ app.use(async (ctx, next) => {
 app.use(index.routes(), index.allowedMethods());
 app.use(users.routes(), users.allowedMethods());
 
+var testjob = [
+    {
+        id : 1,
+        language : 'CPP',
+        exefile : '1',
+        srcfile : '1.cpp',
+        code : `
+#include <iostream>
+#include <unistd.h>
+using namespace std;
+int main(){cout<<"jizz"<<endl;sleep(5);}
+`
+    },
+    {
+        id : 2,
+        language : 'Python3',
+        exefile : '',
+        srcfile : '2.py',
+        code : `
+print('Hello, world.')
+    `
+},
+    {
+        id : 3,
+        language : 'CPP11',
+        exefile : '3',
+        srcfile : '3.cpp',
+        code : `
+#include <unistd.h>
+int main(){sleep(2);}
+`
+    }
+];
+
 app.io = io;
 io.of('lxtester').use((socket, next) => {
     if (socket.request.headers.passtoken === 'jizz') return next();
@@ -43,21 +77,28 @@ io.of('lxtester').use((socket, next) => {
 });
 io.of('lxtester').on('connection', socket => {
     debug('Lxtester connected.');
-    socket.emit('Job', {
-        id : 1,
-        language : 'CPP',
-        exefile : '1',
-        srcfile : '1.cpp',
-        code : `
-#include <iostream>
-using namespace std;
-int main(){cout<<"jizz"<<endl;}
-`
-    });
+    var count = 0;
     socket.on('Result', data => {
         console.log(data);
-        socket.emit("CallBack", {});
+        /*
+        if(count < testjob.length)
+            socket.emit('Job', testjob[count++]);
+            */
     });
+    // socket.emit('Job', testjob[count++]);
+    for(let i = 0; i < 10; i++)
+    {
+        socket.emit('Job', {
+            id : i,
+            language : 'Python3',
+            exefile : '',
+            srcfile : `${i}.py`,
+            code : `
+print('Hello, world.')
+`
+        });
+        console.log(`Sent Task. ID: ${i}.`);
+    }
 });
 
 module.exports = app;
