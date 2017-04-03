@@ -11,6 +11,13 @@ var User = new Schema({
     root : { type: Schema.Types.ObjectId, ref: 'Directory' }
 })
 
+var Session = new Schema({
+    uuid : String,
+    expireAt : { type: Date, expires: 1 },
+    user : { type: Schema.Types.ObjectId, ref: 'User' },
+    tempLogin : { type: Boolean, default : true }
+})
+
 var Directory = new Schema({
     name : String,
     parent : { type: Schema.Types.ObjectId, ref: 'Directory' },
@@ -30,13 +37,14 @@ var File = new Schema({
 })
 
 mongoose.model('User', User)
+mongoose.model('Session', Session)
 mongoose.model('Directory', Directory)
 mongoose.model('File', File)
 
-mongoose.connect('mongodb://localhost:27017', error => {
+mongoose.connect('mongodb://localhost:27017/INFOR-Pad', error => {
     if(error) {
         console.error(`Failed to connect to mongodb.`)
-        console.error(error)
+        throw error
     }
     else {
         debug('connected to mongodb.')
