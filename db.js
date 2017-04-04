@@ -6,8 +6,8 @@ var User = new Schema({
     name : String,
     password : String,
     level : { type : Number, default : 0 },
-    createDate : { type : Date, default : Date.now },
-    lastLogin : { type : Date, default : Date.now },
+    createDate : { type : Date, default : new Date() },
+    lastLogin : { type : Date, default : new Date() },
     root : { type: Schema.Types.ObjectId, ref: 'Directory' }
 })
 
@@ -15,22 +15,22 @@ var Session = new Schema({
     uuid : String,
     expireAt : { type: Date, expires: 1 },
     user : { type: Schema.Types.ObjectId, ref: 'User' },
-    tempLogin : { type: Boolean, default : true }
+    autoLogin : { type: Boolean, default : false }
 })
 
 var Directory = new Schema({
     name : String,
     parent : { type: Schema.Types.ObjectId, ref: 'Directory' },
-    createDate : { type : Date, default : Date.now },
-    modifyDate : { type : Date, default : Date.now },
+    createDate : { type : Date, default : new Date() },
+    modifyDate : { type : Date, default : new Date() },
     files : [{ type: Schema.Types.ObjectId, ref: 'File' }]
 })
 
 var File = new Schema({
     name : String,
     parent : { type: Schema.Types.ObjectId, ref: 'Directory' },
-    createDate : { type : Date, default : Date.now },
-    modifyDate : { type : Date, default : Date.now },
+    createDate : { type : Date, default : new Date() },
+    modifyDate : { type : Date, default : new Date() },
     format : String,
     data : String,
     stdin : String
