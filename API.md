@@ -1,4 +1,4 @@
-#INFOR-Pad Api Document
+# INFOR-Pad Api Document
 This document contains how to use the REST api
 ***
 #### Session Control
