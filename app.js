@@ -6,8 +6,11 @@ const onerror = require('koa-onerror');
 const bodyparser = require('koa-bodyparser')();
 const logger = require('koa-logger');
 const debug = require('debug')('INFOR-Pad:app');
+const mongoose = require('mongoose');
 const io = require('socket.io')();
+require('./db.js');
 
+const api = require('./routes/api');
 const index = require('./routes/index');
 const users = require('./routes/users');
 
@@ -33,6 +36,7 @@ app.use(async (ctx, next) => {
 });
 
 // routes
+app.use(api.routes(), api.allowedMethods());
 app.use(index.routes(), index.allowedMethods());
 app.use(users.routes(), users.allowedMethods());
 
