@@ -1,28 +1,32 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Button, Form, Container, Menu } from 'semantic-ui-react'
+import {
+  BrowserRouter as Router,
+  Route,
+  //browserHistory,
+  IndexRoute
+} from 'react-router'
 
-const Login_Form = () => (
+import HomePage from './components/HomePage.jsx'
+import IndexPage from './components/IndexPage.jsx'
+import Sign_in from './components/Sign_in.jsx'
+import Sign_up from './components/Sign_up.jsx'
+
+//<HomePage />
+// <IndexPage />
+// <HomePage />
+// <Sign_in />
+// <Sign_up />
+const App = () => (
   <div>
-    <Menu secondary inverted style={{background: 'black', margin: '0'}}>
-        <Menu.Item name="jizz1" />
-        <Menu.Item name="Jizz2" />
-      </Menu>
-    <Container>
-      <h1>INFOR-PAD LOGIN</h1>
-      <Form>
-        <Form.Field>
-          <label>Username:</label>
-          <input placeholder='Input your Username' />
-        </Form.Field>
-        <Form.Field>
-          <label>Password:</label>
-          <input type='password' placeholder='Input your Password' />
-        </Form.Field>
-        <Button type='submit'>Login</Button>
-      </Form>
-    </Container>
+    <Router>
+      <Route path="/" component={IndexPage}>
+        <IndexRoute component={HomePage} />
+        <Route path="/Sign_in" component={Sign_in} />
+        <Route path="/Sign_up" component={Sign_up} />
+      </Route>
+    </Router>
   </div>
 )
 
-ReactDOM.render(<Login_Form />, document.getElementById('app'))
+ReactDOM.render(<App />, document.getElementById('app'))
