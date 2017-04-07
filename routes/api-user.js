@@ -10,7 +10,7 @@ router.post('/user', async ctx => {
         name : data.username,
         password : hash//,
         //root : { type: Schema.Types.ObjectId, ref: 'Directory' }
-    })//TODO:only for temporary usage
+    }).save()//TODO:only for temporary usage
 })
 
 module.exports = router
