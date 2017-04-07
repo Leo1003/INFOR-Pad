@@ -93,6 +93,7 @@ io.of('lxtester').on('connection', socket => {
             language : 'Python3',
             exefile : '',
             srcfile : `${i}.py`,
+            stdin : '',
             code : `
 print('Hello, world.')
 `
