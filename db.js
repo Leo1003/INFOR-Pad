@@ -5,6 +5,7 @@ const debug = require('debug')('INFOR-Pad:mongodb')
 var User = new Schema({
     name : String,
     password : String,
+    email : String,
     level : { type : Number, default : 0 },
     createDate : { type : Date, default : new Date() },
     lastLogin : { type : Date, default : new Date() },

@@ -11,7 +11,9 @@ router.post('/session', async ctx => {
         ctx.status = 400
         return
     }
-    let user = await User.findOne({ name : data.username})
+    let user = await User.findOne({
+        name: data.username
+    })
     let hash = crypto.createHash('sha512').update(data.password).digest('hex')
     if (user) {
         if (hash === user.password) {
@@ -40,6 +42,29 @@ router.post('/session', async ctx => {
         }
     }
     ctx.status = 403
+})
+
+router.delete('/session', async ctx => {
+    if (!ctx.header.sessionID) {
+        ctx.status = 403
+        ctx.body = {
+            error: "Header 'sessionID' doesn't exist."
+        }
+    }
+    let sess = await Session.findOne({
+        uuid: ctx.header.sessionID
+    })
+    if (!sess) {
+        ctx.status = 403
+        ctx.body = {
+            error: "The session doesn't exist."
+        }
+    }
+    await sess.remove()
+    ctx.status = 200
+    ctx.body = {
+        sessionID: ctx.header.sessionID
+    }
 })
 
 module.exports = router

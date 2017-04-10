@@ -17,3 +17,16 @@ This document contains how to use the REST api
 	 * Respond Body
 	 	* sessionID : The ID which can be used to login
 	 	* name : The user's name
+
+```
+ DELETE /api/session
+```
+ * Logout a session
+	 * Request Header
+	 	* sessionID : The session ID to logout
+	 * Respond Status
+	 	* 200 : Logout Successfully
+	 	* 403 : Logout Failed
+	 * Respond Body
+	 	* sessionID : The ID which logouted successfully
+        * error : The reason of the error
