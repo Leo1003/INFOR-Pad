@@ -1,11 +1,15 @@
 import React from 'react'
 import { Menu } from 'semantic-ui-react'
+import { Link } from 'react-router-dom'
 
 const IndexPage = (props) => (
   <div>
     <Menu secondary inverted style={{background: 'black', margin: '0'}}>
-      <Menu.Item name="jizz1" />
-      <Menu.Item name="Jizz2" />
+      <Menu.Item name="INFOR PAD" as={Link} to='/' />
+      <Menu.Menu position='right'>
+        <Menu.Item name="Sign in" as={Link} to='/Sign_in' />
+        <Menu.Item name="Sign up" as={Link} to='/Sign_up' />
+      </Menu.Menu>
     </Menu>
     {props.children}
   </div>

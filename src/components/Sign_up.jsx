@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Form, Container, Menu } from 'semantic-ui-react'
+import { Button, Form, Container } from 'semantic-ui-react'
 
 const Sign_up = () => (
   <div>
