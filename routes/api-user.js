@@ -3,14 +3,14 @@ const crypto = require('crypto')
 const ramdomstring = require('randomstring')
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
+const FileSystem = mongoose.model('FileSystem')
 
 router.post('/user', async ctx => {
     let data = ctx.request.body
     let hash = crypto.createHash('sha512').update(data.password).digest('hex')
     new User({
         name : data.username,
-        password : hash//,
-        //root : { type: Schema.Types.ObjectId, ref: 'Directory' }
+        password : hash
     }).save()//TODO:only for temporary usage
 })
 
@@ -49,9 +49,10 @@ router.post('/user', async ctx => {
         salt : salt,
         email : data.email
     }).save()
-    let root = await new Directory({
-        name : "Root",
-        owner : user._id
+    let root = await new FileSystem({
+        name: "Root",
+        isFile: false,
+        owner: user._id
     }).save()
     user.root = root._id
     user = await user.save()

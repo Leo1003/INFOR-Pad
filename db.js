@@ -10,7 +10,7 @@ var User = new Schema({
     level : { type : Number, default : 0 },
     createDate : { type : Date, default : new Date() },
     lastLogin : { type : Date, default : new Date() },
-    root : { type: Schema.Types.ObjectId, ref: 'Directory' }
+    root : { type: Schema.Types.ObjectId, ref: 'FileSystem' }
 })
 
 var Session = new Schema({
@@ -20,21 +20,14 @@ var Session = new Schema({
     autoLogin : { type: Boolean, default : false }
 })
 
-var Directory = new Schema({
+var FileSystem = new Schema({
     name : String,
-    parent : { type: Schema.Types.ObjectId, ref: 'Directory' },
+    parent : { type: Schema.Types.ObjectId, ref: 'FileSystem' },
     owner : { type: Schema.Types.ObjectId, ref: 'User' },
     createDate : { type : Date, default : new Date() },
     modifyDate : { type : Date, default : new Date() },
-    files : [{ type: Schema.Types.ObjectId, ref: 'File', default : [] }]
-})
-
-var File = new Schema({
-    name : String,
-    parent : { type: Schema.Types.ObjectId, ref: 'Directory' },
-    owner : { type: Schema.Types.ObjectId, ref: 'User' },
-    createDate : { type : Date, default : new Date() },
-    modifyDate : { type : Date, default : new Date() },
+    isFile : { type: Boolean, required: true },
+    files : [{ type: Schema.Types.ObjectId, ref: 'FileSystem', default: [] }],
     format : String,
     data : String,
     stdin : String
@@ -42,8 +35,7 @@ var File = new Schema({
 
 mongoose.model('User', User)
 mongoose.model('Session', Session)
-mongoose.model('Directory', Directory)
-mongoose.model('File', File)
+mongoose.model('FileSystem', FileSystem)
 
 mongoose.connect('mongodb://localhost:27017/INFOR-Pad', error => {
     if(error) {
