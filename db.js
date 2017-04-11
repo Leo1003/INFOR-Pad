@@ -5,6 +5,7 @@ const debug = require('debug')('INFOR-Pad:mongodb')
 var User = new Schema({
     name : String,
     password : String,
+    salt : String,
     email : String,
     level : { type : Number, default : 0 },
     createDate : { type : Date, default : new Date() },
@@ -22,14 +23,16 @@ var Session = new Schema({
 var Directory = new Schema({
     name : String,
     parent : { type: Schema.Types.ObjectId, ref: 'Directory' },
+    owner : { type: Schema.Types.ObjectId, ref: 'User' },
     createDate : { type : Date, default : new Date() },
     modifyDate : { type : Date, default : new Date() },
-    files : [{ type: Schema.Types.ObjectId, ref: 'File' }]
+    files : [{ type: Schema.Types.ObjectId, ref: 'File', default : [] }]
 })
 
 var File = new Schema({
     name : String,
     parent : { type: Schema.Types.ObjectId, ref: 'Directory' },
+    owner : { type: Schema.Types.ObjectId, ref: 'User' },
     createDate : { type : Date, default : new Date() },
     modifyDate : { type : Date, default : new Date() },
     format : String,

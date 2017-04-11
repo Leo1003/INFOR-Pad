@@ -14,7 +14,7 @@ router.post('/session', async ctx => {
     let user = await User.findOne({
         name: data.username
     })
-    let hash = crypto.createHash('sha512').update(data.password).digest('hex')
+    let hash = crypto.createHmac('RSA-SHA512', user.salt).update(data.password).digest('hex')
     if (user) {
         if (hash === user.password) {
             let sessID = ramdomstring.generate(32)
