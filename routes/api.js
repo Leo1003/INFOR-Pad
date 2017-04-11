@@ -1,6 +1,8 @@
 const session = require('./api-session')
 const user = require('./api-user')
 var router = require('koa-router')()
+const crypto = require('crypto')
+const debug = require('debug')('INFOR-Pad:api');
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const Session = mongoose.model('Session')
@@ -20,10 +22,10 @@ router.use(async (ctx, next) => {
 })
 
 router.use(async (ctx, next) => {
-    if (!ctx.header.sessionID) {
+    if (!ctx.header.sessionid) {
         return next()
     }
-    let idhash = crypto.createHash('sha512').update(ctx.header.sessionID).digest('hex')
+    let idhash = crypto.createHash('sha512').update(ctx.header.sessionid).digest('hex')
     let sess = await Session.findOne({
         uuid: idhash
     }).populate('user').exec()

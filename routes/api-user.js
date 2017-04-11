@@ -11,7 +11,7 @@ router.post('/user', async ctx => {
     if (!data.username || !data.password || !data.email) {
         ctx.status = 400
         ctx.body = {
-            error : "miss some data"
+            error : "Some data are missed"
         }
         return
     }
@@ -63,7 +63,7 @@ router.post('/user', async ctx => {
     }).save()
     ctx.status = 201
     ctx.body = {
-        sessionID: sessID,
+        sessionid: sessID,
         name: user.name
     }
 })

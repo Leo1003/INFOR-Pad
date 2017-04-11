@@ -9,6 +9,9 @@ router.post('/session', async ctx => {
     let data = ctx.request.body
     if (!data.username || !data.password) {
         ctx.status = 400
+        ctx.body = {
+            error: "Some data are missed"
+        }
         return
     }
     let user = await User.findOne({
@@ -35,13 +38,16 @@ router.post('/session', async ctx => {
             }).save()
             ctx.status = 200
             ctx.body = {
-                sessionID: sessID,
+                sessionid: sessID,
                 name: user.name
             }
             return
         }
     }
     ctx.status = 403
+    ctx.body = {
+        error: "The username or the password is wrong"
+    }
 })
 
 router.delete('/session', async ctx => {

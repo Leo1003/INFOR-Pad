@@ -16,7 +16,7 @@ This document contains how to use the REST api
 	 	* 403 : Login Failed
 	 	* 500 : Server Error
 	 * Respond Body
-	 	* sessionID : The ID which can be used to login
+	 	* sessionid : The ID which can be used to login
 	 	* name : The user's name
 	 	* error : The error message
 
@@ -25,14 +25,14 @@ This document contains how to use the REST api
 ~~~
  * Logout a session
 	 * Request Header
-	 	* sessionID : The session ID to logout
+	 	* sessionid : The session ID to logout
 	 * Respond Status
 	 	* 200 : Logout Successfully
 	 	* 403 : Logout Failed
 	 	* 500 : Server Error
 	 * Respond Body
        	* error : The error message
-       	
+
 ***
 #### User Control
 ~~~
@@ -49,6 +49,6 @@ This document contains how to use the REST api
  		* 409 : The username or the email address had been used by someone else
  		* 500 : Server Error
  	* Respond Body
- 		* sessionID : The ID which can be used to login
+ 		* sessionid : The ID which can be used to login
 	 	* name : The user's name
 	 	* error : The error message
