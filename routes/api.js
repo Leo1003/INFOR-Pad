@@ -1,8 +1,40 @@
 const session = require('./api-session')
 const user = require('./api-user')
 var router = require('koa-router')()
+const mongoose = require('mongoose')
+const User = mongoose.model('User')
+const Session = mongoose.model('Session')
 
 router.prefix('/api');
+
+router.use(async (ctx, next) => {
+    if (!ctx.header.sessionID) {
+        return next()
+    }
+    let idhash = crypto.createHash('sha512').update(ctx.header.sessionID).digest('hex')
+    try {
+        let sess = await Session.findOne({
+            uuid: idhash
+        }).populate('user').exec()
+        if (sess && sess.user) {
+            if (sess.expireAt > new Date()) {
+                //Auto renew session
+                if (sess.autoLogin == true) {
+                    sess.expireAt.setTime(sess.expireAt.getTime() + 14 * 86400 * 1000)
+                } else {
+                    sess.expireAt.setTime(sess.expireAt.getTime() + 3600 * 1000)
+                }
+                await sess.save()
+                ctx.state.session = sess
+            }
+        }
+    } catch (err) {
+        ctx.status = 500
+        ctx.body = err
+        return
+    }
+    return next()
+})
 
 router.use(session.routes(), session.allowedMethods())
 router.use(user.routes(), user.allowedMethods())

@@ -45,26 +45,31 @@ router.post('/session', async ctx => {
 })
 
 router.delete('/session', async ctx => {
-    if (!ctx.header.sessionID) {
+    if (!ctx.state.session) {
         ctx.status = 403
         ctx.body = {
-            error: "Header 'sessionID' doesn't exist."
+            error: "You haven't login yet!"
         }
+        return
     }
+    /*
     let sess = await Session.findOne({
         uuid: ctx.header.sessionID
     })
-    if (!sess) {
-        ctx.status = 403
-        ctx.body = {
-            error: "The session doesn't exist."
-        }
-    }
     await sess.remove()
-    ctx.status = 200
-    ctx.body = {
-        sessionID: ctx.header.sessionID
+    */
+    try{
+        await ctx.state.session.remove()
+    } catch (err) {
+        ctx.status = 500
+        ctx.body = {
+            error: err
+        }
+        return
     }
+
+    ctx.status = 200
+    ctx.body = {}
 })
 
 module.exports = router

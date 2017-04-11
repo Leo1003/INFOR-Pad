@@ -7,15 +7,6 @@ const FileSystem = mongoose.model('FileSystem')
 
 router.post('/user', async ctx => {
     let data = ctx.request.body
-    let hash = crypto.createHash('sha512').update(data.password).digest('hex')
-    new User({
-        name : data.username,
-        password : hash
-    }).save()//TODO:only for temporary usage
-})
-
-router.post('/user', async ctx => {
-    let data = ctx.request.body
     if (!data.username || !data.password || !data.email) {
         ctx.status = 400
         ctx.body = {
