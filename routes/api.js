@@ -32,11 +32,13 @@ router.use(async (ctx, next) => {
     if (sess && sess.user) {
         if (sess.expireAt > new Date()) {
             //Auto renew session
+            let expireDate = new Date()
             if (sess.autoLogin == true) {
-                sess.expireAt.setTime(sess.expireAt.getTime() + 14 * 86400 * 1000)
+                expireDate.setTime(expireDate.getTime() + 14 * 86400 * 1000)
             } else {
-                sess.expireAt.setTime(sess.expireAt.getTime() + 3600 * 1000)
+                expireDate.setTime(expireDate.getTime() + 3600 * 1000)
             }
+            sess.expireAt = expireDate
             await sess.save()
             ctx.state.session = sess
         }

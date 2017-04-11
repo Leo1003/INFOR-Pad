@@ -30,6 +30,8 @@ router.post('/session', async ctx => {
                 expireDate.setTime(expireDate.getTime() + 3600 * 1000)
                 autologin = false
             }
+            user.lastLogin = new Date()
+            await user.save()
             await new Session({
                 uuid: crypto.createHash('sha512').update(sessID).digest('hex'),
                 expireAt: expireDate,
