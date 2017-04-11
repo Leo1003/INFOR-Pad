@@ -1,6 +1,6 @@
 var router = require('koa-router')()
 const crypto = require('crypto')
-const ramdomstring = require('randomstring')
+const randomstring = require('randomstring')
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const Session = mongoose.model('Session')
@@ -17,7 +17,7 @@ router.post('/session', async ctx => {
     let hash = crypto.createHmac('RSA-SHA512', user.salt).update(data.password).digest('hex')
     if (user) {
         if (hash === user.password) {
-            let sessID = ramdomstring.generate(32)
+            let sessID = randomstring.generate(32)
             let expireDate = new Date()
             let autologin = false
             if (data.autoLogin == true) {

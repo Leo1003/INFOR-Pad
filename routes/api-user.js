@@ -1,9 +1,10 @@
 var router = require('koa-router')()
 const crypto = require('crypto')
-const ramdomstring = require('randomstring')
+const randomstring = require('randomstring')
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const FileSystem = mongoose.model('FileSystem')
+const Session = mongoose.model('Session')
 
 router.post('/user', async ctx => {
     let data = ctx.request.body
@@ -33,7 +34,7 @@ router.post('/user', async ctx => {
             return
         }
 
-        let salt = randomstring(16)
+        let salt = randomstring.generate(16)
         let hash = crypto.createHmac('RSA-SHA512', salt).update(data.password).digest('hex')
         let user = await new User({
             name : data.username,
@@ -52,7 +53,7 @@ router.post('/user', async ctx => {
         //TODO:Add email verify
 
         //Auto login for the new created user
-        let sessID = ramdomstring.generate(32)
+        let sessID = randomstring.generate(32)
         let expireDate = new Date()
         expireDate.setTime(expireDate.getTime() + 3600 * 1000)
         autologin = false
