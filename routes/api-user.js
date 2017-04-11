@@ -16,63 +16,55 @@ router.post('/user', async ctx => {
         return
     }
     //*** Test if existed
-    try {
-        let samename = await User.findOne({ name : data.username })
-        if (samename) {
-            ctx.status = 409
-            ctx.body = {
-                error : "Username has already been taken!"
-            }
-            return
-        }
-        let samemail = await User.findOne({ name : data.username })
-        if (samemail) {
-            ctx.status = 409
-            ctx.body = {
-                error : "Email address has already been used!"
-            }
-            return
-        }
-
-        let salt = randomstring.generate(16)
-        let hash = crypto.createHmac('RSA-SHA512', salt).update(data.password).digest('hex')
-        let user = await new User({
-            name : data.username,
-            password : hash,
-            salt : salt,
-            email : data.email
-        }).save()
-        let root = await new FileSystem({
-            name: "Root",
-            isFile: false,
-            owner: user._id
-        }).save()
-        user.root = root._id
-        user = await user.save()
-
-        //TODO:Add email verify
-
-        //Auto login for the new created user
-        let sessID = randomstring.generate(32)
-        let expireDate = new Date()
-        expireDate.setTime(expireDate.getTime() + 3600 * 1000)
-        autologin = false
-        await new Session({
-            uuid: crypto.createHash('sha512').update(sessID).digest('hex'),
-            expireAt: expireDate,
-            user: user._id,
-            autoLogin: false
-        }).save()
-        ctx.status = 201
+    let samename = await User.findOne({ name : data.username })
+    if (samename) {
+        ctx.status = 409
         ctx.body = {
-            sessionID: sessID,
-            name: user.name
+            error : "Username has already been taken!"
         }
-    } catch (err) {
-        ctx.status = 500
+        return
+    }
+    let samemail = await User.findOne({ name : data.username })
+    if (samemail) {
+        ctx.status = 409
         ctx.body = {
-            error: err
+            error : "Email address has already been used!"
         }
+        return
+    }
+
+    let salt = randomstring.generate(16)
+    let hash = crypto.createHmac('RSA-SHA512', salt).update(data.password).digest('hex')
+    let user = await new User({
+        name : data.username,
+        password : hash,
+        salt : salt,
+        email : data.email
+    }).save()
+    let root = await new FileSystem({
+        name: "Root",
+        isFile: false,
+        owner: user._id
+    }).save()
+    user.root = root._id
+    user = await user.save()
+
+    //TODO:Add email verify
+
+    //Auto login for the new created user
+    let sessID = randomstring.generate(32)
+    let expireDate = new Date()
+    expireDate.setTime(expireDate.getTime() + 3600 * 1000)
+    await new Session({
+        uuid: crypto.createHash('sha512').update(sessID).digest('hex'),
+        expireAt: expireDate,
+        user: user._id,
+        autoLogin: false
+    }).save()
+    ctx.status = 201
+    ctx.body = {
+        sessionID: sessID,
+        name: user.name
     }
 })
 

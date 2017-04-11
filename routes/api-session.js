@@ -52,21 +52,7 @@ router.delete('/session', async ctx => {
         }
         return
     }
-    /*
-    let sess = await Session.findOne({
-        uuid: ctx.header.sessionID
-    })
-    await sess.remove()
-    */
-    try{
-        await ctx.state.session.remove()
-    } catch (err) {
-        ctx.status = 500
-        ctx.body = {
-            error: err
-        }
-        return
-    }
+    await ctx.state.session.remove()
 
     ctx.status = 200
     ctx.body = {}

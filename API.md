@@ -14,9 +14,11 @@ This document contains how to use the REST api
 	 	* 200 : Login Successfully
 	 	* 400 : Invaild Value
 	 	* 403 : Login Failed
+	 	* 500 : Server Error
 	 * Respond Body
 	 	* sessionID : The ID which can be used to login
 	 	* name : The user's name
+	 	* error : The error message
 
 ~~~
  DELETE /api/session
@@ -29,7 +31,7 @@ This document contains how to use the REST api
 	 	* 403 : Logout Failed
 	 	* 500 : Server Error
 	 * Respond Body
-       	* error : The reason of the error
+       	* error : The error message
        	
 ***
 #### User Control
@@ -49,4 +51,4 @@ This document contains how to use the REST api
  	* Respond Body
  		* sessionID : The ID which can be used to login
 	 	* name : The user's name
-	 	* error : The reason of the error
+	 	* error : The error message
