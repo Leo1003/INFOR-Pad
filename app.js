@@ -11,8 +11,6 @@ const io = require('socket.io')();
 require('./db.js');
 
 const api = require('./routes/api');
-const index = require('./routes/index');
-const users = require('./routes/users');
 
 // error handler
 onerror(app);
@@ -37,8 +35,6 @@ app.use(async (ctx, next) => {
 
 // routes
 app.use(api.routes(), api.allowedMethods());
-app.use(index.routes(), index.allowedMethods());
-app.use(users.routes(), users.allowedMethods());
 
 app.io = io;
 io.on('connection', socket => {
