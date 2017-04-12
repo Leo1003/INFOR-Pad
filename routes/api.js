@@ -1,5 +1,6 @@
 const session = require('./api-session')
 const user = require('./api-user')
+const fs = require('./api-fs')
 var router = require('koa-router')()
 const crypto = require('crypto')
 const debug = require('debug')('INFOR-Pad:api')
@@ -7,7 +8,7 @@ const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const Session = mongoose.model('Session')
 
-router.prefix('/api');
+router.prefix('/api')
 
 router.use(async (ctx, next) => {
     try {
@@ -48,5 +49,6 @@ router.use(async (ctx, next) => {
 
 router.use(session.routes(), session.allowedMethods())
 router.use(user.routes(), user.allowedMethods())
+router.use(fs.routes(), fs.allowedMethods())
 
 module.exports = router
