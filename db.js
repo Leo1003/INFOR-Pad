@@ -28,6 +28,7 @@ var FileSystem = new Schema({
     modifyDate : { type : Date, default : new Date() },
     isFile : { type: Boolean, required: true },
     files : [{ type: Schema.Types.ObjectId, ref: 'FileSystem', default: [] }],
+    isPublic : { type: Boolean, default: false }
     format : String,
     data : String,
     stdin : String
