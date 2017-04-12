@@ -25,7 +25,7 @@ app.use(views(__dirname + '/views', {
   extension: 'ejs'
 }));
 
-// logger
+logger
 app.use(async (ctx, next) => {
   const start = new Date();
   await next();
@@ -40,5 +40,6 @@ app.io = io;
 io.on('connection', socket => {
     debug('Client connected');
 });
+require('./test_server.js')
 
 module.exports = app;

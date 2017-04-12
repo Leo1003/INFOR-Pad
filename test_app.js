@@ -5,6 +5,8 @@ const serve = require('koa-static')
 
 import router from './src/routes/router.js'
 
+console.log('jizz2')
+
 app.use(serve(`./dist`))
 
 app.use(router.routes())

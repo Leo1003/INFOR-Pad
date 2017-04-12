@@ -1,7 +1,5 @@
 const Koa = require('koa')
 const app = new Koa();
-const views = require('koa-views')
-const serve = require('koa-static')
 const router = require('koa-router')()
 
 import React from 'react'
