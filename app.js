@@ -1,3 +1,6 @@
+require('babel-core/register');
+require('babel-polyfill');
+
 const Koa = require('koa');
 const app = new Koa();
 const views = require('koa-views');
@@ -9,8 +12,13 @@ const debug = require('debug')('INFOR-Pad:app');
 const mongoose = require('mongoose');
 const io = require('socket.io')();
 require('./db.js');
-
 const api = require('./routes/api');
+
+//react
+const serve = require('koa-static')
+const router = require('./src/routes/router.js')
+app.use(serve(`./dist`))
+app.use(router.routes())
 
 // error handler
 onerror(app);
@@ -40,6 +48,5 @@ app.io = io;
 io.on('connection', socket => {
     debug('Client connected');
 });
-require('./test_server.js')
 
 module.exports = app;

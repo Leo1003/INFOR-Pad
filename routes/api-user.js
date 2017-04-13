@@ -8,6 +8,7 @@ const Session = mongoose.model('Session')
 
 router.post('/user', async ctx => {
     let data = ctx.request.body
+    console.log(ctx.request.body)
     if (!data.username || !data.password || !data.email) {
         ctx.status = 400
         ctx.body = {
