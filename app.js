@@ -17,8 +17,6 @@ const api = require('./routes/api');
 //react
 const serve = require('koa-static')
 const router = require('./src/routes/router.js')
-app.use(serve(`./dist`))
-app.use(router.routes())
 
 // error handler
 onerror(app);
@@ -33,7 +31,7 @@ app.use(views(__dirname + '/views', {
   extension: 'ejs'
 }));
 
-logger
+//logger
 app.use(async (ctx, next) => {
   const start = new Date();
   await next();
@@ -42,6 +40,8 @@ app.use(async (ctx, next) => {
 });
 
 // routes
+app.use(serve(`./dist`))
+app.use(router.routes())
 app.use(api.routes(), api.allowedMethods());
 
 app.io = io;

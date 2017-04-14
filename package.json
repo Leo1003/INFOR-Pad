@@ -7,7 +7,8 @@
     "pm2": "pm2 start bin/www ",
     "nodemon": "DEBUG=INFOR-Pad:* nodemon bin/www",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack-dev-server --devtool eval --progress --colors --content-base build"
+    "dev": "webpack-dev-server --devtool eval --progress --colors --content-base build",
+    "webpack": "webpack && node bin/www"
   },
   "dependencies": {
     "babel-core": "^6.24.1",
@@ -28,6 +29,7 @@
     "mongoose": "^4.9.2",
     "randomstring": "^1.1.5",
     "react": "^15.4.2",
+    "react-cookie": "^1.0.5",
     "react-dom": "^15.4.2",
     "react-redux": "^5.0.3",
     "react-router": "^3.0.0",
