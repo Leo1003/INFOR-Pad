@@ -17,8 +17,8 @@ router.post('/session', async ctx => {
     let user = await User.findOne({
         name: data.username
     })
-    let hash = crypto.createHmac('RSA-SHA512', user.salt).update(data.password).digest('hex')
     if (user) {
+        let hash = crypto.createHmac('RSA-SHA512', user.salt).update(data.password).digest('hex')
         if (hash === user.password) {
             let sessID = randomstring.generate(32)
             let expireDate = new Date()
