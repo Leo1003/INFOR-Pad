@@ -1,5 +1,9 @@
 # INFOR-Pad Api Document
 This document contains how to use the REST api
+#### NOTE
+ * All the POST request bodies format are NOT json format
+ * All the respond bodies are json format
+ * If any 4xx or 5xx status return, check respond's error for detail reason
 ***
 #### Session Control
 ~~~
