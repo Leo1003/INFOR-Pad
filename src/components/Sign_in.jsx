@@ -61,10 +61,13 @@ class Sign_in extends React.Component {
     }).then(res => {
       if(res.ok) {
         console.log("Login Successful");
-        browserHistory.push('/')
         return res.json().then(json => {
           fetchData['name'] = json.name;
           fetchData['sessionid'] = json.sessionid;
+          console.log(fetchData)
+          cookie.save('username', json.name, { path: '/' })
+          cookie.save('sessionid', json.sessionid, { path: '/' })
+          browserHistory.push('/')
         })
       }
       else if(res.status == 403) {
@@ -72,9 +75,6 @@ class Sign_in extends React.Component {
       }
     })
     .catch(err => { console.log(err) })
-    console.log(fetchData)
-    cookie.save('username', fetchData.name, { path: '/' })
-    cookie.save('sessionid', fetchData.sessionid, { path: '/' })
   }
   render() {
     let renderMessage = () => {
