@@ -90,5 +90,40 @@ router.route('/fs/:fsid')
             }
         }
     })
+    .post(async ctx => {
+        if (ctx.state.access >= 2) {
+            let fs = ctx.state.fs
+            if (fs.isFile === false) {
+                let data = ctx.request.body
+                if (!data.filename || !data.type) {
+                    ctx.status = 400
+                    ctx.body = {
+                        error: "Some data are missed"
+                    }
+                    return
+                }
+                let newfile = await new FileSystem({
+                    name : data.filename,
+                    parent : fs._id,
+                    owner : ctx.state.session.user._id,
+                    isFile : data.type != 'Directory',
+                    format : data.type == 'Directory' ? undefined : data.type
+                }).save()
+                fs.files.push(newfile._id)
+                await fs.save()
+                //TODO: Return data to user
+            } else {
+                ctx.status = 400
+                ctx.body = {
+                    error: "Not a directory"
+                }
+            }
+        } else {
+            ctx.status = 403
+            ctx.body = {
+                error: "Permission denied"
+            }
+        }
+    })
 
 module.exports = router

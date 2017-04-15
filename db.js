@@ -30,8 +30,8 @@ var FileSystem = new Schema({
     isPublic : { type: Boolean, default: false },
     files : [{ type: Schema.Types.ObjectId, ref: 'FileSystem', default: [] }],
     format : String,
-    code : String,
-    stdin : String
+    code : { type: String, default: '' },
+    stdin : { type: String, default: '' }
 })
 
 mongoose.model('User', User)
