@@ -3,7 +3,10 @@ This document contains how to use the REST api
 #### NOTE
  * All the POST request bodies format are NOT json format
  * All the respond bodies are json format
- * If any 4xx or 5xx status return, check respond's error for detail reason
+ * If any 4xx or 5xx status return, check respond body's error for detail reason
+***
+#### Request Header
+ * sessionid: A string for this session. We use this to identify your login status.
 ***
 #### Session Control
 ~~~
@@ -11,31 +14,28 @@ This document contains how to use the REST api
 ~~~
  * Login to an account
 	 * Request Body
-	 	* username : The user's name to login
-	 	* password : The user's password
-	 	* autoLogin : 0 or 1. Specify if the session can be use for 14 days
+	 	* username: The user's name to login
+	 	* password: The user's password
+	 	* autoLogin: 0 or 1. Specify if the session can be use for 14 days
 	 * Respond Status
-	 	* 200 : Login Successfully
-	 	* 400 : Invaild Value
-	 	* 403 : Login Failed
-	 	* 500 : Server Error
+	 	* 200: Login Successfully
+	 	* 400: Invaild Value
+	 	* 403: Login Failed
+	 	* 500: Server Error
 	 * Respond Body
-	 	* sessionid : The ID which can be used to login
-	 	* name : The user's name
-	 	* error : The error message
+	 	* sessionid: The ID which can be used to login
+	 	* name: The user's name
 
 ~~~
  DELETE /api/session
 ~~~
  * Logout a session
 	 * Request Header
-	 	* sessionid : The session ID to logout
+	 	* sessionid: The session ID to logout
 	 * Respond Status
-	 	* 200 : Logout Successfully
-	 	* 403 : Logout Failed
-	 	* 500 : Server Error
-	 * Respond Body
-       	* error : The error message
+	 	* 200: Logout Successfully
+	 	* 403: Logout Failed
+	 	* 500: Server Error
 
 ***
 #### User Control
@@ -44,15 +44,56 @@ This document contains how to use the REST api
 ~~~
  * Create a new user
  	* Request Body
- 		* username : The name to register
- 		* password : The password to login
- 		* email : The email address which can be used to verify
+ 		* username: The name to register
+ 		* password: The password to login
+ 		* email: The email address which can be used to verify
  	* Respond Status
- 		* 201 : The user has been created successfully
- 		* 400 : Some data lost
- 		* 409 : The username or the email address had been used by someone else
- 		* 500 : Server Error
+ 		* 201: The user has been created successfully
+ 		* 400: Some data lost
+ 		* 409: The username or the email address had been used by someone else
+ 		* 500: Server Error
  	* Respond Body
- 		* sessionid : The ID which can be used to login
-	 	* name : The user's name
-	 	* error : The error message
+ 		* sessionid: The ID which can be used to login
+	 	* name: The user's name
+
+***
+#### File System
+~~~
+ GET /api/fs/:id
+~~~
+ * Query a file or a directory
+     * Respond Status
+         * 200: Succeed
+         * 401: Login first!
+         * 403: You don't have enough permission
+         * 404: The file isn't exist
+         * 500: Server Error
+     * Respond Body
+         * name: File name
+         * parent: Parent Directory
+         * owner: The user id of the file's owner
+         * createDate: CreateDate
+         * modifyDate: LastModifyDate
+         * isPublic: If the file can be viewed by anyone
+         * format: The file's format or 'Directory'
+         * code: The code of the file (File Only)
+         * stdin: The stdin data (File Only)
+         * files[]: The list of the files contained (Directory Only)
+
+~~~
+ POST /api/fs/:id
+~~~
+ * Create a new file or a directory
+     * Request Body
+         * filename: The name of the file
+         * type: Code type or 'Directory'
+     * Respond Status
+         * 201: Succeed
+         * 400: Data missed or the id isn't a diretory
+         * 401: Login first!
+         * 403: You don't have enough permission
+         * 404: The directory isn't exist
+         * 500: Server Error
+     * Respond Body
+         * id: The id of the new file
+         

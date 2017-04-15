@@ -110,8 +110,11 @@ router.route('/fs/:fsid')
                     format : data.type == 'Directory' ? undefined : data.type
                 }).save()
                 fs.files.push(newfile._id)
-                await fs.save()
-                //TODO: Return data to user
+                fs = await fs.save()
+                ctx.status = 201
+                ctx.body = {
+                    id: fs._id
+                }
             } else {
                 ctx.status = 400
                 ctx.body = {
