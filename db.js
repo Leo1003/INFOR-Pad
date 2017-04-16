@@ -27,10 +27,11 @@ var FileSystem = new Schema({
     createDate : { type : Date, default : new Date() },
     modifyDate : { type : Date, default : new Date() },
     isFile : { type: Boolean, required: true },
+    isPublic : { type: Boolean, default: false },
     files : [{ type: Schema.Types.ObjectId, ref: 'FileSystem', default: [] }],
     format : String,
-    data : String,
-    stdin : String
+    code : { type: String, default: '' },
+    stdin : { type: String, default: '' }
 })
 
 mongoose.model('User', User)
