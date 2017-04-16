@@ -29277,6 +29277,9 @@ var Logout = function (_React$Component) {
           console.log("Logout");
           _reactCookie2.default.remove('sessionid');
           _reactRouter.browserHistory.replace({ pathname: '/' });
+        } else if (res.status == 401) {
+          if (sessionid) _reactCookie2.default.remove('sessionid');
+          _reactRouter.browserHistory.replace({ pathname: '/Sign_in' });
         }
       });
     }

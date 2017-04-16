@@ -22,6 +22,9 @@ class Logout extends React.Component{
         console.log("Logout")
         cookie.remove('sessionid')
         browserHistory.replace({ pathname: '/' })
+      } else if(res.status == 401) {
+        if(sessionid) cookie.remove('sessionid')
+        browserHistory.replace({ pathname: '/Sign_in'})
       }
     })
   }
