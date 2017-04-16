@@ -48,85 +48,84 @@ router.param('fsid', async (fsid, ctx, next) => {
         }
         return
     }
-}
+})
 
-router.route('/fs/:fsid')
-    .get(async ctx => {
-        if (ctx.state.access >= 1) {
-            let fs = ctx.state.fs
-            let resBody = {
-                name: fs.name,
-                parent: fs.parent,
-                owner: fs.owner,
-                createDate: fs.createDate,
-                modifyDate: fs.modifyDate,
-                isPublic: fs.isPublic,
-                format: fs.isFile === true ? fs.format : 'Directory'
-            }
-            if (fs.isFile === true) {
-                ctx.status = 200
-                resBody.code = fs.code
-                resBody.stdin = fs.stdin
-            } else {
-                ctx.status = 200
-                resBody.files = []
-                fs = await fs.populate('files')
-                fs.files.forEach(filedb => {
-                    resBody.files.push({
-                        name: filedb.name,
-                        createDate: filedb.createDate,
-                        modifyDate: filedb.modifyDate,
-                        isPublic: filedb.isPublic,
-                        format: filedb.isFile === true ? filedb.format : 'Directory'
-                    })
-                })
-            }
-            ctx.status = 200
-            ctx.body = resBody
-        } else {
-            ctx.status = 403
-            ctx.body = {
-                error: "Permission denied"
-            }
+router.get('/fs/:fsid', async ctx => {
+    if (ctx.state.access >= 1) {
+        let fs = ctx.state.fs
+        let resBody = {
+            name: fs.name,
+            parent: fs.parent,
+            owner: fs.owner,
+            createDate: fs.createDate,
+            modifyDate: fs.modifyDate,
+            isPublic: fs.isPublic,
+            format: fs.isFile === true ? fs.format : 'Directory'
         }
-    })
-    .post(async ctx => {
-        if (ctx.state.access >= 2) {
-            let fs = ctx.state.fs
-            if (fs.isFile === false) {
-                let data = ctx.request.body
-                if (!data.filename || !data.type) {
-                    ctx.status = 400
-                    ctx.body = {
-                        error: "Some data are missed"
-                    }
-                    return
-                }
-                let newfile = await new FileSystem({
-                    name : data.filename,
-                    parent : fs._id,
-                    owner : ctx.state.session.user._id,
-                    isFile : data.type != 'Directory',
-                    format : data.type == 'Directory' ? undefined : data.type
-                }).save()
-                fs.files.push(newfile._id)
-                fs = await fs.save()
-                ctx.status = 201
-                ctx.body = {
-                    id: fs._id
-                }
-            } else {
+        if (fs.isFile === true) {
+            ctx.status = 200
+            resBody.code = fs.code
+            resBody.stdin = fs.stdin
+        } else {
+            ctx.status = 200
+            resBody.files = []
+            fs = await fs.populate('files')
+            fs.files.forEach(filedb => {
+                resBody.files.push({
+                    name: filedb.name,
+                    createDate: filedb.createDate,
+                    modifyDate: filedb.modifyDate,
+                    isPublic: filedb.isPublic,
+                    format: filedb.isFile === true ? filedb.format : 'Directory'
+                })
+            })
+        }
+        ctx.status = 200
+        ctx.body = resBody
+    } else {
+        ctx.status = 403
+        ctx.body = {
+            error: "Permission denied"
+        }
+    }
+})
+router.post('/fs/:fsid', async ctx => {
+    if (ctx.state.access >= 2) {
+        let fs = ctx.state.fs
+        if (fs.isFile === false) {
+            let data = ctx.request.body
+            if (!data.filename || !data.type) {
                 ctx.status = 400
                 ctx.body = {
-                    error: "Not a directory"
+                    error: "Some data are missed"
                 }
+                return
+            }
+            let newfile = await new FileSystem({
+                name : data.filename,
+                parent : fs._id,
+                owner : ctx.state.session.user._id,
+                isFile : data.type != 'Directory',
+                format : data.type == 'Directory' ? undefined : data.type
+            }).save()
+            fs.files.push(newfile._id)
+            fs = await fs.save()
+            ctx.status = 201
+            ctx.body = {
+                id: fs._id
             }
         } else {
-            ctx.status = 403
+            ctx.status = 400
             ctx.body = {
-                error: "Permission denied"
+                error: "Not a directory"
             }
         }
-    })
+    } else {
+        ctx.status = 403
+        ctx.body = {
+            error: "Permission denied"
+        }
+    }
+})
 
 module.exports = router
