@@ -127,5 +127,44 @@ router.post('/fs/:fsid', async ctx => {
         }
     }
 })
+router.put('/fs/:fsid', async ctx => {
+    if (ctx.state.access >= 2) {
+        let fs = ctx.state.fs
+        let data = ctx.request.body
+        if (data.filename) fs.name = data.filename
+        if (data.isPublic) fs.isPublic = (data.isPublic == true) ? true : false
+        if (fs.isFile === true) {
+            if (data.code) {
+                if (data.code.length > 1024*128) {
+                    ctx.status = 413
+                    ctx.body = {
+                        error: "Your code is too large"
+                    }
+                    return
+                }
+                //TODO: Uncomplete
+            }
+            if (data.stdin) {
+                if (data.stdin.length > 1024*128) {
+                    ctx.status = 413
+                    ctx.body = {
+                        error: "Your stdin is too large"
+                    }
+                    return
+                }
+                //TODO: Uncomplete
+            }
+        } else {
+            //TODO: Uncomplete
+        }
+        fs.modifyDate = new Date()
+        fs = await fs.save()
+    } else {
+        ctx.status = 403
+        ctx.body = {
+            error: "Permission denied"
+        }
+    }
+})
 
 module.exports = router
