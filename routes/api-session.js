@@ -53,6 +53,8 @@ router.post('/session', async ctx => {
 })
 
 router.delete('/session', async ctx => {
+  console.log(ctx.req.headers)
+  console.log(ctx.state.session)
     if (!ctx.state.session) {
         ctx.status = 403
         ctx.body = {

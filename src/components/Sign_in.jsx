@@ -65,7 +65,6 @@ class Sign_in extends React.Component {
           fetchData['name'] = json.name;
           fetchData['sessionid'] = json.sessionid;
           console.log(fetchData)
-          cookie.save('username', json.name, { path: '/' })
           cookie.save('sessionid', json.sessionid, { path: '/' })
           browserHistory.push('/')
         })

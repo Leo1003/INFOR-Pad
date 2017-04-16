@@ -22,7 +22,9 @@ router.use(async (ctx, next) => {
 })
 
 router.use(async (ctx, next) => {
+    console.log(ctx.header)
     if (!ctx.header.sessionid) {
+        debug("Can't find header")
         return next()
     }
     let idhash = crypto.createHash('sha512').update(ctx.header.sessionid).digest('hex')
@@ -43,6 +45,7 @@ router.use(async (ctx, next) => {
             ctx.state.session = sess
         }
     }
+    debug("Expired!")
     return next()
 })
 

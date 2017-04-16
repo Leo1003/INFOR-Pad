@@ -1,6 +1,7 @@
 import React from 'react'
 import { Menu } from 'semantic-ui-react'
 import { Link } from 'react-router'
+import Logout from './Logout.jsx'
 
 const IndexPage = (props) => (
   <div>
@@ -9,6 +10,7 @@ const IndexPage = (props) => (
       <Menu.Menu position='right'>
         <Menu.Item name="Sign in" as={Link} to='/Sign_in' />
         <Menu.Item name="Sign up" as={Link} to='/Sign_up' />
+        <Logout />
       </Menu.Menu>
     </Menu>
     {props.children}
