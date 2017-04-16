@@ -42,9 +42,14 @@ router.use(async (ctx, next) => {
             sess.expireAt = expireDate
             await sess.save()
             ctx.state.session = sess
+            return next()
         }
     }
-    return next()
+    ctx.status = 401
+    ctx.body = {
+        error: "Invalid session!"
+    }
+    return
 })
 
 router.use(session.routes(), session.allowedMethods())

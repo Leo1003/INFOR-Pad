@@ -54,7 +54,7 @@ router.post('/session', async ctx => {
 
 router.delete('/session', async ctx => {
     if (!ctx.state.session) {
-        ctx.status = 403
+        ctx.status = 401
         ctx.body = {
             error: "You haven't login yet!"
         }
