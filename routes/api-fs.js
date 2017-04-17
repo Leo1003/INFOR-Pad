@@ -132,7 +132,7 @@ router.put('/fs/:fsid', async ctx => {
         let fs = ctx.state.fs
         let data = ctx.request.body
         if (data.filename) fs.name = data.filename
-        if (data.isPublic) fs.isPublic = (data.isPublic == true) ? true : false
+        if (data.isPublic) fs.isPublic = (data.isPublic == true ? true : false)
         if (fs.isFile === true) {
             if (data.code) {
                 if (data.code.length > 1024*128) {
@@ -142,7 +142,7 @@ router.put('/fs/:fsid', async ctx => {
                     }
                     return
                 }
-                //TODO: Uncomplete
+                fs.code = data.code
             }
             if (data.stdin) {
                 if (data.stdin.length > 1024*128) {
@@ -152,13 +152,25 @@ router.put('/fs/:fsid', async ctx => {
                     }
                     return
                 }
-                //TODO: Uncomplete
+                fs.stdin = data.stdin
             }
-        } else {
-            //TODO: Uncomplete
+            if (data.format) {
+                if (data.format == 'Directory') {
+                    ctx.status = 400
+                    ctx.body = {
+                        error: "You can't change a file to directory"
+                    }
+                    return
+                }
+                fs.format = data.format
+            }
         }
         fs.modifyDate = new Date()
         fs = await fs.save()
+        ctx.status = 200
+        ctx.body = {
+            id: fs._id
+        }
     } else {
         ctx.status = 403
         ctx.body = {
