@@ -86,7 +86,7 @@ This document contains how to use the REST api
  * Create a new file or a directory
      * Request Body
          * filename: The name of the file
-         * type: Code type or 'Directory'
+         * format: Code type or 'Directory'
      * Respond Status
          * 201: Succeed
          * 400: Data missed or the id isn't a diretory
@@ -96,4 +96,3 @@ This document contains how to use the REST api
          * 500: Server Error
      * Respond Body
          * id: The id of the new file
-         
