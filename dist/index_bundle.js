@@ -31549,6 +31549,7 @@ var Logout = function (_React$Component) {
     key: 'handleLogout',
     value: function handleLogout(e) {
       var sessionid = _reactCookie2.default.load('sessionid');
+      if (!sessionid) return;
       fetch("/api/session", {
         method: 'DELETE',
         headers: {
@@ -31560,7 +31561,7 @@ var Logout = function (_React$Component) {
           _reactRouter.browserHistory.replace({ pathname: '/' });
         } else if (res.status == 401) {
           if (sessionid) _reactCookie2.default.remove('sessionid');
-          _reactRouter.browserHistory.push('/Sign_in');
+          _reactRouter.browserHistory.push('/');
         }
       });
     }
@@ -31621,7 +31622,6 @@ var Sign_in = function (_React$Component) {
   _createClass(Sign_in, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      //console.log(this.props)
       $('.ui.form').form({
         fields: {
           username: {
@@ -31647,7 +31647,6 @@ var Sign_in = function (_React$Component) {
   }, {
     key: 'handleInvalid',
     value: function handleInvalid(e) {
-      console.log(e);
       return false;
     }
   }, {
@@ -32036,8 +32035,8 @@ var authReducers = (0, _reduxActions.handleActions)({
     var payload = _ref.payload;
 
     // console.log("I'm in reducers")
-    // console.log(payload)
-    _reactCookie2.default.save('sessionid', payload.sessionid, { path: '/' });
+    //console.log(payload.data.sessionid)
+    _reactCookie2.default.save('sessionid', payload.data.sessionid, { path: '/' });
     _reactRouter.browserHistory.push('/');
     return Object.assign({}, { message: '' });
   },

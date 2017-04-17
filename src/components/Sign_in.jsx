@@ -8,7 +8,6 @@ class Sign_in extends React.Component {
     super(props)
   }
   componentDidMount() {
-    //console.log(this.props)
     $('.ui.form').form({
       fields: {
         username: {
@@ -37,7 +36,6 @@ class Sign_in extends React.Component {
   }
 
   handleInvalid(e) {
-    console.log(e)
     return false
   }
 

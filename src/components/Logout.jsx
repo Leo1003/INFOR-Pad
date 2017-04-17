@@ -10,6 +10,7 @@ class Logout extends React.Component{
   }
   handleLogout(e) {
     const sessionid = cookie.load('sessionid')
+    if(!sessionid) return
     fetch("/api/session", {
       method: 'DELETE',
       headers: {
@@ -22,7 +23,7 @@ class Logout extends React.Component{
         browserHistory.replace({ pathname: '/' })
       } else if(res.status == 401) {
         if(sessionid) cookie.remove('sessionid')
-        browserHistory.push('/Sign_in')
+        browserHistory.push('/')
       }
     })
   }

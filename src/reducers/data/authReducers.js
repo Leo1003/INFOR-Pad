@@ -13,8 +13,8 @@ import { browserHistory } from 'react-router'
 const authReducers = handleActions({
   SIGN_IN_SUCCESS: (state, { payload }) => {
     // console.log("I'm in reducers")
-    // console.log(payload)
-    cookie.save('sessionid', payload.sessionid, { path: '/' })
+    //console.log(payload.data.sessionid)
+    cookie.save('sessionid', payload.data.sessionid, { path: '/' })
     browserHistory.push('/')
     return Object.assign({}, { message: '' })
   },
