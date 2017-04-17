@@ -68,7 +68,7 @@ class Sign_up extends React.Component {
   }
 
   handleInvalid(e) {
-    console.log(e)
+    //console.log(e)
     return false
   }
 
@@ -88,7 +88,10 @@ class Sign_up extends React.Component {
       body: `username=${formData.username}&password=${formData.password}&email=${formData.email}`,
       credentials: 'include'
     }).then(res => {
-      if(res.ok) { console.log("Create Successful"); browserHistory.push('/')}
+      if(res.ok) {
+        //console.log("Create Successful"); 
+        browserHistory.push('/')
+      }
       else if(res.status == 409) {
         this.setState({'message': 'Username Already Used'})
       }

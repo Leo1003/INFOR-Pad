@@ -6,11 +6,9 @@ import cookie from 'react-cookie'
 class Sign_in extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      message: ''
-    }
   }
   componentDidMount() {
+    //console.log(this.props)
     $('.ui.form').form({
       fields: {
         username: {
@@ -49,38 +47,17 @@ class Sign_in extends React.Component {
   }
   handleSignin() {
     const formData = {}
-    const fetchData = {}
     for(const field in this.refs) {
       formData[field] = this.refs[field].value
     }
-    fetch('/api/session', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: `username=${formData.username}&password=${formData.password}`,
-      credentials: 'include'
-    }).then(res => {
-      if(res.ok) {
-        console.log("Login Successful");
-        return res.json().then(json => {
-          fetchData['name'] = json.name;
-          fetchData['sessionid'] = json.sessionid;
-          console.log(fetchData)
-          cookie.save('sessionid', json.sessionid, { path: '/' })
-          browserHistory.push('/')
-        })
-      }
-      else if(res.status == 403) {
-        this.setState({'message': 'Login Fail'})
-      }
-    })
-    .catch(err => { console.log(err) })
+    this.props.handleSignin(formData)
   }
   render() {
     let renderMessage = () => {
-      if (this.state.message.length == 0) return
+      if (this.props.message.length == 0) return
       return (
         <Message negative>
-          <Message.Header>{this.state.message}</Message.Header>
+          <Message.Header>{this.props.message}</Message.Header>
         </Message>
       )
     }

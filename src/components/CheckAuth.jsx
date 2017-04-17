@@ -11,7 +11,7 @@ class CheckAuth extends React.Component {
   }
   componentDidMount() {
     if(cookie.load('sessionid')) {
-      console.log(cookie.load('sessionid'))
+      //console.log(cookie.load('sessionid'))
       this.setState({'isLogin': true})
       browserHistory.replace({
         pathname: "/"
