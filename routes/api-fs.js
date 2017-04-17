@@ -178,5 +178,35 @@ router.put('/fs/:fsid', async ctx => {
         }
     }
 })
+router.delete('/fs/:fsid', async ctx => {
+    if (ctx.state.access >= 2) {
+        if (ctx.state.fs._id == ctx.state.session.user.root) {
+            ctx.status = 403
+            ctx.body = {
+                error: "You can't delete your root directory"
+            }
+            return
+        }
+        let num = await recursiveDelete(ctx.state.fs._id)
+        ctx.status = 200
+        ctx.body = {
+            count: num
+        }
+    } else {
+        ctx.status = 403
+        ctx.body = {
+            error: "Permission denied"
+        }
+    }
+})
+
+async function recursiveDelete(id) {
+    let fs = await FileSystem.findById(id)
+    if (fs.isFile == true) {
+        //TODO: Uncomplete
+    } else {
+        //TODO: Uncomplete
+    }
+}
 
 module.exports = router
