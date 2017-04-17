@@ -10,32 +10,29 @@ router.param('fsid', async (fsid, ctx, next) => {
     let fs = await FileSystem.findById(fsid)
     if (fs) {
         ctx.state.fs = fs
-        return next()
     } else {
         ctx.status = 404
         ctx.body = {
-            error: "Can't find the fsid"
+            error: "Not found"
         }
         return
     }
-})
 /************************
  ***  Access Control  ***
  ************************
-    ctx.state.access
-        2 = Read/Write
-        1 = Read Only
-        0 = No Access
+ ctx.state.access
+ 2 = Read/Write
+ 1 = Read Only
+ 0 = No Access
  */
-router.param('fsid', async (fsid, ctx, next) => {
-    if (ctx.state.session.user && ctx.state.session.user._id == ctx.state.fs.owner) {
+    if (ctx.state.session && ctx.state.session.user._id.equals(fs.owner)) {
         ctx.state.access = 2
         return next()
-    } else if (ctx.state.fs.isPublic === true) {
+    } else if (fs.isPublic === true) {
         ctx.state.access = 1
         return next()
     } else {
-        if (!ctx.state.session.user) {
+        if (!ctx.state.session) {
             ctx.status = 401
             ctx.body = {
                 error: "Need authorized"
@@ -54,6 +51,7 @@ router.get('/fs/:fsid', async ctx => {
     if (ctx.state.access >= 1) {
         let fs = ctx.state.fs
         let resBody = {
+            id: fs._id,
             name: fs.name,
             parent: fs.parent,
             owner: fs.owner,
@@ -69,14 +67,16 @@ router.get('/fs/:fsid', async ctx => {
         } else {
             ctx.status = 200
             resBody.files = []
-            fs = await fs.populate('files')
+            fs = await fs.populate('files').execPopulate()
+            console.log(fs)
             fs.files.forEach(filedb => {
                 resBody.files.push({
+                    id: filedb._id,
                     name: filedb.name,
                     createDate: filedb.createDate,
                     modifyDate: filedb.modifyDate,
                     isPublic: filedb.isPublic,
-                    format: filedb.isFile === true ? filedb.format : 'Directory'
+                    format: filedb.isFile == true ? filedb.format : 'Directory'
                 })
             })
         }
@@ -94,7 +94,7 @@ router.post('/fs/:fsid', async ctx => {
         let fs = ctx.state.fs
         if (fs.isFile === false) {
             let data = ctx.request.body
-            if (!data.filename || !data.type) {
+            if (!data.filename || !data.format) {
                 ctx.status = 400
                 ctx.body = {
                     error: "Some data are missed"
@@ -105,14 +105,14 @@ router.post('/fs/:fsid', async ctx => {
                 name : data.filename,
                 parent : fs._id,
                 owner : ctx.state.session.user._id,
-                isFile : data.type != 'Directory',
-                format : data.type == 'Directory' ? undefined : data.type
+                isFile : data.format != 'Directory',
+                format : data.format == 'Directory' ? undefined : data.format
             }).save()
             fs.files.push(newfile._id)
             fs = await fs.save()
             ctx.status = 201
             ctx.body = {
-                id: fs._id
+                id: newfile._id
             }
         } else {
             ctx.status = 400
@@ -158,7 +158,7 @@ router.put('/fs/:fsid', async ctx => {
                 if (data.format == 'Directory') {
                     ctx.status = 400
                     ctx.body = {
-                        error: "You can't change a file to directory"
+                        error: "You can't change a file into a directory"
                     }
                     return
                 }
@@ -200,12 +200,42 @@ router.delete('/fs/:fsid', async ctx => {
     }
 })
 
+async function Delete(id) {
+    let fs = await FileSystem.findById(id)
+    if (!fs) {
+        throw new Error("File doesn't exist")
+    }
+    if (fs.isFile == false && fs.files.length > 0) {
+        throw new Error(`Directory ${fs._id} isn't empty`)
+    }
+    fs = await fs.populate('parent').execPopulate()
+    if (fs.parent.isFile == true) {
+        throw new Error(`Parent is not a directory: ${fs.parent._id}`)
+    }
+    let index = fs.parent.files.indexOf(fs._id)
+    if (index == -1) {
+        throw new Error(`Parent doesn't contain file: ${fs._id}`)
+    }
+    fs.parent.files.splice(index, 1)
+    await fs.parent.save()
+    await fs.remove()
+    return 1
+}
+
 async function recursiveDelete(id) {
     let fs = await FileSystem.findById(id)
+    if (!fs) {
+        throw new Error("File doesn't exist")
+    }
     if (fs.isFile == true) {
-        //TODO: Uncomplete
+        return await Delete(id)
     } else {
-        //TODO: Uncomplete
+        let count = 0
+        for (let fileid of fs.files) {
+            count += await Delete(fileid)
+        }
+        count += await Delete(id)
+        return count
     }
 }
 
