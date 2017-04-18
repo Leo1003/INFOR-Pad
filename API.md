@@ -40,6 +40,22 @@ This document contains how to use the REST api
 ***
 #### User Control
 ~~~
+ GET /api/user/:id
+~~~
+ * Get a user's profile by ID
+     * Respond Status
+         * 200: Succeed
+         * 404: Not Found
+         * 500: Server Error
+     * Respond Body
+         * name: username,
+         * level: userlevel,
+         * createDate: The time when the user created
+         * email: The user's email **(Hidden)**
+         * lastLogin: The last time when the user login **(Hidden)**
+         * rootfsid: user's root directory fsid **(Hidden)**
+
+~~~
  POST /api/user
 ~~~
  * Create a new user
