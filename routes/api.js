@@ -18,7 +18,7 @@ router.use(async (ctx, next) => {
             if (err.kind == 'ObjectId') {
                 ctx.status = 404
                 ctx.body = {
-                    error: "Invaild ID!"
+                    error: "Invalid ID!"
                 }
                 return
             }

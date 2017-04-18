@@ -19,7 +19,7 @@ This document contains how to use the REST api
 	 	* autoLogin: 0 or 1. Specify if the session can be use for 14 days
 	 * Respond Status
 	 	* 200: Login Successfully
-	 	* 400: Invaild Value
+	 	* 400: Invalid Value
 	 	* 403: Login Failed
 	 	* 500: Server Error
 	 * Respond Body
