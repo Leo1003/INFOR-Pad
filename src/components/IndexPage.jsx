@@ -2,6 +2,7 @@ import React from 'react'
 import { Menu } from 'semantic-ui-react'
 import { Link } from 'react-router'
 import Logout from './Logout.jsx'
+import CheckAuth from './CheckAuth.jsx'
 
 const IndexPage = (props) => (
   <div>

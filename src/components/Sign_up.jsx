@@ -5,9 +5,6 @@ import { Button, Form, Container, Message } from 'semantic-ui-react'
 class Sign_up extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      message: ''
-    }
   }
   componentDidMount() {
     $('.ui.form').form({
@@ -68,7 +65,6 @@ class Sign_up extends React.Component {
   }
 
   handleInvalid(e) {
-    //console.log(e)
     return false
   }
 
@@ -82,27 +78,14 @@ class Sign_up extends React.Component {
     for(const field in this.refs) {
       formData[field] = this.refs[field].value
     }
-    fetch('/api/user', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: `username=${formData.username}&password=${formData.password}&email=${formData.email}`,
-      credentials: 'include'
-    }).then(res => {
-      if(res.ok) {
-        //console.log("Create Successful"); 
-        browserHistory.push('/')
-      }
-      else if(res.status == 409) {
-        this.setState({'message': 'Username Already Used'})
-      }
-    }).catch(err => { console.log(err) })
+    this.props.handleSignup(formData)
   }
   render() {
     let renderMessage = () => {
-      if (this.state.message.length == 0) return
+      if (this.props.message.length == 0) return
       return (
         <Message negative>
-          <Message.Header>{this.state.message}</Message.Header>
+          <Message.Header>{this.props.message}</Message.Header>
         </Message>
       )
     }

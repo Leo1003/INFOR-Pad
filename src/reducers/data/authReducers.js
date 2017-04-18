@@ -1,8 +1,7 @@
 import { handleActions } from 'redux-actions'
 import {
-  SIGN_IN,
-  SIGN_UP,
-  LOGOUT,
+  SIGN_UP_SUCCESS,
+  SIGN_UP_FAIL,
   SIGN_IN_SUCCESS,
   SIGN_IN_FAIL
 } from '../../constants/actionTypes'
@@ -17,8 +16,14 @@ const authReducers = handleActions({
     return Object.assign({}, { message: '' })
   },
   SIGN_IN_FAIL: (state) => {
-    //state.set('message', 'Sign in Fail')
     return Object.assign({}, { message: 'Sign in Fail' })
+  },
+  SIGN_UP_SUCCESS: (state) => {
+    browserHistory.push('/')
+    return Object.assign({}, { message: '' })
+  },
+  SIGN_UP_FAIL: (state) => {
+    return Object.assign({}, { message: 'Username Already Used'})
   }
 }, auth_state)
 
