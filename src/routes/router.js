@@ -8,21 +8,34 @@ import { renderToString } from 'react-dom/server'
 import { match, RouterContext } from 'react-router'
 import routes from './routes.jsx'
 
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+import rootReducer from '../reducers'
+import store from '../store/configureStore'
+
+
 router.get('*', (ctx, next) => {
   match({ routes: routes, location: ctx.url}, (err, redirect, props) => {
     if (err) {
      console.log(err.message)
    } else if (props) {
-     const appHtml = renderToString(<RouterContext {...props}/>)
-     ctx.body = renderPage(appHtml)
+
+     const store = createStore(rootReducer)
+
+     const appHtml = renderToString(
+       <Provider store={store}>
+         <RouterContext {...props}/>
+       </Provider>
+     )
+     const preloadedState = store.getState()
+     ctx.body = renderPage(appHtml, preloadedState)
    } else {
      return next()
-    //ctx.body = 'Not Found Jizz'
    }
   })
 })
 
-function renderPage(appHtml) {
+function renderPage(appHtml, preloadedState) {
   return `
   <!DOCTYPE html>
   <html>
@@ -39,6 +52,7 @@ function renderPage(appHtml) {
     </head>
     <body>
       <div id="app">${appHtml}</div>
+      <script>window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\u003c')}</script>
     <script type="text/javascript" src="index_bundle.js"></script></body>
   </html>
   `

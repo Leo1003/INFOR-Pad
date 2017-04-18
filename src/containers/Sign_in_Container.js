@@ -4,8 +4,6 @@ import Sign_in from '../components/Sign_in.jsx'
 import signIn from '../actions/authActions'
 
 const mapStateToProps = (state) => {
-  // console.log("I'm in container")
-  //console.log(state)
   return {
     message: state.auth.message
   }

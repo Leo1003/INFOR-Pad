@@ -5,12 +5,23 @@ import {
   browserHistory
 } from 'react-router'
 import { Provider } from 'react-redux'
-//import { syncHistoryWithStore } from 'react-router-redux'
-
-import store from './store/configureStore.js'
 import routes from './routes/routes.jsx'
 
-//const history = syncHistoryWithStore(browserHistory, store)
+import { createStore, applyMiddleware } from 'redux'
+import reduxThunk from 'redux-thunk'
+import { createLogger } from 'redux-logger'
+
+import rootReducer from './reducers'
+
+const preloadedState = window.__PRELOADED_STATE__
+
+delete window.__PRELOADED_STATE__
+
+const store = createStore(
+  rootReducer,
+  preloadedState,
+  applyMiddleware(reduxThunk, createLogger())
+)
 
 const App = ({store}) => (
   <Provider store={store}>
