@@ -181,7 +181,7 @@ router.put('/fs/:fsid', async ctx => {
 router.delete('/fs/:fsid', async ctx => {
     if (ctx.state.access >= 2) {
         if (ctx.state.fs._id == ctx.state.session.user.root) {
-            ctx.status = 403
+            ctx.status = 400
             ctx.body = {
                 error: "You can't delete your root directory"
             }
