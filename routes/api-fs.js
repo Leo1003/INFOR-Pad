@@ -180,14 +180,20 @@ router.put('/fs/:fsid', async ctx => {
 })
 router.delete('/fs/:fsid', async ctx => {
     if (ctx.state.access >= 2) {
-        if (ctx.state.fs._id == ctx.state.session.user.root) {
+        if (!ctx.state.fs.parent) {
             ctx.status = 400
             ctx.body = {
-                error: "You can't delete your root directory"
+                error: "You can't delete a root directory"
             }
             return
         }
-        let num = await recursiveDelete(ctx.state.fs._id)
+        try {
+            let num = await recursiveDelete(ctx.state.fs._id)
+        } catch (err) {
+            ctx.status = 507
+            ctx.body = err.message
+            return
+        }
         ctx.status = 200
         ctx.body = {
             count: num

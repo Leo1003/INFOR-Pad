@@ -147,3 +147,4 @@ This document contains how to use the REST api
          * 403: You don't have enough permission
          * 404: The directory isn't exist
          * 500: Server Error
+         * 507: Error occurred when deleting
