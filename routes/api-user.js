@@ -6,6 +6,28 @@ const User = mongoose.model('User')
 const FileSystem = mongoose.model('FileSystem')
 const Session = mongoose.model('Session')
 
+router.get('/user/:uid', async ctx => {
+    let user = await User.findById(ctx.params.uid)
+    if (!user) {
+        ctx.status = 404
+        ctx.body = {
+            error: "No such user"
+        }
+        return
+    }
+    let resBody = {
+        name: user.name,
+        level: user.level,
+        createDate: user.createDate
+    }
+    if (ctx.state.session.user._id.equals(ctx.params.uid)) {
+        resBody.email = user.email
+        resBody.lastLogin = user.lastLogin
+        resBody.rootfsid = user.root
+    }
+    ctx.status = 200
+    ctx.body = resBody
+})
 router.post('/user', async ctx => {
     let data = ctx.request.body
     if (!data.username || !data.password || !data.email) {
@@ -63,6 +85,7 @@ router.post('/user', async ctx => {
     }).save()
     ctx.status = 201
     ctx.body = {
+        userid: user._id,
         sessionid: sessID,
         name: user.name
     }

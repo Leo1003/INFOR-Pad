@@ -19,7 +19,7 @@ This document contains how to use the REST api
 	 	* autoLogin: 0 or 1. Specify if the session can be use for 14 days
 	 * Respond Status
 	 	* 200: Login Successfully
-	 	* 400: Invaild Value
+	 	* 400: Invalid Value
 	 	* 403: Login Failed
 	 	* 500: Server Error
 	 * Respond Body
@@ -86,7 +86,7 @@ This document contains how to use the REST api
  * Create a new file or a directory
      * Request Body
          * filename: The name of the file
-         * type: Code type or 'Directory'
+         * format: Code type or 'Directory'
      * Respond Status
          * 201: Succeed
          * 400: Data missed or the id isn't a diretory
@@ -96,4 +96,36 @@ This document contains how to use the REST api
          * 500: Server Error
      * Respond Body
          * id: The id of the new file
-         
+
+~~~
+ PUT /api/fs/:id
+~~~
+ * Update a file or directory's data
+     * Request Body
+         * filename: The new name [Optional]
+         * isPublic: New view permission [Optional]
+         * code: Save new code (File ONly) [Optional]
+         * stdin: Save new input (File ONly) [Optional]
+         * format: Change file format (File ONly) [Optional]
+     * Respond Status
+         * 200: Succeed
+         * 400: Wrong Request Body
+         * 401: Login first!
+         * 403: You don't have enough permission
+         * 413: Your data is too big to save
+         * 404: The directory isn't exist
+         * 500: Server Error
+     * Respond Body
+         * id: The file id be updated
+
+~~~
+ DELETE /api/fs/:id
+~~~
+ * Delete a directory or a file permanently!
+     * Respond Status
+         * 200: Succeed
+         * 400: You can't delete your root directory
+         * 401: Login first!
+         * 403: You don't have enough permission
+         * 404: The directory isn't exist
+         * 500: Server Error
