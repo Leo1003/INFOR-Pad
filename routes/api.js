@@ -14,6 +14,15 @@ router.use(async (ctx, next) => {
     try {
         await next()
     } catch (err) {
+        if (err.name == 'CastError') {
+            if (err.kind == 'ObjectId') {
+                ctx.status = 404
+                ctx.body = {
+                    error: "Invaild ID!"
+                }
+                return
+            }
+        }
         ctx.status = 500
         ctx.body = {
             error: err.message
