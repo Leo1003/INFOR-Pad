@@ -5,6 +5,7 @@ import { signUp } from '../actions/authActions.js'
 
 const mapStateToProps = (state) => {
   return {
+    //message: state.auth.get('message')
     message: state.auth.message
   }
 }

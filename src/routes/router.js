@@ -1,5 +1,3 @@
-const Koa = require('koa')
-const app = new Koa();
 const router = require('koa-router')()
 
 import React from 'react'
@@ -13,6 +11,7 @@ import { createStore } from 'redux'
 import rootReducer from '../reducers'
 import store from '../store/configureStore'
 
+import Immutable, { fromJS } from 'immutable'
 
 router.get('*', (ctx, next) => {
   match({ routes: routes, location: ctx.url}, (err, redirect, props) => {
@@ -20,7 +19,7 @@ router.get('*', (ctx, next) => {
      console.log(err.message)
    } else if (props) {
 
-     const store = createStore(rootReducer)
+     const store = createStore(fromJS(rootReducer))
 
      const appHtml = renderToString(
        <Provider store={store}>
@@ -28,6 +27,7 @@ router.get('*', (ctx, next) => {
        </Provider>
      )
      const preloadedState = store.getState()
+     console.log(preloadedState)
      ctx.body = renderPage(appHtml, preloadedState)
    } else {
      return next()

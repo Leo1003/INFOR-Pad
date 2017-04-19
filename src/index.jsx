@@ -13,13 +13,16 @@ import { createLogger } from 'redux-logger'
 
 import rootReducer from './reducers'
 
+import { fromJS } from 'immutable'
+
 const preloadedState = window.__PRELOADED_STATE__
+console.log(preloadedState)
 
 delete window.__PRELOADED_STATE__
 
 const store = createStore(
   rootReducer,
-  preloadedState,
+  fromJS(preloadedState),
   applyMiddleware(reduxThunk, createLogger())
 )
 

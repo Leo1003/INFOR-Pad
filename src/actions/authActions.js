@@ -1,6 +1,5 @@
 import 'whatwg-fetch'
 import {
-  LOGOUT,
   SIGN_UP_SUCCESS,
   SIGN_UP_FAIL,
   SIGN_IN_SUCCESS,

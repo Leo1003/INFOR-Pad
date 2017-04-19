@@ -4,8 +4,10 @@ import Sign_in from '../components/Sign_in.jsx'
 import { signIn } from '../actions/authActions.js'
 
 const mapStateToProps = (state) => {
+  console.log(state)
   return {
-    message: state.auth.message
+    message: state.auth.get('message')
+    //message: state.auth.message
   }
 }
 
