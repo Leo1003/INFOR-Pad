@@ -232,7 +232,7 @@ async function recursiveDelete(id) {
     } else {
         let count = 0
         for (let fileid of fs.files) {
-            count += await Delete(fileid)
+            count += await recursiveDelete(fileid)
         }
         count += await Delete(id)
         return count
