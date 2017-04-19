@@ -7,9 +7,7 @@ import { match, RouterContext } from 'react-router'
 import routes from './routes.jsx'
 
 import { Provider } from 'react-redux'
-import { createStore } from 'redux'
-import rootReducer from '../reducers'
-import store from '../store/configureStore'
+import configureStore from '../store/configureStore'
 
 import Immutable, { fromJS } from 'immutable'
 
@@ -19,7 +17,9 @@ router.get('*', (ctx, next) => {
      console.log(err.message)
    } else if (props) {
 
-     const store = createStore(fromJS(rootReducer))
+     const store = configureStore(fromJS({
+       message: '',
+     }))
 
      const appHtml = renderToString(
        <Provider store={store}>

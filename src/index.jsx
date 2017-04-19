@@ -6,25 +6,15 @@ import {
 } from 'react-router'
 import { Provider } from 'react-redux'
 import routes from './routes/routes.jsx'
-
-import { createStore, applyMiddleware } from 'redux'
-import reduxThunk from 'redux-thunk'
 import { createLogger } from 'redux-logger'
-
-import rootReducer from './reducers'
-
+import configureStore from './store/configureStore'
 import { fromJS } from 'immutable'
 
-const preloadedState = window.__PRELOADED_STATE__
-console.log(preloadedState)
+const initialState = window.__PRELOADED_STATE__
 
 delete window.__PRELOADED_STATE__
 
-const store = createStore(
-  rootReducer,
-  fromJS(preloadedState),
-  applyMiddleware(reduxThunk, createLogger())
-)
+const store = configureStore(fromJS(initialState))
 
 const App = ({store}) => (
   <Provider store={store}>
