@@ -20,7 +20,7 @@ router.get('/user/:uid', async ctx => {
         level: user.level,
         createDate: user.createDate
     }
-    if (ctx.state.session.user._id.equals(ctx.params.uid)) {
+    if (ctx.state.session && ctx.state.session.user._id.equals(ctx.params.uid)) {
         resBody.email = user.email
         resBody.lastLogin = user.lastLogin
         resBody.rootfsid = user.root
