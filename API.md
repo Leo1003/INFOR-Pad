@@ -9,57 +9,73 @@ This document contains how to use the REST api
  * sessionid: A string for this session. We use this to identify your login status.
 ***
 #### Session Control
-~~~
+~~~http
  POST /api/session
 ~~~
  * Login to an account
 	 * Request Body
-	 	* username: The user's name to login
-	 	* password: The user's password
-	 	* autoLogin: 0 or 1. Specify if the session can be use for 14 days
+	 	 * username: The user's name to login
+	 	 * password: The user's password
+	 	 * autoLogin: 0 or 1. Specify if the session can be use for 14 days
 	 * Respond Status
-	 	* 200: Login Successfully
-	 	* 400: Invalid Value
-	 	* 403: Login Failed
-	 	* 500: Server Error
+	 	 * 200: Login Successfully
+	 	 * 400: Invalid Value
+	 	 * 403: Login Failed
+	 	 * 500: Server Error
 	 * Respond Body
-	 	* sessionid: The ID which can be used to login
-	 	* name: The user's name
+	 	 * sessionid: The ID which can be used to login
+	 	 * name: The user's name
 
-~~~
+~~~http
  DELETE /api/session
 ~~~
  * Logout a session
 	 * Request Header
-	 	* sessionid: The session ID to logout
+	 	 * sessionid: The session ID to logout
 	 * Respond Status
-	 	* 200: Logout Successfully
-	 	* 403: Logout Failed
-	 	* 500: Server Error
+	 	 * 200: Logout Successfully
+	 	 * 403: Logout Failed
+	 	 * 500: Server Error
 
 ***
-#### User Control
+#### User
+~~~http
+ GET /api/user/:id
 ~~~
+ * Get a user's profile by ID
+     * Respond Status
+         * 200: Succeed
+         * 404: Not Found
+         * 500: Server Error
+     * Respond Body
+         * name: username,
+         * level: userlevel,
+         * createDate: The time when the user created
+         * email: The user's email **(Hidden)**
+         * lastLogin: The last time when the user login **(Hidden)**
+         * rootfsid: user's root directory fsid **(Hidden)**
+
+~~~http
  POST /api/user
 ~~~
  * Create a new user
- 	* Request Body
- 		* username: The name to register
- 		* password: The password to login
- 		* email: The email address which can be used to verify
- 	* Respond Status
- 		* 201: The user has been created successfully
- 		* 400: Some data lost
- 		* 409: The username or the email address had been used by someone else
- 		* 500: Server Error
- 	* Respond Body
- 		* sessionid: The ID which can be used to login
-	 	* name: The user's name
+ 	 * Request Body
+ 		 * username: The name to register
+ 		 * password: The password to login
+ 		 * email: The email address which can be used to verify
+ 	 * Respond Status
+ 		 * 201: The user has been created successfully
+ 		 * 400: Some data lost
+ 		 * 409: The username or the email address had been used by someone else
+ 		 * 500: Server Error
+   	 * Respond Body
+ 		 * sessionid: The ID which can be used to login
+	 	 * name: The user's name
 
 ***
 #### File System
-~~~
- GET /api/fs/:id
+~~~http
+ GET /api/fs/:fsid
 ~~~
  * Query a file or a directory
      * Respond Status
@@ -76,14 +92,16 @@ This document contains how to use the REST api
          * modifyDate: LastModifyDate
          * isPublic: If the file can be viewed by anyone
          * format: The file's format or 'Directory'
-         * code: The code of the file (File Only)
-         * stdin: The stdin data (File Only)
-         * files[]: The list of the files contained (Directory Only)
+         * code: The code of the file *(File Only)*
+         * stdin: The stdin data **(File Only)**
+         * files[]: The list of the files contained **(Directory Only)**
 
-~~~
- POST /api/fs/:id
+~~~http
+ POST /api/fs/:fsid
 ~~~
  * Create a new file or a directory
+     * Request Param
+     	 * fsid: **MUST** point to a directory!
      * Request Body
          * filename: The name of the file
          * format: Code type or 'Directory'
@@ -97,16 +115,16 @@ This document contains how to use the REST api
      * Respond Body
          * id: The id of the new file
 
-~~~
- PUT /api/fs/:id
+~~~http
+ PUT /api/fs/:fsid
 ~~~
  * Update a file or directory's data
      * Request Body
          * filename: The new name [Optional]
-         * isPublic: New view permission [Optional]
-         * code: Save new code (File ONly) [Optional]
-         * stdin: Save new input (File ONly) [Optional]
-         * format: Change file format (File ONly) [Optional]
+         * isPublic: Save new view permission [Optional]
+         * code: Save new code **(File Only)** [Optional]
+         * stdin: Save new input **(File Only)** [Optional]
+         * format: Change file format **(File Only)** [Optional]
      * Respond Status
          * 200: Succeed
          * 400: Wrong Request Body
@@ -118,8 +136,8 @@ This document contains how to use the REST api
      * Respond Body
          * id: The file id be updated
 
-~~~
- DELETE /api/fs/:id
+~~~http
+ DELETE /api/fs/:fsid
 ~~~
  * Delete a directory or a file permanently!
      * Respond Status
@@ -129,3 +147,4 @@ This document contains how to use the REST api
          * 403: You don't have enough permission
          * 404: The directory isn't exist
          * 500: Server Error
+         * 507: Error occurred when deleting
