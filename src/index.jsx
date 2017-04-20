@@ -14,10 +14,7 @@ const initialState = window.__PRELOADED_STATE__
 
 delete window.__PRELOADED_STATE__
 
-console.log("client_initialState:")
-console.log(initialState)
-
-const store = configureStore(fromJS(initialState))
+const store = configureStore(initialState)
 
 const App = ({store}) => (
   <Provider store={store}>
