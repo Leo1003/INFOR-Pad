@@ -101,12 +101,15 @@ router.post('/fs/:fsid', async ctx => {
                 }
                 return
             }
+            let isfile = data.format != 'Directory'
             let newfile = await new FileSystem({
-                name : data.filename,
-                parent : fs._id,
-                owner : ctx.state.session.user._id,
-                isFile : data.format != 'Directory',
-                format : data.format == 'Directory' ? undefined : data.format
+                name: data.filename,
+                parent: fs._id,
+                owner: ctx.state.session.user._id,
+                isFile: isfile === true,
+                format: isfile === true ? data.format : undefined,
+                code: isfile === true ? "" : undefined,
+                stdin: isfile === true ? "" : undefined
             }).save()
             fs.files.push(newfile._id)
             fs = await fs.save()

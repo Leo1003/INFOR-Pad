@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const Session = mongoose.model('Session')
 
-router.get('/session', async ctx =>{
+router.get('/session', async ctx => {
     if (!ctx.state.session) {
         ctx.status = 401
         ctx.body = {
