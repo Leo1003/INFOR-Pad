@@ -17,9 +17,14 @@ router.get('*', (ctx, next) => {
      console.log(err.message)
    } else if (props) {
 
-     const store = configureStore(fromJS({
-       message: '',
-     }))
+
+     const initialState = {
+       auth: {
+         message: '',
+       }
+     }
+     //console.log(initialState)
+     const store = configureStore(fromJS(initialState))
 
      const appHtml = renderToString(
        <Provider store={store}>
@@ -27,7 +32,7 @@ router.get('*', (ctx, next) => {
        </Provider>
      )
      const preloadedState = store.getState()
-     console.log(preloadedState)
+     //console.log(preloadedState)
      ctx.body = renderPage(appHtml, preloadedState)
    } else {
      return next()
@@ -52,7 +57,7 @@ function renderPage(appHtml, preloadedState) {
     </head>
     <body>
       <div id="app">${appHtml}</div>
-      <script>window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\u003c')}</script>
+      <script>window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\x3c')}</script>
     <script type="text/javascript" src="index_bundle.js"></script></body>
   </html>
   `

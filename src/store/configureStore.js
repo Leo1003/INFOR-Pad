@@ -5,9 +5,9 @@ import { createLogger } from 'redux-logger'
 import rootReducer from '../reducers'
 import Immutable from 'immutable'
 
-// const initialState = Immutable.Map()
+const initialState = Immutable.Map()
 
-export default function configureStore(preloadedState) {
+export default function configureStore(preloadedState = initialState) {
   const store = createStore(
     rootReducer,
     preloadedState,
