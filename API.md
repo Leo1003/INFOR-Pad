@@ -10,13 +10,26 @@ This document contains how to use the REST api
 ***
 #### Session Control
 ~~~http
+ GET /api/session
+~~~
+ * Get this session's detail
+     * Respond Status
+         * 200: Succeed
+         * 401: Login first!
+         * 500: Server Error
+     * Respond Body
+         * userid: The user id of the current session
+         * expire: The session's expire time
+         * autoLogin: If the session support autoLogin
+
+~~~http
  POST /api/session
 ~~~
  * Login to an account
 	 * Request Body
 	 	 * username: The user's name to login
 	 	 * password: The user's password
-	 	 * autoLogin: 0 or 1. Specify if the session can be use for 14 days
+	 	 * autoLogin: 0 or 1. Specify if the session can support autoLogin
 	 * Respond Status
 	 	 * 200: Login Successfully
 	 	 * 400: Invalid Value
@@ -24,7 +37,7 @@ This document contains how to use the REST api
 	 	 * 500: Server Error
 	 * Respond Body
 	 	 * sessionid: The ID which can be used to login
-	 	 * name: The user's name
+	 	 * userid: The user's id
 
 ~~~http
  DELETE /api/session
@@ -69,6 +82,7 @@ This document contains how to use the REST api
  		 * 409: The username or the email address had been used by someone else
  		 * 500: Server Error
    	 * Respond Body
+         * userid: The user's id
  		 * sessionid: The ID which can be used to login
 	 	 * name: The user's name
 
@@ -92,7 +106,7 @@ This document contains how to use the REST api
          * modifyDate: LastModifyDate
          * isPublic: If the file can be viewed by anyone
          * format: The file's format or 'Directory'
-         * code: The code of the file *(File Only)*
+         * code: The code of the file **(File Only)**
          * stdin: The stdin data **(File Only)**
          * files[]: The list of the files contained **(Directory Only)**
 

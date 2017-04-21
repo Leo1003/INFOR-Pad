@@ -14,24 +14,24 @@ var User = new Schema({
 })
 
 var Session = new Schema({
-    uuid : String,
+    uuid : { type: String, unique: true },
     expireAt : { type: Date, expires: 1 },
     user : { type: Schema.Types.ObjectId, ref: 'User' },
     autoLogin : { type: Boolean, default : false }
 })
 
 var FileSystem = new Schema({
-    name : String,
+    name : { type: String, required: true },
     parent : { type: Schema.Types.ObjectId, ref: 'FileSystem' },
     owner : { type: Schema.Types.ObjectId, ref: 'User' },
     createDate : { type : Date, default : new Date() },
     modifyDate : { type : Date, default : new Date() },
     isFile : { type: Boolean, required: true },
     isPublic : { type: Boolean, default: false },
-    files : [{ type: Schema.Types.ObjectId, ref: 'FileSystem', default: [] }],
+    files : [{ type: Schema.Types.ObjectId, ref: 'FileSystem' }],
     format : String,
-    code : { type: String, default: '' },
-    stdin : { type: String, default: '' }
+    code : { type: String },
+    stdin : { type: String }
 })
 
 mongoose.model('User', User)

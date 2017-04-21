@@ -13,7 +13,7 @@ const api = require('./routes/api');
 
 //react
 const serve = require('koa-static')
-const router = require('./src/routes/router.js')
+const router = require('./src/server/router.js')
 
 // error handler
 onerror(app);

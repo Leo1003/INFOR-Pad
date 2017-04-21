@@ -7,8 +7,8 @@ const mapStateToProps = (state) => {
   console.log("sign in")
   console.log(state)
   return {
-    message: state.auth.get('message')
-    //message: state.auth.message
+    //message: state.auth.get('message')
+    message: state.auth.message
   }
 }
 

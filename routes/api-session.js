@@ -5,6 +5,21 @@ const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const Session = mongoose.model('Session')
 
+router.get('/session', async ctx => {
+    if (!ctx.state.session) {
+        ctx.status = 401
+        ctx.body = {
+            error: "You haven't login yet!"
+        }
+        return
+    }
+    ctx.status = 200
+    ctx.body = {
+        userid: ctx.state.session.user._id,
+        expire: ctx.state.session.expireAt,
+        autoLogin: ctx.state.session.autoLogin
+    }
+})
 router.post('/session', async ctx => {
     let data = ctx.request.body
     if (!data.username || !data.password) {
@@ -41,7 +56,7 @@ router.post('/session', async ctx => {
             ctx.status = 200
             ctx.body = {
                 sessionid: sessID,
-                name: user.name
+                userid: user._id
             }
             return
         }

@@ -3,17 +3,23 @@ import reduxThunk from 'redux-thunk'
 import { createLogger } from 'redux-logger'
 
 import rootReducer from '../reducers'
-import Immutable from 'immutable'
+import Immutable, { fromJS } from 'immutable'
 
-// const initialState = Immutable.Map()
+const initialState = {
+  auth: {
+    message: '',
+  }
+}
 
-export default function configureStore(preloadedState) {
+export default function configureStore(preloadedState = initialState) {
+  console.log("store")
+  console.log(preloadedState)
   const store = createStore(
     rootReducer,
     preloadedState,
     applyMiddleware(
-      reduxThunk,
-      createLogger()
+      createLogger(),
+      reduxThunk
     )
   )
   return store
