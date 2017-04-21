@@ -27,10 +27,10 @@ router.param('fsid', async (fsid, ctx, next) => {
  */
     if (ctx.state.session && ctx.state.session.user._id.equals(fs.owner)) {
         ctx.state.access = 2
-        return next()
+        return await next()
     } else if (fs.isPublic === true) {
         ctx.state.access = 1
-        return next()
+        return await next()
     } else {
         if (!ctx.state.session) {
             ctx.status = 401
@@ -44,6 +44,39 @@ router.param('fsid', async (fsid, ctx, next) => {
             }
         }
         return
+    }
+})
+router.param('tgfsid', async (tgfsid, ctx, next) => {
+    if (!ctx.state.session) {
+        ctx.status = 401
+        ctx.body = {
+            error: "Need authorized"
+        }
+        return
+    }
+    let tgfs = await FileSystem.findById(tgfsid)
+    if (!tgfs) {
+        ctx.status = 404
+        ctx.body = {
+            error: "Target Directory Not found"
+        }
+        return
+    }
+    if (ctx.state.session.user._id.equals(tgfs.owner)) {
+        if (tgfs.isFile == false) {
+            ctx.state.tgfs = tgfs
+            return await next()
+        } else {
+            ctx.status = 400
+            ctx.body = {
+                error: "Target MUST BE a directory"
+            }
+        }
+    } else {
+        ctx.status = 403
+        ctx.body = {
+            error: "Permission denied"
+        }
     }
 })
 
@@ -68,7 +101,6 @@ router.get('/fs/:fsid', async ctx => {
             ctx.status = 200
             resBody.files = []
             fs = await fs.populate('files').execPopulate()
-            console.log(fs)
             fs.files.forEach(filedb => {
                 resBody.files.push({
                     id: filedb._id,
@@ -181,6 +213,34 @@ router.put('/fs/:fsid', async ctx => {
         }
     }
 })
+router.put('/fs/:fsid/:tgfsid', async ctx => {
+    if (ctx.state.access >= 2) {
+        let fs = ctx.state.fs
+        let tgfs = ctx.state.tgfs
+        fs = await fs.populate('parent').execPopulate()
+        let index = fs.parent.files.indexOf(fs._id)
+        if (index == -1) {
+            throw new Error(`Parent doesn't contain file: ${fs._id}`)
+        }
+        fs.parent.files.splice(index, 1)
+        await fs.parent.save()
+        fs.depopulate('parent')
+        fs.parent = tgfs._id
+        tgfs.files.push(fs._id)
+        fs = await fs.save()
+        tgfs = await tgfs.save()
+        ctx.status = 200
+        ctx.body = {
+            fsid: fs._id,
+            newParent: tgfs._id
+        }
+    } else {
+        ctx.status = 403
+        ctx.body = {
+            error: "Permission denied"
+        }
+    }
+})
 router.delete('/fs/:fsid', async ctx => {
     if (ctx.state.access >= 2) {
         if (!ctx.state.fs.parent) {
@@ -190,8 +250,9 @@ router.delete('/fs/:fsid', async ctx => {
             }
             return
         }
+        let num = 0
         try {
-            let num = await recursiveDelete(ctx.state.fs._id)
+            num = await recursiveDelete(ctx.state.fs._id)
         } catch (err) {
             ctx.status = 507
             ctx.body = err.message
