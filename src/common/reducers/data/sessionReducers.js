@@ -11,7 +11,9 @@ import { browserHistory } from 'react-router'
 
 const sessionReducers = handleActions({
   SIGN_IN_SUCCESS: (state, { payload }) => {
-    cookie.save('sessionid', payload.data.sessionid, { path: '/' })
+    let d = new Date()
+    d.setTime(d.getTime() + (14 * 24 * 60 * 60 * 1000))
+    cookie.save('sessionid', payload.data.sessionid, { path: '/' , expires: d})
     browserHistory.push('/')
     return Object.assign({}, state, {
       isLogin: true,

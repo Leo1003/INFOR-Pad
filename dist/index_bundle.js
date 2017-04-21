@@ -37230,7 +37230,9 @@ var sessionReducers = (0, _reduxActions.handleActions)({
   SIGN_IN_SUCCESS: function SIGN_IN_SUCCESS(state, _ref) {
     var payload = _ref.payload;
 
-    _reactCookie2.default.save('sessionid', payload.data.sessionid, { path: '/' });
+    var d = new Date();
+    d.setTime(d.getTime() + 14 * 24 * 60 * 60 * 1000);
+    _reactCookie2.default.save('sessionid', payload.data.sessionid, { path: '/', expires: d });
     _reactRouter.browserHistory.push('/');
     return Object.assign({}, state, {
       isLogin: true,
