@@ -31,3 +31,6 @@ npm-debug.log
 
 # for macos
 .DS_Store
+
+# webpack
+index_bundle.js

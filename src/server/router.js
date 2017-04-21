@@ -4,8 +4,8 @@ import { renderToString } from 'react-dom/server'
 import { match, RouterContext } from 'react-router'
 import { Provider } from 'react-redux'
 import Immutable, { fromJS } from 'immutable'
-
 import configureStore from '../common/store/configureStore'
+import { session } from '../common/constants/models'
 import routes from '../common/routes/routes.jsx'
 
 router.get('*', (ctx, next) => {
@@ -14,11 +14,7 @@ router.get('*', (ctx, next) => {
      console.log(err.message)
    } else if (props) {
 
-     const store = configureStore({
-       auth:{
-         message: '',
-       }
-     })
+     const store = configureStore({session})
      console.log("jizz1")
 
      const appHtml = renderToString(

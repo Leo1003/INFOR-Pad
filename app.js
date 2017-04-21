@@ -36,10 +36,10 @@ app.use(async (ctx, next) => {
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`);
 });
 
-// routes
+app.use(api.routes(), api.allowedMethods());
+// react routes
 app.use(serve(`./dist`))
 app.use(router.routes())
-app.use(api.routes(), api.allowedMethods());
 
 app.io = io;
 io.on('connection', socket => {

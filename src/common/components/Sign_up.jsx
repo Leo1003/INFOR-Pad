@@ -82,10 +82,10 @@ class Sign_up extends React.Component {
   }
   render() {
     let renderMessage = () => {
-      if (this.props.message.length == 0) return
+      if (this.props.error_message.length == 0) return
       return (
         <Message negative>
-          <Message.Header>{this.props.message}</Message.Header>
+          <Message.Header>{this.props.error_message}</Message.Header>
         </Message>
       )
     }
