@@ -36699,13 +36699,13 @@ var IndexPage = function (_React$Component) {
       console.log(this.props);
       var rightMenu = function rightMenu() {
         if (_this2.props.isLogin) return _react2.default.createElement(
-          'div',
-          null,
+          _semanticUiReact.Menu.Menu,
+          { position: 'right' },
           _react2.default.createElement(_semanticUiReact.Menu.Item, { name: 'username', as: _reactRouter.Link }),
           _react2.default.createElement(_Logout2.default, null)
         );else return _react2.default.createElement(
-          'div',
-          null,
+          _semanticUiReact.Menu.Menu,
+          { position: 'right' },
           _react2.default.createElement(_semanticUiReact.Menu.Item, { name: 'Sign in', as: _reactRouter.Link, to: '/Sign_in' }),
           _react2.default.createElement(_semanticUiReact.Menu.Item, { name: 'Sign up', as: _reactRouter.Link, to: '/Sign_up' })
         );
@@ -36717,11 +36717,7 @@ var IndexPage = function (_React$Component) {
           _semanticUiReact.Menu,
           { secondary: true, inverted: true, style: { background: 'black', margin: '0' } },
           _react2.default.createElement(_semanticUiReact.Menu.Item, { name: 'INFOR PAD', as: _reactRouter.Link, to: '/' }),
-          _react2.default.createElement(
-            _semanticUiReact.Menu.Menu,
-            { position: 'right' },
-            rightMenu()
-          )
+          rightMenu()
         ),
         this.props.children
       );

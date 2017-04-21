@@ -12,25 +12,23 @@ class IndexPage extends React.Component {
     console.log(this.props)
     let rightMenu = () => {
       if(this.props.isLogin) return (
-        <div>
-        <Menu.Item name="username" as={Link} />
-        <Logout />
-        </div>
+        <Menu.Menu position='right'>
+          <Menu.Item name="username" as={Link} />
+          <Logout />
+        </Menu.Menu>
       )
       else return (
-        <div>
-        <Menu.Item name="Sign in" as={Link} to='/Sign_in' />
-        <Menu.Item name="Sign up" as={Link} to='/Sign_up' />
-        </div>
+        <Menu.Menu position='right'>
+          <Menu.Item name="Sign in" as={Link} to='/Sign_in' />
+          <Menu.Item name="Sign up" as={Link} to='/Sign_up' />
+        </Menu.Menu>
       )
     }
     return (
       <div>
         <Menu secondary inverted style={{background: 'black', margin: '0'}}>
           <Menu.Item name="INFOR PAD" as={Link} to='/' />
-          <Menu.Menu position='right'>
             {rightMenu()}
-          </Menu.Menu>
         </Menu>
         {this.props.children}
       </div>
