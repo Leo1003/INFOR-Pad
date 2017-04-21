@@ -1,15 +1,12 @@
 const router = require('koa-router')()
-
 import React from 'react'
 import { renderToString } from 'react-dom/server'
-
 import { match, RouterContext } from 'react-router'
-import routes from './routes.jsx'
-
 import { Provider } from 'react-redux'
-import configureStore from '../store/configureStore'
-
 import Immutable, { fromJS } from 'immutable'
+
+import configureStore from '../common/store/configureStore'
+import routes from '../common/routes/routes.jsx'
 
 router.get('*', (ctx, next) => {
   match({ routes: routes, location: ctx.url}, (err, redirect, props) => {

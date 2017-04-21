@@ -5,10 +5,11 @@ import {
   browserHistory
 } from 'react-router'
 import { Provider } from 'react-redux'
-import routes from './routes/routes.jsx'
 import { createLogger } from 'redux-logger'
-import configureStore from './store/configureStore'
 import { fromJS } from 'immutable'
+
+import routes from '../common/routes/routes.jsx'
+import configureStore from '../common/store/configureStore'
 
 const initialState = window.__PRELOADED_STATE__
 

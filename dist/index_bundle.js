@@ -36532,17 +36532,17 @@ var _reactRouter = __webpack_require__(56);
 
 var _reactRedux = __webpack_require__(230);
 
+var _reduxLogger = __webpack_require__(421);
+
+var _immutable = __webpack_require__(293);
+
 var _routes = __webpack_require__(523);
 
 var _routes2 = _interopRequireDefault(_routes);
 
-var _reduxLogger = __webpack_require__(421);
-
 var _configureStore = __webpack_require__(524);
 
 var _configureStore2 = _interopRequireDefault(_configureStore);
-
-var _immutable = __webpack_require__(293);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
