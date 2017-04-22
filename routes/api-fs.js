@@ -217,6 +217,13 @@ router.put('/fs/:fsid/:tgfsid', async ctx => {
     if (ctx.state.access >= 2) {
         let fs = ctx.state.fs
         let tgfs = ctx.state.tgfs
+        if (!ctx.state.fs.parent) {
+            ctx.status = 400
+            ctx.body = {
+                error: "You can't move a root directory"
+            }
+            return
+        }
         fs = await fs.populate('parent').execPopulate()
         let index = fs.parent.files.indexOf(fs._id)
         if (index == -1) {
