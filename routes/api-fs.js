@@ -144,6 +144,7 @@ router.post('/fs/:fsid', async ctx => {
                 stdin: isfile === true ? "" : undefined
             }).save()
             fs.files.push(newfile._id)
+            fs.modifyDate = new Date()
             fs = await fs.save()
             ctx.status = 201
             ctx.body = {
@@ -233,7 +234,9 @@ router.put('/fs/:fsid/:tgfsid', async ctx => {
         await fs.parent.save()
         fs.depopulate('parent')
         fs.parent = tgfs._id
+        fs.modifyDate = new Date()
         tgfs.files.push(fs._id)
+        tgfs.modifyDate = new Date()
         fs = await fs.save()
         tgfs = await tgfs.save()
         ctx.status = 200
@@ -257,6 +260,9 @@ router.delete('/fs/:fsid', async ctx => {
             }
             return
         }
+        let parent = await findById(ctx.state.fs.parent)
+        parent.modifyDate = new Date()
+        parent = await parent.save()
         let num = 0
         try {
             num = await recursiveDelete(ctx.state.fs._id)
