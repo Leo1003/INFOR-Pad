@@ -225,6 +225,22 @@ router.put('/fs/:fsid/:tgfsid', async ctx => {
             }
             return
         }
+        if (tgfs._id.equals(fs._id)) {
+            ctx.status = 400
+            ctx.body = {
+                error: "You can't move it into itself"
+            }
+            return
+        }
+        if (tgfs._id.equals(fs.parent)) {
+            //Don't do anything if already in the the target directory
+            ctx.status = 202
+            ctx.body = {
+                fsid: fs._id,
+                newParent: tgfs._id
+            }
+            return
+        }
         fs = await fs.populate('parent').execPopulate()
         let index = fs.parent.files.indexOf(fs._id)
         if (index == -1) {
@@ -260,7 +276,7 @@ router.delete('/fs/:fsid', async ctx => {
             }
             return
         }
-        let parent = await findById(ctx.state.fs.parent)
+        let parent = await FileSystem.findById(ctx.state.fs.parent)
         parent.modifyDate = new Date()
         parent = await parent.save()
         let num = 0
