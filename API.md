@@ -18,7 +18,7 @@ This document contains how to use the REST api
          * 401: Login first!
          * 500: Server Error
      * Respond Body
-         * userid: The user id of the current session
+         * user: The user object of the login user
          * expire: The session's expire time
          * autoLogin: If the session support autoLogin
 
@@ -149,6 +149,25 @@ This document contains how to use the REST api
          * 500: Server Error
      * Respond Body
          * id: The file id be updated
+
+~~~http
+ PUT /api/fs/:fsid/:tgfsid
+~~~
+ * Move file or directory to another directory
+     * Request Param
+         * fsid: the file or directory to move
+         * tgfsid: the target directory
+     * Respond Status
+         * 200: Succeed
+         * 202: The file is already in the target directory. Nothing will happen.
+         * 400: Bad request!
+         * 401: Login first!
+         * 403: You don't have enough permission
+         * 404: Not Found
+         * 500: Server Error
+     * Respond Body
+         * fsid: The file's id
+         * newParent: The file's new parent id
 
 ~~~http
  DELETE /api/fs/:fsid

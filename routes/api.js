@@ -33,8 +33,7 @@ router.use(async (ctx, next) => {
 
 router.use(async (ctx, next) => {
     if (!ctx.header.sessionid) {
-        debug("Can't find header")
-        return next()
+        return await next()
     }
     let idhash = crypto.createHash('sha512').update(ctx.header.sessionid).digest('hex')
     let sess = await Session.findOne({
@@ -52,7 +51,7 @@ router.use(async (ctx, next) => {
             sess.expireAt = expireDate
             await sess.save()
             ctx.state.session = sess
-            return next()
+            return await next()
         }
     }
     debug("Expired!")
