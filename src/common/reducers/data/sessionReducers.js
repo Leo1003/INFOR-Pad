@@ -29,6 +29,16 @@ const sessionReducers = handleActions({
   },
   SIGN_UP_FAIL: (state) => {
     return Object.assign({}, state, { error_message: 'Username Already Used'})
+  },
+  LOGOUT: (state) => {
+    cookie.remove('sessionid')
+    browserHistory.replace({ pathname: '/' })
+    return Object.assign({}, state, {
+      isLogin: false,
+      sessionid: '',
+      userid: '',
+      error_message: ''
+    })
   }
 }, session)
 

@@ -2,10 +2,17 @@ import React from 'react'
 import { Menu } from 'semantic-ui-react'
 import { Link } from 'react-router'
 import Logout from './Logout.jsx'
+import cookie from 'react-cookie'
 
 class IndexPage extends React.Component {
   constructor(props) {
     super(props)
+  }
+  componentWillMount() {
+    // const sesionid = cookie.load('sessionid')
+    // if(sessionid && this.props.sessionid.length == 0) {
+    //   this.props.getInitial(sessionid)
+    // }
   }
   render() {
     console.log("Index")
