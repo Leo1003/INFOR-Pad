@@ -18,7 +18,7 @@ This document contains how to use the REST api
          * 401: Login first!
          * 500: Server Error
      * Respond Body
-         * userid: The user id of the current session
+         * user: The user object of the login user
          * expire: The session's expire time
          * autoLogin: If the session support autoLogin
 

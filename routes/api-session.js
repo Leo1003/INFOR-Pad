@@ -13,9 +13,17 @@ router.get('/session', async ctx => {
         }
         return
     }
+    let userData = {
+        name: ctx.state.session.user.name,
+        level: ctx.state.session.user.level,
+        createDate: ctx.state.session.user.createDate,
+        email: ctx.state.session.user.email,
+        lastLogin: ctx.state.session.user.lastLogin,
+        rootfsid: ctx.state.session.user.root
+    }
     ctx.status = 200
     ctx.body = {
-        userid: ctx.state.session.user._id,
+        user: userData,
         expire: ctx.state.session.expireAt,
         autoLogin: ctx.state.session.autoLogin
     }
