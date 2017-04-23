@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import Sign_in from '../components/Sign_in.jsx'
 
-import { signIn } from '../actions/authActions.js'
+import { fetchSignIn } from '../actions/sessionActions.js'
 
 const mapStateToProps = (state) => {
   console.log("sign in")
@@ -14,8 +14,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    handleSignin: (formData) => {
-      dispatch(signIn(formData))
+    handleSignIn: (formData) => {
+      dispatch(fetchSignIn(formData))
     }
   }
 }

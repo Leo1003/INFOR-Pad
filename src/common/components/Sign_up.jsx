@@ -78,7 +78,7 @@ class Sign_up extends React.Component {
     for(const field in this.refs) {
       formData[field] = this.refs[field].value
     }
-    this.props.handleSignup(formData)
+    this.props.handleSignUp(formData)
   }
   render() {
     let renderMessage = () => {

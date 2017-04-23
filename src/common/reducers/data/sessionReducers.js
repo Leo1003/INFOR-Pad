@@ -14,7 +14,7 @@ const sessionReducers = handleActions({
     let d = new Date()
     d.setTime(d.getTime() + (14 * 24 * 60 * 60 * 1000))
     cookie.save('sessionid', payload.data.sessionid, { path: '/' , expires: d})
-    browserHistory.push('/')
+    browserHistory.replace({ pathname: '/' })
     return Object.assign({}, state, {
       isLogin: true,
       sessionid: payload.data.sessionid,
@@ -36,7 +36,21 @@ const sessionReducers = handleActions({
     return Object.assign({}, state, {
       isLogin: false,
       sessionid: '',
-      userid: '',
+      error_message: ''
+    })
+  },
+  GET_INITIAL_SESSION: (state) => {
+    const sessionid = cookie.load('sessionid')
+    if(sessionid) {
+      return Object.assign({}, state, {
+        isLogin: true,
+        sessionid: `${sessionid}`,
+        error_message: ''
+      })
+    }
+    else return Object.assign({}, state, {
+      isLogin: false,
+      sessionid: '',
       error_message: ''
     })
   }

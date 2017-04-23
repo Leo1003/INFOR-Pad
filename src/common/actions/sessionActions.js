@@ -1,13 +1,14 @@
 import 'whatwg-fetch'
 import {
-  SIGN_UP_SUCCESS,
-  SIGN_UP_FAIL,
   SIGN_IN_SUCCESS,
   SIGN_IN_FAIL,
+  SIGN_UP_SUCCESS,
+  SIGN_UP_FAIL,
+  GET_INITIAL_SESSION,
   LOGOUT
 } from '../constants/actionTypes'
 
-export const signIn = (formData) => (
+export const fetchSignIn = (formData) => (
   (dispatch) => {
     fetch('/api/session', {
       method: 'POST',
@@ -30,7 +31,24 @@ export const signIn = (formData) => (
   }
 )
 
-export const signUp = (formData) => (
+
+export const fetchLogout = (sessionid) => (
+  (dispatch) => {
+    fetch("/api/session", {
+      method: 'DELETE',
+      headers: {
+        'sessionid': `${sessionid}`
+      }
+    })
+    .then(res => {
+      if(res.ok) {
+        dispatch({ type: LOGOUT })
+      }
+    }).catch(err => { console.log(err) })
+  }
+)
+
+export const fetchSignUp = (formData) => (
   (dispatch) => {
     fetch('/api/user', {
       method: 'POST',
@@ -50,18 +68,8 @@ export const signUp = (formData) => (
   }
 )
 
-export const logOut = () => (
+export const GetInitialSession = (sessionid) => (
   (dispatch) => {
-    fetch("/api/session", {
-      method: 'DELETE',
-      headers: {
-        'sessionid': `${sessionid}`
-      }
-    })
-    .then(res => {
-      if(res.ok) {
-        dispatch({ type: LOGOUT })
-      }
-    }).catch(err => { console.log(err) })
+    dispatch({ type: GET_INITIAL_SESSION })
   }
 )

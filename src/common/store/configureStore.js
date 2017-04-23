@@ -1,12 +1,13 @@
 import { createStore, applyMiddleware } from 'redux'
 import reduxThunk from 'redux-thunk'
 import { createLogger } from 'redux-logger'
-import { session } from '../constants/models'
+import { session, user } from '../constants/models'
 import rootReducer from '../reducers'
 import Immutable, { fromJS } from 'immutable'
 
 const initialState = {
-  session
+  session,
+  user
 }
 
 export default function configureStore(preloadedState = initialState) {

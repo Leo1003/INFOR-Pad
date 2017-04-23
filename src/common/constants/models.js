@@ -2,7 +2,6 @@ export const session = {
     error_message: '',   //login or sign in error
     isLogin: false,
     sessionid: '',
-    userid: ''
 }
 
 export const user = {

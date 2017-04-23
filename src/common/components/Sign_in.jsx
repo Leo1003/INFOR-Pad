@@ -48,7 +48,7 @@ class Sign_in extends React.Component {
     for(const field in this.refs) {
       formData[field] = this.refs[field].value
     }
-    this.props.handleSignin(formData)
+    this.props.handleSignIn(formData)
   }
   render() {
     let renderMessage = () => {

@@ -6,16 +6,17 @@ import cookie from 'react-cookie'
 class Logout extends React.Component{
   constructor(props) {
     super(props)
-    //this.handleLogout = this.handleLogout.bind(this)
+    this.onLogout = this.onLogout.bind(this)
   }
-  // handleLogout(e) {
-  //   const sessionid = cookie.load('sessionid')
-  //   if(!sessionid) return
-  //   else this.props.onLogout
-  // }
+  onLogout(e) {
+    const sessionid = cookie.load('sessionid')
+    console.log(this.props)
+    if(!sessionid) return
+    else this.props.handleLogout(sessionid)
+  }
   render() {
     return (
-      <Menu.Item name="Logout" as={Link} onClick={this.props.handleLogout} />
+      <Menu.Item name="Logout" as={Link} onClick={this.onLogout} />
     )
   }
 }

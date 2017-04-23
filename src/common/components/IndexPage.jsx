@@ -1,7 +1,7 @@
 import React from 'react'
 import { Menu } from 'semantic-ui-react'
 import { Link } from 'react-router'
-import Logout from './Logout.jsx'
+import Logout_Container from '../containers/Logout_Container.js'
 import cookie from 'react-cookie'
 
 class IndexPage extends React.Component {
@@ -9,10 +9,7 @@ class IndexPage extends React.Component {
     super(props)
   }
   componentWillMount() {
-    // const sesionid = cookie.load('sessionid')
-    // if(sessionid && this.props.sessionid.length == 0) {
-    //   this.props.getInitial(sessionid)
-    // }
+    this.props.handleGetInitialSession()
   }
   render() {
     console.log("Index")
@@ -21,7 +18,7 @@ class IndexPage extends React.Component {
       if(this.props.isLogin) return (
         <Menu.Menu position='right'>
           <Menu.Item name="username" as={Link} />
-          <Logout />
+          <Logout_Container />
         </Menu.Menu>
       )
       else return (
