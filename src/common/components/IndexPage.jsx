@@ -8,16 +8,13 @@ class IndexPage extends React.Component {
   constructor(props) {
     super(props)
   }
-  componentWillMount() {
-    this.props.handleGetInitialSession()
-  }
   render() {
     console.log("Index")
     console.log(this.props)
     let rightMenu = () => {
       if(this.props.isLogin) return (
         <Menu.Menu position='right'>
-          <Menu.Item name="username" as={Link} />
+          <Menu.Item name={this.props.name} as={Link} />
           <Logout_Container />
         </Menu.Menu>
       )
