@@ -3,9 +3,9 @@ const Schema = mongoose.Schema
 const debug = require('debug')('INFOR-Pad:mongodb')
 
 var User = new Schema({
-    name : String,
-    password : String,
-    salt : String,
+    name : { type: String, required: true },
+    password : { type: String, required: true },
+    salt : { type: String, required: true },
     email : String,
     level : { type : Number, default : 0 },
     createDate : { type : Date, default : new Date() },
@@ -23,7 +23,7 @@ var Session = new Schema({
 var FileSystem = new Schema({
     name : { type: String, required: true },
     parent : { type: Schema.Types.ObjectId, ref: 'FileSystem' },
-    owner : { type: Schema.Types.ObjectId, ref: 'User' },
+    owner : { type: Schema.Types.ObjectId, ref: 'User', required: true },
     createDate : { type : Date, default : new Date() },
     modifyDate : { type : Date, default : new Date() },
     isFile : { type: Boolean, required: true },

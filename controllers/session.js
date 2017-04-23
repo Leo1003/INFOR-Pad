@@ -10,6 +10,9 @@ function getExpireDate(autologin) {
 }
 
 exports.generateSession = async function (user, autologin) {
+    if (!user) {
+        throw new Error("Invalid user!")
+    }
     let sessID = randomstring.generate(32)
     let expireDate = getExpireDate(autologin)
     user.lastLogin = new Date()

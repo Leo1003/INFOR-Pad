@@ -1,11 +1,12 @@
 var router = require('koa-router')()
 const hash = require('../controllers/hash')
-const sessionCtrl = require('../controllers/session')
 const crypto = require('crypto')
 const randomstring = require('randomstring')
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const Session = mongoose.model('Session')
+const userCtrl = require('../controllers/user')
+const sessionCtrl = require('../controllers/session')
 
 router.get('/session', async ctx => {
     if (!ctx.state.session) {
@@ -15,17 +16,9 @@ router.get('/session', async ctx => {
         }
         return
     }
-    let userData = {
-        name: ctx.state.session.user.name,
-        level: ctx.state.session.user.level,
-        createDate: ctx.state.session.user.createDate,
-        email: ctx.state.session.user.email,
-        lastLogin: ctx.state.session.user.lastLogin,
-        rootfsid: ctx.state.session.user.root
-    }
     ctx.status = 200
     ctx.body = {
-        user: userData,
+        user: userCtrl.extractUserData(ctx.state.session.user, true),
         expire: ctx.state.session.expireAt,
         autoLogin: ctx.state.session.autoLogin
     }
