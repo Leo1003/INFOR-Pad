@@ -4,9 +4,13 @@ const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const Session = mongoose.model('Session')
 
-function getExpireDate(autologin) {
+function genExpireDate(autologin) {
     let timeout = (autologin == true ? 14*86400*1000 : 3600*1000)
     return new Date(Date.now() + timeout)
+}
+
+exports.getSessionById = async function (sessionid) {
+    return await Session.findOne({uuid: hash.hashSessionId(sessionid)})
 }
 
 exports.generateSession = async function (user, autologin) {
@@ -14,7 +18,7 @@ exports.generateSession = async function (user, autologin) {
         throw new Error("Invalid user!")
     }
     let sessID = randomstring.generate(32)
-    let expireDate = getExpireDate(autologin)
+    let expireDate = genExpireDate(autologin)
     user.lastLogin = new Date()
     await user.save()
     await new Session({
@@ -27,7 +31,11 @@ exports.generateSession = async function (user, autologin) {
 }
 
 exports.renewSession = async function (session) {
-    session.expireAt = getExpireDate(session.autologin)
+    session.expireAt = genExpireDate(session.autologin)
     await session.save()
     return session
+}
+
+exports.removeSession = async function (session) {
+    return await session.remove()
 }
