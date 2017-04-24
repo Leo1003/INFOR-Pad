@@ -7,7 +7,8 @@ const mapStateToProps = (state) => {
   console.log("sign up")
   console.log(state)
   return {
-    error_message: state.session.error_message
+    error_message: state.session.error_message,
+    isLogin: state.session.isLogin
   }
 }
 

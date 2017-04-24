@@ -5,7 +5,8 @@ import {
   SIGN_UP_SUCCESS,
   SIGN_UP_FAIL,
   GET_INITIAL_SESSION,
-  LOGOUT
+  CLEAN_SESSION,
+  CLEAN_USER
 } from '../constants/actionTypes'
 
 export const fetchSignIn = (formData) => (
@@ -42,7 +43,8 @@ export const fetchLogout = (sessionid) => (
     })
     .then(res => {
       if(res.ok) {
-        dispatch({ type: LOGOUT })
+        dispatch({ type: CLEAN_SESSION })
+        dispatch({ type: CLEAN_USER })
       }
     }).catch(err => { console.log(err) })
   }
@@ -58,7 +60,10 @@ export const fetchSignUp = (formData) => (
     })
     .then(res => {
       if(res.ok) {
-        dispatch({ type: SIGN_UP_SUCCESS })
+        return res.json()
+        .then(json => {
+          dispatch({ type: SIGN_UP_SUCCESS , payload: { data: json } })
+        })
       }
       else if(res.status == 409) {
         dispatch({ type: SIGN_UP_FAIL })

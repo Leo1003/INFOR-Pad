@@ -1,14 +1,16 @@
 import { handleActions } from 'redux-actions'
 import {
-  GET_INITIAL_USER
+  GET_INITIAL_USER,
+  CLEAN_SESSION
 } from '../../constants/actionTypes'
 import { user } from '../../constants/models.js'
 import cookie from 'react-cookie'
 import { browserHistory } from 'react-router'
 const userReducers = handleActions({
+  CLEAN_SESSION: (state) => {
+    return user
+  },
   GET_INITIAL_USER: (state, { payload }) => {
-    console.log("userReducer")
-    console.log(state)
     return Object.assign({}, state, {
       name: payload.data.user.name,
       level: payload.data.user.level,
@@ -17,7 +19,7 @@ const userReducers = handleActions({
       lastLogin: payload.data.user.lastLogin,
       rootfsid: payload.data.user.rootfsid
     })
-  }
+  },
 }, user)
 
 export default userReducers

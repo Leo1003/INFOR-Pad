@@ -20,11 +20,11 @@ delete window.__PRELOADED_STATE__
 const store = configureStore(initialState)
 
 store.dispatch(GetInitialSession())
-console.log(store.getState())
+//console.log(store.getState())
 if(store.getState().session.isLogin) {
   store.dispatch(fetchGetInitialUser(store.getState().session.sessionid))
 }
-console.log(store.getState())
+//console.log(store.getState())
 
 const App = ({store}) => (
   <Provider store={store}>

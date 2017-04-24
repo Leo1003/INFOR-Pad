@@ -7,12 +7,12 @@ import HomePage from '../components/HomePage.jsx'
 import IndexPageContainer from '../containers/IndexPageContainer'
 import Sign_in_Container from '../containers/Sign_in_Container'
 import Sign_up_Container from '../containers/Sign_up_Container'
-import CheckAuth from '../components/CheckAuth.jsx'
+import CheckAuth_Container from '../containers/CheckAuth_Container'
 
 module.exports = (
   <Route path="/" component={IndexPageContainer}>
     <IndexRoute component={HomePage} />
-    <Route component={CheckAuth}>
+    <Route component={CheckAuth_Container}>
       <Route path="/Sign_in" component={Sign_in_Container} />
       <Route path="/Sign_up" component={Sign_up_Container} />
     </Route>
