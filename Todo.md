@@ -9,6 +9,19 @@
   * sessionid
 
 ### Todo:
+  * Router
+    / -> home
+    /:user -> userhome
+    ```
+    if(isLogin && username == user) redirect myhome; render private + public data
+    else render public data of the user
+
+    ```
+    /Sign_In -> if(!isLogin) render it
+    /Sign_Up -> if(!isLogin) render it
+
+    /:folderid -> ace editor
+
   * CheckAuth -> get Initail by sessionid
     ```
     function CheckAuth() {

@@ -9,6 +9,8 @@ import {
   CLEAN_USER
 } from '../constants/actionTypes'
 
+import { fetchGetInitialUser } from './userActions'
+
 export const fetchSignIn = (formData) => (
   (dispatch) => {
     fetch('/api/session', {
@@ -22,6 +24,7 @@ export const fetchSignIn = (formData) => (
         return res.json()
         .then(json => {
           dispatch({ type: SIGN_IN_SUCCESS, payload: { data: json } });
+          dispatch(fetchGetInitialUser(json.sessionid))
         })
       }
       else if(res.status == 403) {
@@ -73,7 +76,7 @@ export const fetchSignUp = (formData) => (
   }
 )
 
-export const GetInitialSession = (sessionid) => (
+export const GetInitialSession = () => (
   (dispatch) => {
     dispatch({ type: GET_INITIAL_SESSION })
   }
