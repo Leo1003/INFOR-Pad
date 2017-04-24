@@ -5,33 +5,18 @@ const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const Session = mongoose.model('Session')
 const FileSystem = mongoose.model('FileSystem')
+const fsCtrl = require('../controllers/filesystem')
 
 router.param('fsid', async (fsid, ctx, next) => {
-    let fs = await FileSystem.findById(fsid)
-    if (fs) {
-        ctx.state.fs = fs
-    } else {
+    let access = await fsCtrl.getAccess(fsid, (ctx.state.session ? ctx.state.session.user._id : undefined))
+    if (access === undefined) {
         ctx.status = 404
         ctx.body = {
             error: "Not found"
         }
         return
     }
-/************************
- ***  Access Control  ***
- ************************
- ctx.state.access
- 2 = Read/Write
- 1 = Read Only
- 0 = No Access
- */
-    if (ctx.state.session && ctx.state.session.user._id.equals(fs.owner)) {
-        ctx.state.access = 2
-        return await next()
-    } else if (fs.isPublic === true) {
-        ctx.state.access = 1
-        return await next()
-    } else {
+    if (access == 0) {
         if (!ctx.state.session) {
             ctx.status = 401
             ctx.body = {
@@ -45,6 +30,8 @@ router.param('fsid', async (fsid, ctx, next) => {
         }
         return
     }
+    ctx.state.access = access
+    return await next()
 })
 router.param('tgfsid', async (tgfsid, ctx, next) => {
     if (!ctx.state.session) {
@@ -54,17 +41,16 @@ router.param('tgfsid', async (tgfsid, ctx, next) => {
         }
         return
     }
-    let tgfs = await FileSystem.findById(tgfsid)
-    if (!tgfs) {
+    let access = await fsCtrl.getAccess(tgfsid, ctx.state.session.user._id)
+    if (access === undefined) {
         ctx.status = 404
         ctx.body = {
             error: "Target Directory Not found"
         }
         return
     }
-    if (ctx.state.session.user._id.equals(tgfs.owner)) {
-        if (tgfs.isFile == false) {
-            ctx.state.tgfs = tgfs
+    if (access >= 2) {
+        if (await fsCtrl.findDir(tgfsid)) {
             return await next()
         } else {
             ctx.status = 400
@@ -82,38 +68,9 @@ router.param('tgfsid', async (tgfsid, ctx, next) => {
 
 router.get('/fs/:fsid', async ctx => {
     if (ctx.state.access >= 1) {
-        let fs = ctx.state.fs
-        let resBody = {
-            id: fs._id,
-            name: fs.name,
-            parent: fs.parent,
-            owner: fs.owner,
-            createDate: fs.createDate,
-            modifyDate: fs.modifyDate,
-            isPublic: fs.isPublic,
-            format: fs.isFile === true ? fs.format : 'Directory'
-        }
-        if (fs.isFile === true) {
-            ctx.status = 200
-            resBody.code = fs.code
-            resBody.stdin = fs.stdin
-        } else {
-            ctx.status = 200
-            resBody.files = []
-            fs = await fs.populate('files').execPopulate()
-            fs.files.forEach(filedb => {
-                resBody.files.push({
-                    id: filedb._id,
-                    name: filedb.name,
-                    createDate: filedb.createDate,
-                    modifyDate: filedb.modifyDate,
-                    isPublic: filedb.isPublic,
-                    format: filedb.isFile == true ? filedb.format : 'Directory'
-                })
-            })
-        }
+        let fs = await fsCtrl.findFS(ctx.params.fsid)
         ctx.status = 200
-        ctx.body = resBody
+        ctx.body = fsCtrl.extractFSData(fs)
     } else {
         ctx.status = 403
         ctx.body = {
@@ -281,7 +238,7 @@ router.delete('/fs/:fsid', async ctx => {
         parent = await parent.save()
         let num = 0
         try {
-            num = await recursiveDelete(ctx.state.fs._id)
+            num = await fsCtrl.recursiveDelete(ctx.state.fs._id)
         } catch (err) {
             ctx.status = 507
             ctx.body = err.message
@@ -298,44 +255,5 @@ router.delete('/fs/:fsid', async ctx => {
         }
     }
 })
-
-async function Delete(id) {
-    let fs = await FileSystem.findById(id)
-    if (!fs) {
-        throw new Error("File doesn't exist")
-    }
-    if (fs.isFile == false && fs.files.length > 0) {
-        throw new Error(`Directory ${fs._id} isn't empty`)
-    }
-    fs = await fs.populate('parent').execPopulate()
-    if (fs.parent.isFile == true) {
-        throw new Error(`Parent is not a directory: ${fs.parent._id}`)
-    }
-    let index = fs.parent.files.indexOf(fs._id)
-    if (index == -1) {
-        throw new Error(`Parent doesn't contain file: ${fs._id}`)
-    }
-    fs.parent.files.splice(index, 1)
-    await fs.parent.save()
-    await fs.remove()
-    return 1
-}
-
-async function recursiveDelete(id) {
-    let fs = await FileSystem.findById(id)
-    if (!fs) {
-        throw new Error("File doesn't exist")
-    }
-    if (fs.isFile == true) {
-        return await Delete(id)
-    } else {
-        let count = 0
-        for (let fileid of fs.files) {
-            count += await recursiveDelete(fileid)
-        }
-        count += await Delete(id)
-        return count
-    }
-}
 
 module.exports = router
