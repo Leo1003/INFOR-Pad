@@ -1,10 +1,10 @@
 import { connect } from 'react-redux'
-import IndexPage from '../components/IndexPage.jsx'
+import Main from '../components/Main.jsx'
 import { GetInitialSession } from '../actions/sessionActions'
 import { fetchGetInitialUser } from '../actions/userActions'
 
 const mapStateToProps = (state) => {
-  console.log("index")
+  console.log("main")
   console.log(state)
   return {
     isLogin: state.session.isLogin,
@@ -13,4 +13,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps)(IndexPage)
+export default connect(mapStateToProps)(Main)

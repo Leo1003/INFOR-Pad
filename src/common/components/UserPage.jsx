@@ -1,4 +1,5 @@
 import React from 'react'
+import { Container } from 'semantic-ui-react'
 
 class UserPage extends React.Component {
   constructor(props) {
@@ -6,7 +7,9 @@ class UserPage extends React.Component {
   }
   render() {
     return(
-      <h1>{this.props.name} User Page</h1>
+      <Container>
+        <h1>{this.props.name} User Page</h1>
+      </Container>
     )
   }
 }
