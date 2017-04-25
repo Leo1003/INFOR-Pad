@@ -76,6 +76,20 @@ exports.getAccess = async function (fsid, userid) {
 }
 
 
+exports.InsertFS = async function (fs, pfsid) {
+    let pfs = await exports.findDir(pfsid)
+    if (pfs) {
+        fs.parent = pfs._id
+        pfs.files.push(fs._id)
+        pfs.modifyDate = new Date()
+        await fs.save()
+        await pfs.save()
+        return fs
+    } else {
+        throw { name: "Not Found", message: "Can't not find parent dir!" }
+    }
+}
+
 async function Delete(id) {
     let fs = await FileSystem.findById(id)
     if (!fs) {

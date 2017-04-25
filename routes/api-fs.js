@@ -80,37 +80,37 @@ router.get('/fs/:fsid', async ctx => {
 })
 router.post('/fs/:fsid', async ctx => {
     if (ctx.state.access >= 2) {
-        let fs = ctx.state.fs
-        if (fs.isFile === false) {
-            let data = ctx.request.body
-            if (!data.filename || !data.format) {
-                ctx.status = 400
-                ctx.body = {
-                    error: "Some data are missed"
-                }
-                return
+        if (!data.filename || !data.format) {
+            ctx.status = 400
+            ctx.body = {
+                error: "Some data are missed"
             }
+            return
+        }
+        try {
+            let data = ctx.request.body
             let isfile = data.format != 'Directory'
-            let newfile = await new FileSystem({
+            let newfile = new FileSystem({
                 name: data.filename,
-                parent: fs._id,
                 owner: ctx.state.session.user._id,
                 isFile: isfile === true,
                 format: isfile === true ? data.format : undefined,
                 code: isfile === true ? "" : undefined,
                 stdin: isfile === true ? "" : undefined
-            }).save()
-            fs.files.push(newfile._id)
-            fs.modifyDate = new Date()
-            fs = await fs.save()
+            })
+            newfile = await fsCtrl.InsertFS(newfile, ctx.params.fsid)
             ctx.status = 201
             ctx.body = {
                 id: newfile._id
             }
-        } else {
-            ctx.status = 400
-            ctx.body = {
-                error: "Not a directory"
+        } catch (err) {
+            if (err.name == "Not Found") {
+                ctx.status = 400
+                ctx.body = {
+                    error: "Not a directory"
+                }
+            } else {
+                throw err
             }
         }
     } else {
