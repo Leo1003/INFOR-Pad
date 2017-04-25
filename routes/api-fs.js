@@ -98,7 +98,7 @@ router.post('/fs/:fsid', async ctx => {
                 code: isfile === true ? "" : undefined,
                 stdin: isfile === true ? "" : undefined
             })
-            newfile = await fsCtrl.InsertFS(newfile, ctx.params.fsid)
+            newfile = await fsCtrl.link(newfile, ctx.params.fsid)
             ctx.status = 201
             ctx.body = {
                 id: newfile._id
@@ -140,6 +140,7 @@ router.put('/fs/:fsid', async ctx => {
             } else {
                 throw err
             }
+            return
         }
         ctx.status = 200
         ctx.body = {
@@ -154,9 +155,9 @@ router.put('/fs/:fsid', async ctx => {
 })
 router.put('/fs/:fsid/:tgfsid', async ctx => {
     if (ctx.state.access >= 2) {
-        let fs = ctx.state.fs
-        let tgfs = ctx.state.tgfs
-        if (!ctx.state.fs.parent) {
+        let fs = await fsCtrl.findFS(ctx.params.fsid)
+        let tgfs = await fsCtrl.findDir(ctx.params.tgfsid)
+        if (fsCtrl.isRootDir(tgfs) == true) {
             ctx.status = 400
             ctx.body = {
                 error: "You can't move a root directory"
@@ -174,29 +175,35 @@ router.put('/fs/:fsid/:tgfsid', async ctx => {
             //Don't do anything if already in the the target directory
             ctx.status = 202
             ctx.body = {
-                fsid: fs._id,
-                newParent: tgfs._id
+                fsid: ctx.params.fsid,
+                newParent: ctx.params.tgfsid
             }
             return
         }
-        fs = await fs.populate('parent').execPopulate()
-        let index = fs.parent.files.indexOf(fs._id)
-        if (index == -1) {
-            throw new Error(`Parent doesn't contain file: ${fs._id}`)
+        try {
+            let pfs = await fsCtrl.findDir(fs.parent)
+            fs = await fsCtrl.unlink(fs, pfs)
+            fs = await fsCtrl.link(fs, ctx.params.tgfsid)
+        } catch (err) {
+            if (err.name == "Delete") {
+                ctx.status = 507
+                ctx.body = {
+                    error: err.message
+                }
+            } else if (err.name == "Not Found") {
+                ctx.status = 404
+                ctx.body = {
+                    error: err.message
+                }
+            } else {
+                throw err
+            }
+            return
         }
-        fs.parent.files.splice(index, 1)
-        await fs.parent.save()
-        fs.depopulate('parent')
-        fs.parent = tgfs._id
-        fs.modifyDate = new Date()
-        tgfs.files.push(fs._id)
-        tgfs.modifyDate = new Date()
-        fs = await fs.save()
-        tgfs = await tgfs.save()
         ctx.status = 200
         ctx.body = {
             fsid: fs._id,
-            newParent: tgfs._id
+            newParent: ctx.params.tgfsid
         }
     } else {
         ctx.status = 403

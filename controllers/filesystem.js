@@ -75,7 +75,7 @@ exports.getAccess = async function (fsid, userid) {
     }
 }
 
-exports.InsertFS = async function (fs, pfsid) {
+exports.link = async function (fs, pfsid) {
     let pfs = await exports.findDir(pfsid)
     if (pfs) {
         fs.parent = pfs._id
@@ -111,31 +111,38 @@ exports.updateFS = async function (fs, data, limit) {
     return fs
 }
 
+async function unlink(fs, parent) {
+    let index = fs.parent.files.indexOf(fs._id)
+    if (index == -1) {
+        throw { name: "Delete Error", message: `Parent doesn't contain file: ${fs._id}` }
+    }
+    parent.files.splice(index, 1)
+    parent.modifyDate = new Date()
+    await parent.save()
+    fs.depopulate('parent')
+    fs.parent = undefined
+    return fs
+}
 async function Delete(id) {
     let fs = await FileSystem.findById(id)
     if (!fs) {
-        throw new Error("File doesn't exist")
+        throw { name: "Not Found", message: "File doesn't exist" }
     }
     if (fs.isFile == false && fs.files.length > 0) {
-        throw new Error(`Directory ${fs._id} isn't empty`)
+        throw { name: "Delete Error", message: `Directory ${fs._id} isn't empty` }
     }
     fs = await fs.populate('parent').execPopulate()
     if (fs.parent.isFile == true) {
-        throw new Error(`Parent is not a directory: ${fs.parent._id}`)
+        throw { name: "Format Error", message: `Parent is not a directory: ${fs.parent._id}` }
     }
-    let index = fs.parent.files.indexOf(fs._id)
-    if (index == -1) {
-        throw new Error(`Parent doesn't contain file: ${fs._id}`)
-    }
-    fs.parent.files.splice(index, 1)
-    await fs.parent.save()
+    await unlink(fs, fs.parent)
     await fs.remove()
     return 1
 }
 async function recursiveDelete(id) {
     let fs = await FileSystem.findById(id)
     if (!fs) {
-        throw new Error("File doesn't exist")
+        throw { name: "Not Found", message: "File doesn't exist" }
     }
     if (fs.isFile == true) {
         return await Delete(id)
@@ -148,5 +155,6 @@ async function recursiveDelete(id) {
         return count
     }
 }
+exports.unlink = unlink
 exports.Delete = Delete
 exports.recursiveDelete = recursiveDelete
