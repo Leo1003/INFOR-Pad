@@ -12,23 +12,25 @@ router.get('*', (ctx, next) => {
   match({ routes: routes, location: ctx.url}, (err, redirect, props) => {
     if (err) {
      console.log(err.message)
-   } else if (props) {
+     }
+     else if (props) {
 
-     const store = configureStore({session, user})
-     console.log("jizz1")
+       const store = configureStore({session, user})
+       console.log("jizz1")
 
-     const appHtml = renderToString(
-       <Provider store={store}>
-         <RouterContext {...props}/>
-       </Provider>
-     )
-     const preloadedState = store.getState()
-     console.log("jizz2")
-     console.log(preloadedState)
-     ctx.body = renderPage(appHtml, preloadedState)
-   } else {
-     return next()
-   }
+       const appHtml = renderToString(
+         <Provider store={store}>
+           <RouterContext {...props}/>
+         </Provider>
+       )
+       const preloadedState = store.getState()
+       console.log("jizz2")
+       console.log(preloadedState)
+       ctx.body = renderPage(appHtml, preloadedState)
+     }
+     else {
+       return next()
+     }
   })
 })
 

@@ -47,17 +47,14 @@ const sessionReducers = handleActions({
   GET_INITIAL_SESSION: (state) => {
     const sessionid = cookie.load('sessionid')
     if(sessionid) {
+      console.log("GET SESSION REDUCER")
       return Object.assign({}, state, {
         isLogin: true,
         sessionid: `${sessionid}`,
         error_message: ''
       })
     }
-    else return Object.assign({}, state, {
-      isLogin: false,
-      sessionid: '',
-      error_message: ''
-    })
+    else return session
   }
 }, session)
 

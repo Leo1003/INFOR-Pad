@@ -28,7 +28,7 @@ export const fetchSignIn = (formData) => (
         })
       }
       else if(res.status == 403) {
-        dispatch({ type: SIGN_IN_FAIL})
+        dispatch({ type: SIGN_IN_FAIL })
       }
     })
     .catch(err => { console.log(err) })
@@ -78,6 +78,8 @@ export const fetchSignUp = (formData) => (
 
 export const GetInitialSession = () => (
   (dispatch) => {
+    console.log("START GET INTIAL SESSION")
     dispatch({ type: GET_INITIAL_SESSION })
+    console.log("FINISH GET INITIAL SESSION")
   }
 )

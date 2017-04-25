@@ -22,6 +22,9 @@
 
     /:folderid -> ace editor
 
+    Index Route -> App
+    Every Page With Index and receive Props before rendering
+
   * CheckAuth -> get Initail by sessionid
     ```
     function CheckAuth() {

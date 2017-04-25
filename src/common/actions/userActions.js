@@ -4,19 +4,20 @@ import {
 } from '../constants/actionTypes.js'
 
 export const fetchGetInitialUser = (sessionid) => (
-  (dispatch) => {
-    fetch('/api/session', {
-      method: 'GET',
-      headers: {
-        'sessionid': `${sessionid}`
-      }
-    })
-    .then(res => {
+  async (dispatch) => {
+    try {
+      let res = await fetch('/api/session', {
+        methld: 'GET',
+        headers: {
+          'sessionid': `${sessionid}`
+        }
+      })
       if(res.ok) {
-        return res.json()
-        .then(json => dispatch({ type: GET_INITIAL_USER, payload: { data: json } }))
+        let json = await res.json()
+        dispatch({ type: GET_INITIAL_USER, payload: { data: json } })
       }
-    })
-    .catch(err => { console.log(err) })
+    } catch(e) {
+      console.log(e)
+    }
   }
 )

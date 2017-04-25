@@ -13,15 +13,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    handleGetInitialSession: () => {
-      dispatch(GetInitialSession())
-    },
-    handleGetInitialUser: (sessionid) => {
-      dispatch(fetchGetInitialUser(sessionid))
-    }
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(IndexPage)
+export default connect(mapStateToProps)(IndexPage)
