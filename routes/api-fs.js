@@ -8,6 +8,7 @@ const FileSystem = mongoose.model('FileSystem')
 const fsCtrl = require('../controllers/filesystem')
 
 router.param('fsid', async (fsid, ctx, next) => {
+    debug(fsid)
     let access = await fsCtrl.getAccess(fsid, (ctx.state.session ? ctx.state.session.user._id : undefined))
     if (access === undefined) {
         ctx.status = 404
@@ -16,6 +17,7 @@ router.param('fsid', async (fsid, ctx, next) => {
         }
         return
     }
+    debug(access)
     if (access == 0) {
         if (!ctx.state.session) {
             ctx.status = 401
@@ -69,8 +71,9 @@ router.param('tgfsid', async (tgfsid, ctx, next) => {
 router.get('/fs/:fsid', async ctx => {
     if (ctx.state.access >= 1) {
         let fs = await fsCtrl.findFS(ctx.params.fsid)
+        debug(fs)
         ctx.status = 200
-        ctx.body = fsCtrl.extractFSData(fs)
+        ctx.body = await fsCtrl.extractFSData(fs, true)
     } else {
         ctx.status = 403
         ctx.body = {
@@ -80,6 +83,7 @@ router.get('/fs/:fsid', async ctx => {
 })
 router.post('/fs/:fsid', async ctx => {
     if (ctx.state.access >= 2) {
+        let data = ctx.request.body
         if (!data.filename || !data.format) {
             ctx.status = 400
             ctx.body = {
@@ -88,7 +92,6 @@ router.post('/fs/:fsid', async ctx => {
             return
         }
         try {
-            let data = ctx.request.body
             let isfile = data.format != 'Directory'
             let newfile = new FileSystem({
                 name: data.filename,
@@ -143,9 +146,7 @@ router.put('/fs/:fsid', async ctx => {
             return
         }
         ctx.status = 200
-        ctx.body = {
-            id: fs._id
-        }
+        ctx.body = await fsCtrl.extractFSData(fs, true)
     } else {
         ctx.status = 403
         ctx.body = {
@@ -157,7 +158,7 @@ router.put('/fs/:fsid/:tgfsid', async ctx => {
     if (ctx.state.access >= 2) {
         let fs = await fsCtrl.findFS(ctx.params.fsid)
         let tgfs = await fsCtrl.findDir(ctx.params.tgfsid)
-        if (fsCtrl.isRootDir(tgfs) == true) {
+        if (fsCtrl.isRootDir(fs) == true) {
             ctx.status = 400
             ctx.body = {
                 error: "You can't move a root directory"
@@ -214,19 +215,19 @@ router.put('/fs/:fsid/:tgfsid', async ctx => {
 })
 router.delete('/fs/:fsid', async ctx => {
     if (ctx.state.access >= 2) {
-        if (!ctx.state.fs.parent) {
-            ctx.status = 400
-            ctx.body = {
-                error: "You can't delete a root directory"
+        {
+            let fs = await fsCtrl.findFS(ctx.params.fsid)
+            if (fsCtrl.isRootDir(fs) == true) {
+                ctx.status = 400
+                ctx.body = {
+                    error: "You can't delete a root directory"
+                }
+                return
             }
-            return
         }
-        let parent = await FileSystem.findById(ctx.state.fs.parent)
-        parent.modifyDate = new Date()
-        parent = await parent.save()
         let num = 0
         try {
-            num = await fsCtrl.recursiveDelete(ctx.state.fs._id)
+            num = await fsCtrl.recursiveDelete(ctx.params.fsid)
         } catch (err) {
             ctx.status = 507
             ctx.body = err.message

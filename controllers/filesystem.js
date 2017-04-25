@@ -31,7 +31,7 @@ exports.extractFSData = async function (fs, complete) {
     return ret
 }
 exports.isRootDir = function (fs) {
-    if (fs.parent && fs.name == 'Root') {
+    if (!fs.parent && fs.name == 'Root') {
         return true
     }
     return false
@@ -89,11 +89,11 @@ exports.link = async function (fs, pfsid) {
     }
 }
 
-function chkValue(value, default, limit) {
+function chkValue(value, def, limit) {
     if (value instanceof String == true && value.length > limit) {
         throw { name: "Too Big", message: "Your data is too large to save!" }
     }
-    return (value != undefined ? value : default)
+    return (value != undefined ? value : def)
 }
 exports.updateFS = async function (fs, data, limit) {
     fs.name = chkValue(data.filename, fs.name)
@@ -112,7 +112,7 @@ exports.updateFS = async function (fs, data, limit) {
 }
 
 async function unlink(fs, parent) {
-    let index = fs.parent.files.indexOf(fs._id)
+    let index = parent.files.indexOf(fs._id)
     if (index == -1) {
         throw { name: "Delete Error", message: `Parent doesn't contain file: ${fs._id}` }
     }
@@ -124,14 +124,13 @@ async function unlink(fs, parent) {
     return fs
 }
 async function Delete(id) {
-    let fs = await FileSystem.findById(id)
+    let fs = await FileSystem.findById(id).populate('parent')
     if (!fs) {
         throw { name: "Not Found", message: "File doesn't exist" }
     }
     if (fs.isFile == false && fs.files.length > 0) {
         throw { name: "Delete Error", message: `Directory ${fs._id} isn't empty` }
     }
-    fs = await fs.populate('parent').execPopulate()
     if (fs.parent.isFile == true) {
         throw { name: "Format Error", message: `Parent is not a directory: ${fs.parent._id}` }
     }
