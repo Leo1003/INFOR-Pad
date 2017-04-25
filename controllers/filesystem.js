@@ -75,7 +75,6 @@ exports.getAccess = async function (fsid, userid) {
     }
 }
 
-
 exports.InsertFS = async function (fs, pfsid) {
     let pfs = await exports.findDir(pfsid)
     if (pfs) {
@@ -88,6 +87,28 @@ exports.InsertFS = async function (fs, pfsid) {
     } else {
         throw { name: "Not Found", message: "Can't not find parent dir!" }
     }
+}
+
+function chkValue(value, default, limit) {
+    if (value instanceof String == true && value.length > limit) {
+        throw { name: "Too Big", message: "Your data is too large to save!" }
+    }
+    return (value != undefined ? value : default)
+}
+exports.updateFS = async function (fs, data, limit) {
+    fs.name = chkValue(data.filename, fs.name)
+    fs.isPublic = chkValue(data.isPublic, fs.isPublic)
+    if (fs.isFile === true) {
+        fs.code = chkValue(data.code, fs.code, limit)
+        fs.stdin = chkValue(data.stdin, fs.stdin, limit)
+        if (data.format == 'Directory') {
+            throw { name: "Format Error", message: "You can't change a file into a directory!" }
+        }
+        fs.format = chkValue(data.format, fs.format)
+    }
+    fs.modifyDate = new Date()
+    fs = await fs.save()
+    return fs
 }
 
 async function Delete(id) {
