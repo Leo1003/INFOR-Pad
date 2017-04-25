@@ -6,152 +6,81 @@ const User = mongoose.model('User')
 const Session = mongoose.model('Session')
 const FileSystem = mongoose.model('FileSystem')
 const fsCtrl = require('../controllers/filesystem')
+const ApiError = require('../error').ApiError
 
 router.param('fsid', async (fsid, ctx, next) => {
-    debug(fsid)
     let access = await fsCtrl.getAccess(fsid, (ctx.state.session ? ctx.state.session.user._id : undefined))
     if (access === undefined) {
-        ctx.status = 404
-        ctx.body = {
-            error: "Not found"
-        }
-        return
+        throw new ApiError(404, "Not found")
     }
-    debug(access)
     if (access == 0) {
         if (!ctx.state.session) {
-            ctx.status = 401
-            ctx.body = {
-                error: "Need authorized"
-            }
+            throw new ApiError(401, "Need authorized")
         } else {
-            ctx.status = 403
-            ctx.body = {
-                error: "Permission denied"
-            }
+            throw new ApiError(403, "Permission denied")
         }
-        return
     }
     ctx.state.access = access
     return await next()
 })
 router.param('tgfsid', async (tgfsid, ctx, next) => {
     if (!ctx.state.session) {
-        ctx.status = 401
-        ctx.body = {
-            error: "Need authorized"
-        }
-        return
+        throw new ApiError(401, "Need authorized")
     }
     let access = await fsCtrl.getAccess(tgfsid, ctx.state.session.user._id)
     if (access === undefined) {
-        ctx.status = 404
-        ctx.body = {
-            error: "Target Directory Not found"
-        }
-        return
+        throw new ApiError(404, "Target Directory Not found")
     }
     if (access >= 2) {
         if (await fsCtrl.findDir(tgfsid)) {
             return await next()
         } else {
-            ctx.status = 400
-            ctx.body = {
-                error: "Target MUST BE a directory"
-            }
+            throw new ApiError(400, "Target MUST BE a directory")
         }
     } else {
-        ctx.status = 403
-        ctx.body = {
-            error: "Permission denied"
-        }
+        throw new ApiError(403, "Permission denied")
     }
 })
 
 router.get('/fs/:fsid', async ctx => {
     if (ctx.state.access >= 1) {
         let fs = await fsCtrl.findFS(ctx.params.fsid)
-        debug(fs)
         ctx.status = 200
         ctx.body = await fsCtrl.extractFSData(fs, true)
     } else {
-        ctx.status = 403
-        ctx.body = {
-            error: "Permission denied"
-        }
+        throw new ApiError(403, "Permission denied")
     }
 })
 router.post('/fs/:fsid', async ctx => {
     if (ctx.state.access >= 2) {
         let data = ctx.request.body
         if (!data.filename || !data.format) {
-            ctx.status = 400
-            ctx.body = {
-                error: "Some data are missed"
-            }
-            return
+            throw new ApiError(400, "Some data are missed")
         }
-        try {
-            let isfile = data.format != 'Directory'
-            let newfile = new FileSystem({
-                name: data.filename,
-                owner: ctx.state.session.user._id,
-                isFile: isfile === true,
-                format: isfile === true ? data.format : undefined,
-                code: isfile === true ? "" : undefined,
-                stdin: isfile === true ? "" : undefined
-            })
-            newfile = await fsCtrl.link(newfile, ctx.params.fsid)
-            ctx.status = 201
-            ctx.body = {
-                id: newfile._id
-            }
-        } catch (err) {
-            if (err.name == "Not Found") {
-                ctx.status = 400
-                ctx.body = {
-                    error: "Not a directory"
-                }
-            } else {
-                throw err
-            }
-        }
+        let isfile = data.format != 'Directory'
+        let newfile = new FileSystem({
+            name: data.filename,
+            owner: ctx.state.session.user._id,
+            isFile: isfile === true,
+            format: isfile === true ? data.format : undefined,
+            code: isfile === true ? "" : undefined,
+            stdin: isfile === true ? "" : undefined
+        })
+        newfile = await fsCtrl.link(newfile, ctx.params.fsid)
+        ctx.status = 201
+        ctx.body = await fsCtrl.extractFSData(newfile, true)
     } else {
-        ctx.status = 403
-        ctx.body = {
-            error: "Permission denied"
-        }
+        throw new ApiError(403, "Permission denied")
     }
 })
 router.put('/fs/:fsid', async ctx => {
     if (ctx.state.access >= 2) {
         let fs = await fsCtrl.findFS(ctx.params.fsid)
-        let data = ctx.request.body
-        try {
-            fs = await fsCtrl.updateFS(fs, ctx.request.body, 1024*128)
-        } catch (err) {
-            if (err.name == "Too Big") {
-                ctx.status = 413
-                ctx.body = {
-                    error: err.message
-                }
-            } else if (err.name == "Format Error") {
-                ctx.status = 400
-                ctx.body = {
-                    error: err.message
-                }
-            } else {
-                throw err
-            }
-            return
-        }
+        fs = await fsCtrl.updateFS(fs, ctx.request.body, 1024*128)
         ctx.status = 200
         ctx.body = await fsCtrl.extractFSData(fs, true)
     } else {
-        ctx.status = 403
-        ctx.body = {
-            error: "Permission denied"
-        }
+        throw new ApiError(403, "Permission denied")
     }
 })
 router.put('/fs/:fsid/:tgfsid', async ctx => {
@@ -159,18 +88,10 @@ router.put('/fs/:fsid/:tgfsid', async ctx => {
         let fs = await fsCtrl.findFS(ctx.params.fsid)
         let tgfs = await fsCtrl.findDir(ctx.params.tgfsid)
         if (fsCtrl.isRootDir(fs) == true) {
-            ctx.status = 400
-            ctx.body = {
-                error: "You can't move a root directory"
-            }
-            return
+            throw new ApiError(400, "You can't move a root directory")
         }
         if (tgfs._id.equals(fs._id)) {
-            ctx.status = 400
-            ctx.body = {
-                error: "You can't move it into itself"
-            }
-            return
+            throw new ApiError(400, "You can't move it into itself")
         }
         if (tgfs._id.equals(fs.parent)) {
             //Don't do anything if already in the the target directory
@@ -181,36 +102,16 @@ router.put('/fs/:fsid/:tgfsid', async ctx => {
             }
             return
         }
-        try {
-            let pfs = await fsCtrl.findDir(fs.parent)
-            fs = await fsCtrl.unlink(fs, pfs)
-            fs = await fsCtrl.link(fs, ctx.params.tgfsid)
-        } catch (err) {
-            if (err.name == "Delete") {
-                ctx.status = 507
-                ctx.body = {
-                    error: err.message
-                }
-            } else if (err.name == "Not Found") {
-                ctx.status = 404
-                ctx.body = {
-                    error: err.message
-                }
-            } else {
-                throw err
-            }
-            return
-        }
+        let pfs = await fsCtrl.findDir(fs.parent)
+        fs = await fsCtrl.unlink(fs, pfs)
+        fs = await fsCtrl.link(fs, ctx.params.tgfsid)
         ctx.status = 200
         ctx.body = {
             fsid: fs._id,
             newParent: ctx.params.tgfsid
         }
     } else {
-        ctx.status = 403
-        ctx.body = {
-            error: "Permission denied"
-        }
+        throw new ApiError(403, "Permission denied")
     }
 })
 router.delete('/fs/:fsid', async ctx => {
@@ -218,30 +119,16 @@ router.delete('/fs/:fsid', async ctx => {
         {
             let fs = await fsCtrl.findFS(ctx.params.fsid)
             if (fsCtrl.isRootDir(fs) == true) {
-                ctx.status = 400
-                ctx.body = {
-                    error: "You can't delete a root directory"
-                }
-                return
+                throw new ApiError(400, "You can't delete a root directory")
             }
         }
-        let num = 0
-        try {
-            num = await fsCtrl.recursiveDelete(ctx.params.fsid)
-        } catch (err) {
-            ctx.status = 507
-            ctx.body = err.message
-            return
-        }
+        let num = await fsCtrl.recursiveDelete(ctx.params.fsid)
         ctx.status = 200
         ctx.body = {
             count: num
         }
     } else {
-        ctx.status = 403
-        ctx.body = {
-            error: "Permission denied"
-        }
+        throw new ApiError(403, "Permission denied")
     }
 })
 

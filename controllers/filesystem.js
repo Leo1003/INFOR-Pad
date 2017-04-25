@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const Session = mongoose.model('Session')
 const FileSystem = mongoose.model('FileSystem')
+const ApiError = require('../error').ApiError
 
 exports.extractFSData = async function (fs, complete) {
     let ret = {
@@ -85,13 +86,13 @@ exports.link = async function (fs, pfsid) {
         await pfs.save()
         return fs
     } else {
-        throw { name: "Not Found", message: "Can't not find parent dir!" }
+        throw new ApiError(404, "The parent isn't a directory!")
     }
 }
 
 function chkValue(value, def, limit) {
     if (value instanceof String == true && value.length > limit) {
-        throw { name: "Too Big", message: "Your data is too large to save!" }
+        throw new ApiError(413, "Your data is too large to save!")
     }
     return (value != undefined ? value : def)
 }
@@ -102,7 +103,7 @@ exports.updateFS = async function (fs, data, limit) {
         fs.code = chkValue(data.code, fs.code, limit)
         fs.stdin = chkValue(data.stdin, fs.stdin, limit)
         if (data.format == 'Directory') {
-            throw { name: "Format Error", message: "You can't change a file into a directory!" }
+            throw new ApiError(400, "You can't change a file into a directory!")
         }
         fs.format = chkValue(data.format, fs.format)
     }
@@ -114,11 +115,14 @@ exports.updateFS = async function (fs, data, limit) {
 async function unlink(fs, parent) {
     let index = parent.files.indexOf(fs._id)
     if (index == -1) {
-        throw { name: "Delete Error", message: `Parent doesn't contain file: ${fs._id}` }
+        //throw new ApiError(507, `Parent doesn't contain file: ${fs._id}`)
+        console.error('!!WARNING!!');
+        console.error(new ApiError(507, `Parent doesn't contain file: ${fs._id}`))
+    } else {
+        parent.files.splice(index, 1)
+        parent.modifyDate = new Date()
+        await parent.save()
     }
-    parent.files.splice(index, 1)
-    parent.modifyDate = new Date()
-    await parent.save()
     fs.depopulate('parent')
     fs.parent = undefined
     return fs
@@ -126,13 +130,13 @@ async function unlink(fs, parent) {
 async function Delete(id) {
     let fs = await FileSystem.findById(id).populate('parent')
     if (!fs) {
-        throw { name: "Not Found", message: "File doesn't exist" }
+        throw new ApiError(404, "File doesn't exist")
     }
     if (fs.isFile == false && fs.files.length > 0) {
-        throw { name: "Delete Error", message: `Directory ${fs._id} isn't empty` }
+        throw new ApiError(507, `Directory ${fs._id} isn't empty`)
     }
     if (fs.parent.isFile == true) {
-        throw { name: "Format Error", message: `Parent is not a directory: ${fs.parent._id}` }
+        throw new ApiError(400, `Parent is not a directory: ${fs.parent._id}`)
     }
     await unlink(fs, fs.parent)
     await fs.remove()
@@ -141,7 +145,7 @@ async function Delete(id) {
 async function recursiveDelete(id) {
     let fs = await FileSystem.findById(id)
     if (!fs) {
-        throw { name: "Not Found", message: "File doesn't exist" }
+        throw new ApiError(404, "File doesn't exist")
     }
     if (fs.isFile == true) {
         return await Delete(id)

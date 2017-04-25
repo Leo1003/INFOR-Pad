@@ -3,6 +3,7 @@ const randomstring = require('randomstring')
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const Session = mongoose.model('Session')
+const ApiError = require('../error').ApiError
 
 function genExpireDate(autologin) {
     let timeout = (autologin == true ? 14*86400*1000 : 3600*1000)
@@ -15,7 +16,7 @@ exports.getSessionById = async function (sessionid) {
 
 exports.generateSession = async function (user, autologin) {
     if (!user) {
-        throw new Error("Invalid user!")
+        throw new ApiError(404, "User Not Found!")
     }
     let sessID = randomstring.generate(32)
     let expireDate = genExpireDate(autologin)

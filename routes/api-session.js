@@ -7,15 +7,12 @@ const User = mongoose.model('User')
 const Session = mongoose.model('Session')
 const userCtrl = require('../controllers/user')
 const sessionCtrl = require('../controllers/session')
+const ApiError = require('../error').ApiError
 
 router.post('/session', async ctx => {
     let data = ctx.request.body
     if (!data.username || !data.password) {
-        ctx.status = 400
-        ctx.body = {
-            error: "Some data are missed"
-        }
-        return
+        throw new ApiError(400, "Some data are missed")
     }
     let user = await User.findOne({
         name: data.username
@@ -32,18 +29,11 @@ router.post('/session', async ctx => {
             return
         }
     }
-    ctx.status = 403
-    ctx.body = {
-        error: "The username or the password is wrong"
-    }
+    throw new ApiError(403, "The username or the password is wrong")
 })
 router.use(async (ctx, next) => {
     if (!ctx.state.session) {
-        ctx.status = 401
-        ctx.body = {
-            error: "You haven't login yet!"
-        }
-        return
+        throw new ApiError(401, "You haven't login yet!")
     }
     await next()
 })

@@ -8,15 +8,22 @@ const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const Session = mongoose.model('Session')
 const sessionCtrl = require('../controllers/session')
+const ApiError = require('../error').ApiError
 
 router.prefix('/api')
 
-//Error Handler
+//Api Error Handler
 router.use(async (ctx, next) => {
     try {
         await next()
     } catch (err) {
-        if (err.name == 'CastError') {
+        if (err instanceof ApiError) {
+            ctx.status = err.status
+            ctx.body = {
+                error: err.message
+            }
+            return
+        } else if (err instanceof mongoose.CastError) {
             if (err.kind == 'ObjectId') {
                 ctx.status = 404
                 ctx.body = {
@@ -43,17 +50,12 @@ router.use(async (ctx, next) => {
             sess = await sess.populate('user').execPopulate()
             if (sess.user) {
                 //Auto renew session
-                await sessionCtrl.renewSession(sess)
-                ctx.state.session = sess
+                ctx.state.session = await sessionCtrl.renewSession(sess)
                 return await next()
             }
         }
     }
-    ctx.status = 401
-    ctx.body = {
-        error: "Session invalid or expired!"
-    }
-    return
+    throw new ApiError(401, "Session invalid or expired!")
 })
 
 router.use(session.routes(), session.allowedMethods())

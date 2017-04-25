@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const FileSystem = mongoose.model('FileSystem')
 const Session = mongoose.model('Session')
+const ApiError = require('../error').ApiError
 
 function extractUserData(user, privData) {
     let ret = {}
@@ -42,10 +43,10 @@ exports.getUserByMail = async function (email, privData) {
 exports.createUser = async function (option) {
     //*** Test if existed
     if (await exports.getUserByName(option.username)) {
-        throw {name: "Conflict", message: "Username has already been taken!"}
+        throw new ApiError(409, "Username has already been taken!")
     }
     if (await exports.getUserByMail(option.email)) {
-        throw {name: "Conflict", message: "Email address has already been used!"}
+        throw new ApiError(409, "Email address has already been used!")
     }
     let salt = randomstring.generate(16)
     let user = await new User({
