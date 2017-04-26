@@ -7,14 +7,23 @@ const debug = require('debug')('INFOR-Pad:api')
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const Session = mongoose.model('Session')
+const sessionCtrl = require('../controllers/session')
+const ApiError = require('../error').ApiError
 
 router.prefix('/api')
 
+//Api Error Handler
 router.use(async (ctx, next) => {
     try {
         await next()
     } catch (err) {
-        if (err.name == 'CastError') {
+        if (err instanceof ApiError) {
+            ctx.status = err.status
+            ctx.body = {
+                error: err.message
+            }
+            return
+        } else if (err instanceof mongoose.CastError) {
             if (err.kind == 'ObjectId') {
                 ctx.status = 404
                 ctx.body = {
@@ -35,30 +44,18 @@ router.use(async (ctx, next) => {
     if (!ctx.header.sessionid) {
         return await next()
     }
-    let idhash = crypto.createHash('sha512').update(ctx.header.sessionid).digest('hex')
-    let sess = await Session.findOne({
-        uuid: idhash
-    }).populate('user').exec()
-    if (sess && sess.user) {
+    let sess = await sessionCtrl.getSessionById(ctx.header.sessionid)
+    if (sess) {
         if (sess.expireAt > new Date()) {
-            //Auto renew session
-            let expireDate = new Date()
-            if (sess.autoLogin == true) {
-                expireDate.setTime(expireDate.getTime() + 14 * 86400 * 1000)
-            } else {
-                expireDate.setTime(expireDate.getTime() + 3600 * 1000)
+            sess = await sess.populate('user').execPopulate()
+            if (sess.user) {
+                //Auto renew session
+                ctx.state.session = await sessionCtrl.renewSession(sess)
+                return await next()
             }
-            sess.expireAt = expireDate
-            await sess.save()
-            ctx.state.session = sess
-            return await next()
         }
     }
-    ctx.status = 401
-    ctx.body = {
-        error: "Invalid session!"
-    }
-    return
+    throw new ApiError(401, "Session invalid or expired!")
 })
 
 router.use(session.routes(), session.allowedMethods())
