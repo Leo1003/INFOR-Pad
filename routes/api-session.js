@@ -15,7 +15,7 @@ router.post('/session', async ctx => {
         throw new ApiError(400, "Some data are missed")
     }
     let user = await User.findOne({
-        name: data.username
+        name: new RegExp(data.username, 'i')
     })
     if (user) {
         let pwhash = hash.hashPassword(data.password, user.salt)
