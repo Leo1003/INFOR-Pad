@@ -62,6 +62,7 @@ router.post('/fs/:fsid', async ctx => {
             name: data.filename,
             owner: ctx.state.session.user._id,
             isFile: isfile === true,
+            files: isfile === false ? [] : undefined,
             format: isfile === true ? data.format : undefined,
             code: isfile === true ? "" : undefined,
             stdin: isfile === true ? "" : undefined

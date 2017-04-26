@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const FileSystem = mongoose.model('FileSystem')
 const Session = mongoose.model('Session')
+const fsCtrl = require('./filesystem')
 const ApiError = require('../error').ApiError
 
 function extractUserData(user, privData) {
@@ -49,16 +50,17 @@ exports.createUser = async function (option) {
         throw new ApiError(409, "Email address has already been used!")
     }
     let salt = randomstring.generate(16)
-    let user = await new User({
+    let user = new User({
         name : option.username,
         password : hash.hashPassword(option.password, salt),
         salt : salt,
         email : option.email
-    }).save()
+    })
     let root = await new FileSystem({
         name: "Root",
         isFile: false,
-        owner: user._id
+        owner: user._id,
+        files: []
     }).save()
     user.root = root._id
     user = await user.save()
