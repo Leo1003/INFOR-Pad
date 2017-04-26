@@ -1,0 +1,14 @@
+{
+    "host": "mail.your.host",
+    "secure": true,
+    "auth": {
+        "user": "username",
+        "pass": "pass"
+    },
+    "authMethod": "PLAIN",
+    "tls": {
+        "rejectUnauthorized": true
+    },
+    "ignoreTLS": false,
+    "requireTLS": false
+}
