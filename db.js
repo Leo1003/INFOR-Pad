@@ -37,9 +37,17 @@ var FileSystem = new Schema({
     stdin: { type: String }
 })
 
+var MailValidation = new Schema({
+    secret: { type: String, required: true, unique: true },
+    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    action: { type: String, enum: ['SignupCheck', 'PasswordReset'], required: true },
+    expireAt: { type: Date, expires: 1, required: true }
+})
+
 mongoose.model('User', User)
 mongoose.model('Session', Session)
 mongoose.model('FileSystem', FileSystem)
+mongoose.model('MailValidation', MailValidation)
 
 mongoose.connect('mongodb://localhost:27017/INFOR-Pad', error => {
     if(error) {

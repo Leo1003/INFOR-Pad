@@ -1,14 +1,18 @@
 {
-    "host": "mail.your.host",
-    "secure": true,
-    "auth": {
-        "user": "username",
-        "pass": "pass"
+    "nodemailerTransport": {
+        "host": "mail.your.host",
+        "secure": true,
+        "auth": {
+            "user": "username",
+            "pass": "pass"
+        },
+        "authMethod": "PLAIN",
+        "tls": {
+            "rejectUnauthorized": true
+        },
+        "ignoreTLS": false,
+        "requireTLS": false
     },
-    "authMethod": "PLAIN",
-    "tls": {
-        "rejectUnauthorized": true
-    },
-    "ignoreTLS": false,
-    "requireTLS": false
+    "MailLinkDomain": "your.domain.com",
+    "MailAddress": "no-reply@mail.your.host"
 }
