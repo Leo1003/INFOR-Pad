@@ -6,3 +6,10 @@ export const CLEAN_USER = 'CLEAN_USER'
 export const CLEAN_SESSION = 'CLEAN_SESSION'
 export const GET_INITIAL_SESSION = 'GET_INITIAL_SESSION'
 export const GET_INITIAL_USER = 'GET_INITIAL_USER'
+
+export const GET_FOLDER = 'GET_FOLDER'
+export const GET_FILE = 'GET_FILE'
+
+export const LOGIN_FIRST = 'LOGIN_FIRST'
+export const PERMISSION_DENIED = 'PERMISSION_DENIED'
+export const FILE_IS_NOT_EXIST = 'FILE_IS_NOT_EXIST'

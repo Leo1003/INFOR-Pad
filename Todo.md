@@ -10,46 +10,31 @@
 
 ### Todo:
   * Router
-    / -> home
-    /:user -> userhome
-    ```
-    if(isLogin && username == user) redirect myhome; render private + public data
-    else render public data of the user
 
-    ```
-    /Sign_In -> if(!isLogin) render it
-    /Sign_Up -> if(!isLogin) render it
+    / -> homePage
 
-    /:folderid -> ace editor
+    /Sign_In -> only for guest
+    
+    /Sign_Up -> only for guest
 
-    Index Route -> App
+    /mypad -> user's rootfile
+    (with 'all' 'public' 'private' buttons)
+
+    /users/:user -> user profile & user public
+      ```
+        if(this.props.name = user) {
+          render all file(folder) & edit button
+        }
+        else {
+          render profile & public file(folder)
+        }
+      ```
+    /folder/:folderid -> folder page
+
+    /file/:fileid -> ace editor
+
+    /:shareId (short Id)
+
+    Index Route -> Main
+
     Every Page With Index and receive Props before rendering
-
-  * CheckAuth -> get Initail by sessionid
-    ```
-    function CheckAuth() {
-      const sessionid = cookie.load('sessionid')
-      if(sessionid) {
-        get_initail_state
-        return true
-      }
-      else return false
-    }
-
-    if(CheckAuth()) {
-      render (
-        searchBar,
-        Username,
-        Logout,
-        userHomePage,
-        rootFolder
-      )
-    } else {
-      render (
-        HomePage,
-        SearchBar
-        Sign in,
-        Sign up,
-      )
-    }
-    ```

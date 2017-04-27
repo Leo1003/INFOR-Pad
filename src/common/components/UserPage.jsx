@@ -8,7 +8,9 @@ class UserPage extends React.Component {
   render() {
     return(
       <Container>
-        <h1>{this.props.name} User Page</h1>
+        <div>
+          <h1> User Page </h1>
+        </div>
       </Container>
     )
   }

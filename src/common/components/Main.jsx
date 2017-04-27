@@ -1,5 +1,5 @@
 import React from 'react'
-import NavBar from './NavBar.jsx'
+import NavBar from './partials/NavBar.jsx'
 
 class Main extends React.Component {
   constructor(props) {

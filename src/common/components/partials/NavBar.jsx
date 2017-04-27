@@ -1,7 +1,7 @@
 import React from 'react'
 import { Menu } from 'semantic-ui-react'
 import { Link } from 'react-router'
-import Logout_Container from '../containers/Logout_Container.js'
+import Logout_Container from '../../containers/Logout_Container.js'
 import cookie from 'react-cookie'
 
 class NavBar extends React.Component {

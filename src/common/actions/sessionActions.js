@@ -12,67 +12,59 @@ import {
 import { fetchGetInitialUser } from './userActions'
 
 export const fetchSignIn = (formData) => (
-  (dispatch) => {
-    fetch('/api/session', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: `username=${formData.username}&password=${formData.password}`,
-      credentials: 'include'
-    })
-    .then(res => {
+  async (dispatch) => {
+    try {
+      let res = await fetch('/api/session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `username=${formData.username}&password=${formData.password}`,
+        credentials: 'include'
+      })
       if(res.ok) {
-        return res.json()
-        .then(json => {
-          dispatch({ type: SIGN_IN_SUCCESS, payload: { data: json } });
-          dispatch(fetchGetInitialUser(json.sessionid))
-        })
+        let json = await res.json()
+        dispatch({ type: SIGN_IN_SUCCESS, payload: { data: json } })
+        dispatch(fetchGetInitialUser(json.sessionid))
       }
       else if(res.status == 403) {
         dispatch({ type: SIGN_IN_FAIL })
       }
-    })
-    .catch(err => { console.log(err) })
+    } catch(e) { console.log(e) }
   }
 )
 
 
 export const fetchLogout = (sessionid) => (
-  (dispatch) => {
-    fetch("/api/session", {
-      method: 'DELETE',
-      headers: {
-        'sessionid': `${sessionid}`
-      }
-    })
-    .then(res => {
-      if(res.ok) {
-        dispatch({ type: CLEAN_SESSION })
-        dispatch({ type: CLEAN_USER })
-      }
-    }).catch(err => { console.log(err) })
+  async (dispatch) => {
+    try {
+      let res = await fetch("/api/session", {
+        method: 'DELETE',
+        headers: {
+          'sessionid': `${sessionid}`
+        }
+      })
+      dispatch({ type: CLEAN_SESSION })
+      dispatch({ type: CLEAN_USER })
+    } catch(e) { console.log(e) }
   }
 )
 
 export const fetchSignUp = (formData) => (
-  (dispatch) => {
-    fetch('/api/user', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: `username=${formData.username}&password=${formData.password}&email=${formData.email}`,
-      credentials: 'include'
-    })
-    .then(res => {
+  async (dispatch) => {
+    try {
+      let res = await fetch('/api/user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `username=${formData.username}&password=${formData.password}&email=${formData.email}`,
+        credentials: 'include'
+      })
       if(res.ok) {
-        return res.json()
-        .then(json => {
-          dispatch({ type: SIGN_UP_SUCCESS , payload: { data: json } })
-        })
-      }
-      else if(res.status == 409) {
+        let json = await res.json()
+        //dispatch({ type: SIGN_UP_SUCCESS, payload: { data: json } })
+        dispatch(fetchSignIn(formData))
+      } else if(res.status == 409) {
         dispatch({ type: SIGN_UP_FAIL })
       }
-    })
-    .catch(err => { console.log(err) })
+    } catch(e) { console.log(e) }
   }
 )
 
