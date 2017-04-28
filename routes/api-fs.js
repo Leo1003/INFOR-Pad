@@ -1,12 +1,11 @@
 var router = require('koa-router')()
-const crypto = require('crypto')
 const debug = require('debug')('INFOR-Pad:api')
 const mongoose = require('mongoose')
-const User = mongoose.model('User')
-const Session = mongoose.model('Session')
 const FileSystem = mongoose.model('FileSystem')
 const fsCtrl = require('../controllers/filesystem')
 const ApiError = require('../error').ApiError
+
+router.prefix('/fs')
 
 router.param('fsid', async (fsid, ctx, next) => {
     let access = await fsCtrl.getAccess(fsid, (ctx.state.session ? ctx.state.session.user._id : undefined))
@@ -42,7 +41,7 @@ router.param('tgfsid', async (tgfsid, ctx, next) => {
     }
 })
 
-router.get('/fs/:fsid', async ctx => {
+router.get('/:fsid', async ctx => {
     if (ctx.state.access >= 1) {
         let fs = await fsCtrl.findFS(ctx.params.fsid)
         ctx.status = 200
@@ -51,7 +50,7 @@ router.get('/fs/:fsid', async ctx => {
         throw new ApiError(403, "Permission denied")
     }
 })
-router.post('/fs/:fsid', async ctx => {
+router.post('/:fsid', async ctx => {
     if (ctx.state.access >= 2) {
         let data = ctx.request.body
         if (!data.filename || !data.format) {
@@ -74,7 +73,7 @@ router.post('/fs/:fsid', async ctx => {
         throw new ApiError(403, "Permission denied")
     }
 })
-router.put('/fs/:fsid', async ctx => {
+router.put('/:fsid', async ctx => {
     if (ctx.state.access >= 2) {
         let fs = await fsCtrl.findFS(ctx.params.fsid)
         fs = await fsCtrl.updateFS(fs, ctx.request.body, 1024*128)
@@ -84,7 +83,7 @@ router.put('/fs/:fsid', async ctx => {
         throw new ApiError(403, "Permission denied")
     }
 })
-router.put('/fs/:fsid/:tgfsid', async ctx => {
+router.put('/:fsid/:tgfsid', async ctx => {
     if (ctx.state.access >= 2) {
         let fs = await fsCtrl.findFS(ctx.params.fsid)
         let tgfs = await fsCtrl.findDir(ctx.params.tgfsid)
@@ -115,7 +114,7 @@ router.put('/fs/:fsid/:tgfsid', async ctx => {
         throw new ApiError(403, "Permission denied")
     }
 })
-router.delete('/fs/:fsid', async ctx => {
+router.delete('/:fsid', async ctx => {
     if (ctx.state.access >= 2) {
         {
             let fs = await fsCtrl.findFS(ctx.params.fsid)

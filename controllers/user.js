@@ -28,16 +28,25 @@ exports.extractUserData = extractUserData
 
 exports.getUserById = async function (userid, privData) {
     let user = await User.findById(userid)
+    if (!user) {
+        throw new ApiError(404, "No such user")
+    }
     return extractUserData(user, privData)
 }
 
 exports.getUserByName = async function (username, privData) {
     let user = await User.findOne({name: new RegExp(username, 'i')})
+    if (!user) {
+        throw new ApiError(404, "No such user")
+    }
     return extractUserData(user, privData)
 }
 
 exports.getUserByMail = async function (email, privData) {
     let user = await User.findOne({email: email})
+    if (!user) {
+        throw new ApiError(404, "No such user")
+    }
     return extractUserData(user, privData)
 }
 
