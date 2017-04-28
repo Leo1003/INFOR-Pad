@@ -6,7 +6,10 @@ import {
   SIGN_UP_FAIL,
   GET_INITIAL_SESSION,
   CLEAN_SESSION,
-  CLEAN_USER
+  CLEAN_USER,
+  ISFETCHING,
+  DIDFETCH,
+
 } from '../constants/actionTypes'
 
 import { fetchGetInitialUser } from './userActions'
@@ -70,8 +73,10 @@ export const fetchSignUp = (formData) => (
 
 export const GetInitialSession = () => (
   (dispatch) => {
-    console.log("START GET INTIAL SESSION")
+    //console.log("START GET INTIAL SESSION")
+    dispatch({ type: ISFETCHING })
     dispatch({ type: GET_INITIAL_SESSION })
-    console.log("FINISH GET INITIAL SESSION")
+    dispatch({ type: DIDFETCH })
+    //console.log("FINISH GET INITIAL SESSION")
   }
 )

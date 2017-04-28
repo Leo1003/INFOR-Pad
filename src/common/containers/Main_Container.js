@@ -4,12 +4,13 @@ import { GetInitialSession } from '../actions/sessionActions'
 import { fetchGetInitialUser } from '../actions/userActions'
 
 const mapStateToProps = (state) => {
-  console.log("main")
-  console.log(state)
+  // console.log("main")
+  // console.log(state)
   return {
     isLogin: state.session.isLogin,
     sessionid: state.session.sessionid,
     name: state.user.name,
+    isFetching: state.ui.isFetching
   }
 }
 

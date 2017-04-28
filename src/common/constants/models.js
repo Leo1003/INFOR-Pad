@@ -35,3 +35,7 @@ export const file = {
   code: '',               //The code of the file (File Only)
   stdin: '',              //The stdin data (File Only)
 }
+
+export const ui = {
+  isFetching: false
+}

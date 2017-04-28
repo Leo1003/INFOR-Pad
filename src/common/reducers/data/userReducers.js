@@ -11,9 +11,9 @@ const userReducers = handleActions({
     return user
   },
   GET_INITIAL_USER: (state, { payload }) => {
-    console.log("GETTING INITIAL USER IN REDUCER")
-    console.log(state)
-    console.log(payload)
+    // console.log("GETTING INITIAL USER IN REDUCER")
+    // console.log(state)
+    // console.log(payload)
     return {
       name: payload.data.user.name,
       level: payload.data.user.level,

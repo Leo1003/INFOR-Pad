@@ -9,7 +9,7 @@ class NavBar extends React.Component {
     super(props)
   }
   render() {
-    console.log(this.props)
+    //console.log(this.props)
     return (
       <div>
         <Menu secondary inverted style={{background: 'black', margin: '0'}}>

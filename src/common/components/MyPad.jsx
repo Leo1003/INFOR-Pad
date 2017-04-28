@@ -7,12 +7,27 @@ class MyPad extends React.Component {
   constructor(props) {
     super(props)
   }
+  componentWillMount() {
+    // console.log(this.props)
+    if(!this.props.isFetching) this.props.handleGetFiles(this.props.sessionid, this.props.rootfsid)
+  }
+  componentWillReceiveProps(nextProps) {
+    if(!nextProps.isFetching && nextProps.cur_folder.name.length == 0) this.props.handleGetFiles(nextProps.sessionid, this.props.rootfsid)
+  }
   render() {
+    let renderContent = () => {
+      if(this.props.cur_folder.name.length == 0) return (
+        <h1> Loading... </h1>
+      )
+      else return (
+        <FolderContent folder={this.props.cur_folder} />
+      )
+    }
     return (
       <Container>
         <div>
           <h1>{this.props.name + "' "}s Pad</h1>
-          <FolderContent fsid={this.props.fsid} />
+          {renderContent()}
         </div>
       </Container>
     )

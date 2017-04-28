@@ -4,12 +4,15 @@ import {
   GET_FILE,
   LOGIN_FIRST,
   PERMISSION_DENIED,
-  FILE_IS_NOT_EXIST
+  FILE_IS_NOT_EXIST,
+  ISFETCHING,
+  DIDFETCH
 } from '../constants/actionTypes'
 
-export const fetchGetFile = (sessionid, fsid) => (
+export const fetchGetFiles = (sessionid, fsid) => (
   async (dispatch) => {
     try {
+      //dispatch({ type: ISFETCHING })
       let res = await fetch(`/api/fs/${fsid}`, {
         method: 'GET',
         headers: {
@@ -27,6 +30,7 @@ export const fetchGetFile = (sessionid, fsid) => (
       } else if(res.status == '404') {
         dispatch({ type: FILE_IS_NOT_EXIST })
       }
+      //dispatch({ type: DIDFETCH })
     } catch(e) { console.log(e) }
   }
 )

@@ -19,15 +19,10 @@ delete window.__PRELOADED_STATE__
 
 const store = configureStore(initialState)
 
-console.log("CLIENT_GET_INITIAL_SESSION")
+//console.log("CLIENT_GET_INITIAL_SESSION")
 
 store.dispatch(GetInitialSession())
-console.log("finish get session")
-let initial_state = store.getState()
-if(initial_state.session.isLogin) {
-  store.dispatch(fetchGetInitialUser(initial_state.session.sessionid))
-  console.log("fetchuser Finsish")
-}
+store.dispatch(fetchGetInitialUser(store.getState().session.sessionid))
 
 console.log("GOING TO RENDER")
 

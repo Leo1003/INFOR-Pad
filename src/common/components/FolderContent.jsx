@@ -4,6 +4,10 @@ class FolderContent extends React.Component {
   constructor(props) {
     super(props)
   }
+  componentDidMount() {
+    console.log("folderContent")
+    console.log(this.props)
+  }
   render() {
     return (
       <div>

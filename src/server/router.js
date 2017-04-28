@@ -5,7 +5,7 @@ import { match, RouterContext } from 'react-router'
 import { Provider } from 'react-redux'
 import Immutable, { fromJS } from 'immutable'
 import configureStore from '../common/store/configureStore'
-import { session, user } from '../common/constants/models'
+import { session, user, file, folder, ui } from '../common/constants/models'
 import routes from '../common/routes/routes.jsx'
 
 router.get('*', (ctx, next) => {
@@ -15,8 +15,8 @@ router.get('*', (ctx, next) => {
      }
      else if (props) {
 
-       const store = configureStore({session, user})
-       console.log("jizz1")
+       const store = configureStore({ session, user, file, folder, ui })
+       //console.log("jizz1")
 
        const appHtml = renderToString(
          <Provider store={store}>
@@ -24,8 +24,8 @@ router.get('*', (ctx, next) => {
          </Provider>
        )
        const preloadedState = store.getState()
-       console.log("jizz2")
-       console.log(preloadedState)
+       //console.log("jizz2")
+       //console.log(preloadedState)
        ctx.body = renderPage(appHtml, preloadedState)
      }
      else {

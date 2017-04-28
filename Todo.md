@@ -9,12 +9,14 @@
   * sessionid
 
 ### Todo:
+  * Make Loading
+  
   * Router
 
     / -> homePage
 
     /Sign_In -> only for guest
-    
+
     /Sign_Up -> only for guest
 
     /mypad -> user's rootfile
