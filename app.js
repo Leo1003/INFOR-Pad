@@ -38,6 +38,8 @@ mailCtrl.verifyConfig().then(verified => {
     if (verified == false) {
         console.error('Mail config verify failed!')
         console.error('Mail verify will not work!')
+    } else {
+        console.error('Mail verify successfully!')
     }
 })
 

@@ -19,9 +19,10 @@ exports.getVerified = function () {
 exports.verifyConfig = async function () {
     let transporter = nodemailer.createTransport(mailConf.nodemailerTransport)
     try {
-        await ransporter.verify()
+        await transporter.verify()
         verified = true
     } catch (err) {
+        console.error(err.message)
         verified = false
     } finally {
         return verified
