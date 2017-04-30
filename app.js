@@ -1,3 +1,4 @@
+require('./db.js');
 const Koa = require('koa');
 const app = new Koa();
 const views = require('koa-views');
@@ -7,8 +8,8 @@ const bodyparser = require('koa-bodyparser')();
 const logger = require('koa-logger');
 const debug = require('debug')('INFOR-Pad:app');
 const mongoose = require('mongoose');
+const mailCtrl = require('./controllers/mail')
 const io = require('socket.io')();
-require('./db.js');
 
 const api = require('./routes/api');
 
@@ -32,6 +33,13 @@ app.use(async (ctx, next) => {
   const ms = new Date() - start;
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`);
 });
+
+mailCtrl.verifyConfig().then(verified => {
+    if (verified == false) {
+        console.error('Mail config verify failed!')
+        console.error('Mail verify will not work!')
+    }
+})
 
 // routes
 app.use(api.routes(), api.allowedMethods());
