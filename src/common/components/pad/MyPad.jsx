@@ -20,15 +20,14 @@ class MyPad extends React.Component {
         <h1> Loading... </h1>
       )
       else return (
-        <FolderContent folder={this.props.cur_folder} />
+        <div>
+          <FolderContent folder={this.props.cur_folder} />
+        </div>
       )
     }
     return (
       <Container>
-        <div>
-          <h1>{this.props.name + "' "}s Pad</h1>
-          {renderContent()}
-        </div>
+        {renderContent()}
       </Container>
     )
   }

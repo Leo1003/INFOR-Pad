@@ -8,7 +8,7 @@ class Main extends React.Component {
   render() {
     return (
       <div>
-        <NavBar name={this.props.name} isLogin={this.props.isLogin} />
+        <NavBar name={this.props.name} isLogin={this.props.isLogin} isFetching={this.props.isFetching}/>
         <div>
           {this.props.children}
         </div>

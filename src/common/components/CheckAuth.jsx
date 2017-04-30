@@ -17,7 +17,7 @@ export default function CheckAuth(Component, type) {
         }
       } else {
         if(this.props.isLogin) {
-          this.props.router.push(`/mypad`)
+          this.props.router.push('/pad/mypad')
         }
       }
     }

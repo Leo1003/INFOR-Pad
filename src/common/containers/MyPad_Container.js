@@ -1,4 +1,4 @@
-import MyPad from '../components/MyPad.jsx'
+import MyPad from '../components/pad/MyPad.jsx'
 import { connect } from 'react-redux'
 import { fetchGetFiles } from '../actions/filesActions'
 

@@ -52,7 +52,7 @@ function renderPage(appHtml, preloadedState) {
     <body>
       <div id="app">${appHtml}</div>
       <script>window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\u003c')}</script>
-    <script type="text/javascript" src="index_bundle.js"></script></body>
+    <script type="text/javascript" src="/index_bundle.js"></script></body>
   </html>
   `
 }

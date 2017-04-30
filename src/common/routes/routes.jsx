@@ -10,16 +10,25 @@ import Sign_in_Container from '../containers/Sign_in_Container'
 import Sign_up_Container from '../containers/Sign_up_Container'
 import CheckAuth from '../components/CheckAuth.jsx'
 import MyPad_Container from '../containers/MyPad_Container'
+import Folder from '../components/pad/Folder.jsx'
+import Pad from '../components/pad/Pad.jsx'
 
 module.exports = (
   <Route path="/" component={Main_Container}>
     <IndexRoute component={CheckAuth(HomePage, 'guest')} />
     <Route path="Sign_in" component={CheckAuth(Sign_in_Container, 'guest')} />
     <Route path="Sign_up" component={CheckAuth(Sign_up_Container, 'guest')} />
-    <Route path="user/:user" component={UserPage_Container} />
-    <Route path="mypad" component={CheckAuth(MyPad_Container, 'auth')} />
-    <Route path="folder/:folderid" />
-    <Route path="file/:fileid" />
-    <Route path=":shareid" />
+    <Route path="pad" component={Pad}>
+      <Route path="mypad" component={CheckAuth(MyPad_Container, 'auth')} />
+      <Route path="folder/:folderid" component={Folder} />
+    </Route>
+    <Route path="file/:fileid">
+      <Route path="edit" />
+      <Route path="view" />
+    </Route>
+    <Route path="share">
+      <Route path=":shareid" />
+    </Route>
+    <Route path=":user" component={UserPage_Container} />
   </Route>
-);
+)
