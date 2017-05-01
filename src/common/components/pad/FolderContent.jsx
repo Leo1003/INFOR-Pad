@@ -1,6 +1,8 @@
 import React from 'react'
-import { List, Link } from 'semantic-ui-react'
+import { List, Dropdown } from 'semantic-ui-react'
 import { browserHistory } from 'react-router'
+
+const moment = require('moment')
 
 class FolderContent extends React.Component {
   constructor(props) {
@@ -22,7 +24,7 @@ class FolderContent extends React.Component {
         <table className="ui celled striped table">
           <thead>
             <tr>
-              <th colSpan="3">
+              <th colSpan="4">
                 Data:
               </th>
             </tr>
@@ -45,7 +47,20 @@ class FolderContent extends React.Component {
                   Size
                 </td>
                 <td className="right aligned collapsing">
-                  {file.modifyDate}
+                  {moment(file.modifyDate).fromNow()}
+                </td>
+                <td className="right aligned collapsing">
+                  <Dropdown>
+                    <Dropdown.Menu>
+                      <Dropdown.Item icon='add user' text='Public' />
+                      <Dropdown.Item icon='external share' text='shareid' />
+                      <Dropdown.Item icon='file code outline' text='Open with Editor' />
+                      <Dropdown.Divider />
+                      <Dropdown.Item icon='edit' text='Rename' />
+                      <Dropdown.Item icon='level up' text='Move to...' />
+                      <Dropdown.Item icon='remove' text='Delete' />
+                    </Dropdown.Menu>
+                  </Dropdown>
                 </td>
               </tr>
             ))}
