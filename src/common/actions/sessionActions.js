@@ -7,6 +7,8 @@ import {
   GET_INITIAL_SESSION,
   CLEAN_SESSION,
   CLEAN_USER,
+  CLEAN_FILE,
+  CLEAN_FOLDER,
   ISFETCHING,
   DIDFETCH,
 
@@ -47,6 +49,8 @@ export const fetchLogout = (sessionid) => (
       })
       dispatch({ type: CLEAN_SESSION })
       dispatch({ type: CLEAN_USER })
+      dispatch({ type: CLEAN_FILE })
+      dispatch({ type: CLEAN_FOLDER })
     } catch(e) { console.log(e) }
   }
 )

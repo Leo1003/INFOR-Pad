@@ -1,4 +1,5 @@
 import React from 'react'
+import { Container } from 'semantic-ui-react'
 
 class Pad extends React.Component {
   constructor(props) {
@@ -7,9 +8,9 @@ class Pad extends React.Component {
   render() {
     return(
       <div>
-        <h1>Hello</h1>
-        <p>Todo: edit rename delete button......</p>
-        {this.props.children}
+        <Container>
+          {this.props.children}
+        </Container>
       </div>
     )
   }

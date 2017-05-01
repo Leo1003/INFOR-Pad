@@ -1,6 +1,5 @@
 import React from 'react'
 import { Container } from 'semantic-ui-react'
-import { connect } from 'react-redux'
 import FolderContent from './FolderContent.jsx'
 
 class MyPad extends React.Component {
@@ -17,18 +16,20 @@ class MyPad extends React.Component {
   render() {
     let renderContent = () => {
       if(this.props.cur_folder.name.length == 0) return (
-        <h1> Loading... </h1>
+        <div className="ui active inverted dimmer">
+          <div className="ui text loader">Loading</div>
+        </div>
       )
       else return (
         <div>
-          <FolderContent folder={this.props.cur_folder} />
+          <FolderContent name={this.props.name} folder={this.props.cur_folder} />
         </div>
       )
     }
     return (
-      <Container>
+      <div>
         {renderContent()}
-      </Container>
+      </div>
     )
   }
 }

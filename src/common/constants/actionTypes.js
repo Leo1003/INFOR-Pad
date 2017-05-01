@@ -5,8 +5,12 @@ export const SIGN_IN_FAIL = 'SIGN_IN_FAIL'
 export const SIGN_IN_SUCCESS = 'SIGN_IN_SUCCESS'
 export const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS'
 export const SIGN_UP_FAIL = 'SIGN_UP_FAIL'
+
 export const CLEAN_USER = 'CLEAN_USER'
 export const CLEAN_SESSION = 'CLEAN_SESSION'
+export const CLEAN_FILE = 'CLEAN_FILE'
+export const CLEAN_FOLDER = 'CLEAN_FOLDER'
+
 export const GET_INITIAL_SESSION = 'GET_INITIAL_SESSION'
 export const GET_INITIAL_USER = 'GET_INITIAL_USER'
 
