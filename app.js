@@ -8,6 +8,7 @@ const logger = require('koa-logger');
 const debug = require('debug')('INFOR-Pad:app');
 const mongoose = require('mongoose');
 const io = require('socket.io')();
+const password = require('./password.json')
 require('./db.js');
 
 const api = require('./routes/api');
@@ -36,9 +37,17 @@ app.use(async (ctx, next) => {
 // routes
 app.use(api.routes(), api.allowedMethods());
 
-app.io = io;
+app.io = io
 io.on('connection', socket => {
-    debug('Client connected');
-});
+    debug('Client connected')
+})
+io.of('/lxtester').use((socket, next) => {
+    if (socket.request.headers.passtoken === password.lxtester) return next();
+    next(new Error('Authentication error'));
+})
+io.of('/lxtester').on('connection', socket => {
+    debug('Lxtester connected')
+    
+})
 
 module.exports = app;
