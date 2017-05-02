@@ -1,4 +1,5 @@
 import React from 'react'
+import AddNewFiles from '../partials/AddNewFiles.jsx'
 import { List, Dropdown } from 'semantic-ui-react'
 import { browserHistory } from 'react-router'
 
@@ -21,6 +22,7 @@ class FolderContent extends React.Component {
     return (
       <div>
         <h2>{this.props.folder.name}</h2>
+        <AddNewFiles id={this.props.folder.id} />
         <table className="ui celled striped table">
           <thead>
             <tr>
