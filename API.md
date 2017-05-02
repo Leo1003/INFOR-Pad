@@ -47,11 +47,29 @@ This document contains how to use the REST api
 	 	 * sessionid: The session ID to logout
 	 * Respond Status
 	 	 * 200: Logout Successfully
-	 	 * 403: Logout Failed
+	 	 * 401: Not logged in
 	 	 * 500: Server Error
 
 ***
 #### User
+~~~http
+ GET /api/user?name=
+~~~
+ * Get a user's profile by name
+     * Request Query
+         * name: The user's name
+     * Respond Status
+         * 200: Succeed
+         * 404: Not Found
+         * 500: Server Error
+     * Respond Body
+         * name: username,
+         * level: userlevel,
+         * createDate: The time when the user created
+         * email: The user's email **(Hidden)**
+         * lastLogin: The last time when the user login **(Hidden)**
+         * rootfsid: user's root directory fsid **(Hidden)**
+
 ~~~http
  GET /api/user/:id
 ~~~
@@ -82,9 +100,8 @@ This document contains how to use the REST api
  		 * 409: The username or the email address had been used by someone else
  		 * 500: Server Error
    	 * Respond Body
-         * userid: The user's id
+         * user: The user object of the login user
  		 * sessionid: The ID which can be used to login
-	 	 * name: The user's name
 
 ***
 #### File System
@@ -181,3 +198,5 @@ This document contains how to use the REST api
          * 404: The directory isn't exist
          * 500: Server Error
          * 507: Error occurred when deleting
+     * Respond Body
+         * count: The total number of deleted files or directories

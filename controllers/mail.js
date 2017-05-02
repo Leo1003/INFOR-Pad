@@ -7,17 +7,25 @@ const MailValidation = mongoose.model('MailValidation')
 const userCtrl = require('./user')
 const sessionCtrl = require('./session')
 const ApiError = require('../error').ApiError
-const userCtrl = require('../controllers/user')
 const mailConf = require('../mail.json')
 const hash = require('./hash')
+
+var verified = undefined
+
+exports.getVerified = function () {
+    return verified
+}
 
 exports.verifyConfig = async function () {
     let transporter = nodemailer.createTransport(mailConf.nodemailerTransport)
     try {
-        await ransporter.verify()
-        return true
+        await transporter.verify()
+        verified = true
     } catch (err) {
-        return false
+        console.error(err.message)
+        verified = false
+    } finally {
+        return verified
     }
 }
 
@@ -71,4 +79,29 @@ exports.sendMail = async function (mail) {
         throw new ApiError(507, err.message)
     }
     return mail.secret
+}
+
+exports.executeAction = async function (secret) {
+    let mailvad = await MailValidation.findOne({ secret: hash.hashSessionId(secret) })
+    if (mailvad && mailvad.expireAt > new Date()) {
+        if (mailvad == 'SignupCheck') {
+            await mailvad.populate('user').execPopulate()
+            mailvad.user.level = 1
+            await mailvad.user.save()
+            let ret = {
+                type: 'SignupCheck',
+                user: mailvad.user
+            }
+            await mailvad.remove()
+            return ret
+        } else if (mailvad == 'PasswordReset') {
+            let ret = {
+                type: 'PasswordReset',
+                user: mailvad.user
+            }
+            return ret
+        }
+    } else {
+        throw new ApiError(410, "Expired token!")
+    }
 }
