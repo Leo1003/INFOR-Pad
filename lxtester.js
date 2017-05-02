@@ -1,10 +1,7 @@
-const mongoose = require('mongoose')
-const fsCtrl = require('./controllers/filesystem')
-
 class lxtesterServer {
     constructor() {
         this.clients = {}
-        this.tasks = {}
+        this.taskcounter = 0;
     }
     push(socket) {
         let s = {
@@ -17,33 +14,41 @@ class lxtesterServer {
         let min = Infinity
         let id = ''
         for (let s in this.clients) {
-            if (s.pending < min) {
-                min = s.pending
+            if (s.tasks.length < min) {
+                min = s.tasks.length
                 id = s.socket.id
             }
         }
         return id
     }
-    async sendJob(socketid, fileid) {
-        let file = await fsCtrl.findFile(fileid)
-        if (!file) {
-            throw new Error("File not Exist")
-        }
-        if (!this.clients[socketid]) {
-            throw new Error("Client not Exist")
-        }
+    sendJob(task) {
+        let clientid = this.findIdlest()
+        task.id = this.taskcounter
+        this.taskcounter++
         let job = {
-            id: 0,
-            language: file.format,
-            exefile: '',
-            srcfile: '',
-            stdin: file.stdin,
-            code: file.code
-            //Need to add consider language
+            id: task.id,
+            language: task.language,
+            exefile: task.file.name,
+            srcfile: `${task.file.name}.${task.file.format}`,
+            stdin: task.file.stdin,
+            code: task.file.code
         }
-        this.clients[socketid].socket.emit('Job', job)
+        this.clients[clientid].socket.emit('Job', job)
+        this.clients[clientid].tasks[task.id] = task
+        return task.id
     }
-    remove(socketid) {
-        delete this.clients[socket.id]
+    receiveJob(clientid, result) {
+        let task = this.clients[clientid].tasks[result.id]
+        delete this.clients[clientid].tasks[result.id]
+        task.result = result
+        return task
+    }
+    remove(clientid) {
+        let uncompleted = []
+        for (let task in this.clients[clientid].tasks) {
+            uncompleted.push(task)
+        }
+        delete this.clients[clientid]
+        return uncompleted
     }
 }
