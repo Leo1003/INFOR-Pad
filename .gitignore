@@ -34,3 +34,7 @@ npm-debug.log
 
 # webpack
 index_bundle.js
+
+# semantic ui
+/semantic
+semantic.json
