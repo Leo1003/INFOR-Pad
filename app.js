@@ -39,7 +39,7 @@ app.use(async (ctx, next) => {
 app.use(api.routes(), api.allowedMethods());
 // react routes
 app.use(serve(`./dist`))
-app.use(serve('./semantic'))
+app.use(serve('./semantic/dist'))
 app.use(router.routes())
 
 app.io = io;
