@@ -86,18 +86,21 @@ io.of('lxtester').on('connection', socket => {
             */
     });
     // socket.emit('Job', testjob[count++]);
-    for(let i = 0; i < 10; i++)
+    for(let i = 0; i < 100; i++)
     {
         socket.emit('Job', {
-            id : i,
-            language : 'Python3',
-            exefile : '',
-            srcfile : `${i}.py`,
-            stdin : '',
-            code : `
-print('Hello, world.')
+        id : 1,
+        language : 'CPP',
+        exefile : '1',
+        srcfile : '1.cpp',
+        stdin: '',
+        code : `
+#include <iostream>
+#include <unistd.h>
+using namespace std;
+int main(){cout<<"jizz"<<endl;sleep(2);}
 `
-        });
+    });
         console.log(`Sent Task. ID: ${i}.`);
     }
 });
