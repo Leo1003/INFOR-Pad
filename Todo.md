@@ -10,7 +10,11 @@
 
 ### Todo:
   * Make Loading
-  
+
+  * FolderSystem => using react router (not a href)
+
+  * using sematic ui html not react
+
   * Router
 
     / -> homePage

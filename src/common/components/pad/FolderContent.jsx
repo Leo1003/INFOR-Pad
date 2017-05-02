@@ -1,5 +1,5 @@
 import React from 'react'
-import AddNewFiles from '../partials/AddNewFiles.jsx'
+import AddNewFiles from './AddNewFiles.jsx'
 import { List, Dropdown } from 'semantic-ui-react'
 import { browserHistory } from 'react-router'
 
