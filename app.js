@@ -72,11 +72,13 @@ io.use((socket, next) => {
 })
 io.on('connection', socket => {
     debug('Client connected')
-    socket.on('Submit', async data => {
-        lxtesterServer.sendJob({
-            socketid: socket.id,
-            language: data.language,
-            file: await fsCtrl.findFile(data.fileid)
+    socket.on('Submit', data => {
+        fsCtrl.findFile(data.fileid).then(file => {
+            lxtesterServer.sendJob({
+                socketid: socket.id,
+                language: data.language,
+                file: file
+            })
         })
     })
 })
@@ -97,11 +99,11 @@ io.of('/lxtester').on('connection', socket => {
             io.sockets.socket(task.socketid).emit('Result', {
                 id: task.id,
                 type: 2,
-                time: 0,
+                time: -1,
                 memory: -1,
                 exitcode: 0,
                 signal: 0,
-                killed: 1,
+                killed: true,
                 output: '',
                 error: ''
             })
