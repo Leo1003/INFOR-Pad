@@ -31,3 +31,6 @@ npm-debug.log
 
 # for macos
 .DS_Store
+
+# VSCode Folder
+.vscode/

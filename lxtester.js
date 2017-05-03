@@ -52,3 +52,5 @@ class lxtesterServer {
         return uncompleted
     }
 }
+
+module.exports.lxtesterServer = lxtesterServer

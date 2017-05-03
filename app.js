@@ -13,7 +13,7 @@ const fsCtrl = require('./controllers/filesystem')
 const mailCtrl = require('./controllers/mail')
 const io = require('socket.io')();
 const password = require('./password.json')
-const lxtesterServer = require('./lxtester').lxtesterServer()
+const lxtesterServer = new (require('./lxtester').lxtesterServer)()
 
 const api = require('./routes/api');
 
@@ -51,17 +51,24 @@ mailCtrl.verifyConfig().then(verified => {
 app.use(api.routes(), api.allowedMethods());
 
 app.io = io
-io.use(await (socket, next) => {
-    let sess = await sessionCtrl.getSessionById(socket.request.headers.sessionid)
-    if (sess) {
-        if (sess.expireAt > new Date()) {
-            sess = await sess.populate('user').execPopulate()
-            if (sess.user) {
-                return next()
+io.use((socket, next) => {
+    sessionCtrl.getSessionById(socket.request.headers.sessionid).then((sess => {
+        if (sess) {
+            if (sess.expireAt > new Date()) {
+                return sess.populate('user').execPopulate()
             }
         }
-    }
-    next(new Error('Authentication Failed!'))
+        throw new Error('Authentication Failed!')
+    }))
+    .then(sess => {
+        if (sess.user) {
+            return next()
+        }
+        throw new Error('Authentication Failed!')
+    })
+    .catch(err => {
+        next(err)
+    })
 })
 io.on('connection', socket => {
     debug('Client connected')
@@ -88,7 +95,15 @@ io.of('/lxtester').on('connection', socket => {
         let uncompleted = lxtesterServer.remove(socket.id)
         for (let task in uncompleted) {
             io.sockets.socket(task.socketid).emit('Result', {
-                //TODO: Uncompleted
+                id: task.id,
+                type: 2,
+                time: 0,
+                memory: -1,
+                exitcode: 0,
+                signal: 0,
+                killed: 1,
+                output: '',
+                error: ''
             })
         }
     })
