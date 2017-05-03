@@ -1,7 +1,7 @@
 import React from 'react'
 import AddNewFiles from './AddNewFiles.jsx'
 import { List, Dropdown } from 'semantic-ui-react'
-import { browserHistory } from 'react-router'
+import { browserHistory, Link } from 'react-router'
 
 const moment = require('moment')
 
@@ -43,7 +43,7 @@ class FolderContent extends React.Component {
               <tr key={file.id}>
                 <td className='collapsing'>
                   { file.format === 'Directory' ? (<i className="folder icon"></i>) : ( <i className="file outline icon"></i>) }
-                  { file.format === 'Directory' ? (<a href={'/pad/folder/' + file.id }>{file.name}</a>) : (<a href={'file/' + file.id + '/view'}>{file.name}</a>)}
+                  { file.format === 'Directory' ? (<Link to={'/pad/folder/' + file.id }>{file.name}</Link>) : (<Link to={'file/' + file.id + '/view'}>{file.name}</Link>)}
                 </td>
                 <td>
                   Size

@@ -13,6 +13,8 @@ class Folder extends React.Component {
     if(!nextProps.isFetching && nextProps.cur_folder.name.length == 0) this.props.handleGetFiles(nextProps.sessionid, this.props.params.folderid)
   }
   render() {
+    console.log("render folder")
+    if(this.props.cur_folder.id != this.props.params.folderid) this.props.handleGetFiles(this.props.sessionid, this.props.params.folderid)
     let renderContent = () => {
       if(this.props.cur_folder.name.length == 0) return (
         <div className="ui active inverted dimmer">
