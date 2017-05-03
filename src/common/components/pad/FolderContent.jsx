@@ -13,6 +13,7 @@ class FolderContent extends React.Component {
   componentDidMount() {
     console.log("folderContent")
     console.log(this.props)
+    $('.ui.dropdown').dropdown();
   }
   goBack() {
     browserHistory.goBack()
@@ -52,17 +53,19 @@ class FolderContent extends React.Component {
                   {moment(file.modifyDate).fromNow()}
                 </td>
                 <td className="right aligned collapsing">
-                  <Dropdown>
-                    <Dropdown.Menu>
-                      <Dropdown.Item icon='add user' text='Public' />
-                      <Dropdown.Item icon='external share' text='shareid' />
-                      <Dropdown.Item icon='file code outline' text='Open with Editor' />
-                      <Dropdown.Divider />
-                      <Dropdown.Item icon='edit' text='Rename' />
-                      <Dropdown.Item icon='level up' text='Move to...' />
-                      <Dropdown.Item icon='remove' text='Delete' />
-                    </Dropdown.Menu>
-                  </Dropdown>
+                  <div className="ui dropdown">
+                    <div className="text">Option</div>
+                    <i className="dropdown icon"></i>
+                    <div className="menu">
+                      <div className="item"><i className='add user icon'></i>Public</div>
+                      <div className="item"><i className='external share icon'></i>shareid</div>
+                      <div className="item"><i className='file code outline icon'></i>Open with Editor</div>
+                      <div className="divider"></div>
+                      <div className="item"><i className='edit icon'></i>Rename</div>
+                      <div className="item"><i className='level up icon'></i>Move</div>
+                      <div className="item"><i className='remove icon'></i>Delete</div>
+                    </div>
+                  </div>
                 </td>
               </tr>
             ))}
