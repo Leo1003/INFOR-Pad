@@ -1,93 +1,40 @@
 var router = require('koa-router')()
-const crypto = require('crypto')
 const randomstring = require('randomstring')
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
-const FileSystem = mongoose.model('FileSystem')
-const Session = mongoose.model('Session')
+const userCtrl = require('../controllers/user')
+const sessionCtrl = require('../controllers/session')
+const ApiError = require('../error').ApiError
 
-router.get('/user/:uid', async ctx => {
-    let user = await User.findById(ctx.params.uid)
-    if (!user) {
-        ctx.status = 404
-        ctx.body = {
-            error: "No such user"
-        }
-        return
-    }
-    let resBody = {
-        name: user.name,
-        level: user.level,
-        createDate: user.createDate
-    }
-    if (ctx.state.session && ctx.state.session.user._id.equals(ctx.params.uid)) {
-        resBody.email = user.email
-        resBody.lastLogin = user.lastLogin
-        resBody.rootfsid = user.root
-    }
+router.prefix('/user')
+
+router.get('/', async ctx => {
+    let isSelf = (ctx.state.session && ctx.state.session.user._id.equals(ctx.params.uid))
+    let userdata = await userCtrl.getUserByName(ctx.query.name, isSelf)
     ctx.status = 200
-    ctx.body = resBody
+    ctx.body = userdata
 })
-router.post('/user', async ctx => {
+router.get('/:uid', async ctx => {
+    let isSelf = (ctx.state.session && ctx.state.session.user._id.equals(ctx.params.uid))
+    let userdata = await userCtrl.getUserById(ctx.params.uid, isSelf)
+    ctx.status = 200
+    ctx.body = userdata
+})
+router.post('/', async ctx => {
     let data = ctx.request.body
     if (!data.username || !data.password || !data.email) {
-        ctx.status = 400
-        ctx.body = {
-            error : "Some data are missed"
-        }
-        return
+        throw new ApiError(400, "Some data are missed")
     }
-    //*** Test if existed
-    let samename = await User.findOne({ name : data.username })
-    if (samename) {
-        ctx.status = 409
-        ctx.body = {
-            error : "Username has already been taken!"
-        }
-        return
-    }
-    let samemail = await User.findOne({ name : data.username })
-    if (samemail) {
-        ctx.status = 409
-        ctx.body = {
-            error : "Email address has already been used!"
-        }
-        return
-    }
+    //TODO: Verify if password is strong enough
+    //TODO: Verify if email is valid
 
-    let salt = randomstring.generate(16)
-    let hash = crypto.createHmac('RSA-SHA512', salt).update(data.password).digest('hex')
-    let user = await new User({
-        name : data.username,
-        password : hash,
-        salt : salt,
-        email : data.email
-    }).save()
-    let root = await new FileSystem({
-        name: "Root",
-        isFile: false,
-        owner: user._id
-    }).save()
-    user.root = root._id
-    user = await user.save()
-
-    //TODO:Add email verify
-
+    let user = await userCtrl.createUser(data)
     //Auto login for the new created user
-    let sessID = randomstring.generate(32)
-    let expireDate = new Date()
-    expireDate.setTime(expireDate.getTime() + 3600 * 1000)
-    await new Session({
-        uuid: crypto.createHash('sha512').update(sessID).digest('hex'),
-        expireAt: expireDate,
-        user: user._id,
-        autoLogin: false
-    }).save()
+    let sessionid = await sessionCtrl.generateSession(user, false)
     ctx.status = 201
     ctx.body = {
-        userid: user._id,
-        sessionid: sessID,
-        name: user.name
+        user: userCtrl.extractUserData(user, true),
+        sessionid: sessionid
     }
 })
 

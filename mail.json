@@ -1,0 +1,21 @@
+{
+    "nodemailerTransport": {
+        "host": "mail.your.host",
+        "secure": true,
+        "auth": {
+            "user": "username",
+            "pass": "pass"
+        },
+        "authMethod": "PLAIN",
+        "tls": {
+            "rejectUnauthorized": true
+        },
+        "ignoreTLS": false,
+        "requireTLS": false,
+        "connectionTimeout": 30000,
+        "greetingTimeout": 5000,
+        "socketTimeout": 30000
+    },
+    "MailLinkDomain": "your.domain.com",
+    "MailAddress": "no-reply@mail.your.host"
+}

@@ -32,9 +32,13 @@ npm-debug.log
 # for macos
 .DS_Store
 
+
 # webpack
 index_bundle.js
 
 # semantic ui
 /semantic
 semantic.json
+
+# VSCode Folder
+.vscode/
