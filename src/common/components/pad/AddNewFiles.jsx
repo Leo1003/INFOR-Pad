@@ -50,13 +50,14 @@ class AddNewFiles extends React.Component {
     e.preventDefault()
   }
   handleInvalid(e) {
+    console.log("invalid")
     return false
   }
   newFolderModal() {
     $('.ui.small.modal.addNewFolderModal').modal({
       blurring: true,
       onDeny: () => {
-        $('#addfolderform').form('reset')
+        $('#addfolderform').form('clear')
       }
       }).modal('show')
   }
@@ -64,7 +65,7 @@ class AddNewFiles extends React.Component {
     $('.ui.small.modal.addNewFileModal').modal({
       blurring: true,
       onDeny: () => {
-        $('#addfileform').form('reset')
+        $('#addfileform').form('clear')
       }
     }).modal('show')
   }
@@ -87,8 +88,8 @@ class AddNewFiles extends React.Component {
           </div>
           <div className="content">
 
-            <form className="ui folder form" id="addfolderform">
-              <div className="fields">
+            <form className="ui form" id="addfolderform">
+              <div className="field">
                 <input type="text" name="foldername" ref='foldername' placeholder='Folder Name...' />
               </div>
             </form>
@@ -113,7 +114,7 @@ class AddNewFiles extends React.Component {
           </div>
           <div className="content">
 
-            <form className="ui fileform form" id="addfileform">
+            <form className="ui form" id="addfileform">
               <div className="field">
                 <input type="text" name="filename" ref='filename' placeholder='File Name...' />
               </div>
