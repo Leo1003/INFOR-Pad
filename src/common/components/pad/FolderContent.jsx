@@ -11,17 +11,20 @@ class FolderContent extends React.Component {
     this.goBack = this.goBack.bind(this)
   }
   componentDidMount() {
-    console.log("folderContent")
-    console.log(this.props)
-    $('.ui.dropdown').dropdown();
+    console.log("Jizz")
+    $('.ui.dropdown').dropdown()
   }
   goBack() {
     browserHistory.goBack()
     return
   }
+  componentWillReceiveProps() {
+    $('.ui.dropdown').dropdown()
+  }
   render() {
+    console.log("jizzrender")
     let ContentDropDown = () => (
-      <div className="ui dropdown">
+      <div className="ui dropdown button basic">
         <div className="text">Option</div>
         <i className="dropdown icon"></i>
         <div className="menu">
@@ -38,7 +41,7 @@ class FolderContent extends React.Component {
     return (
       <div>
         <h2>{this.props.folder.name}</h2>
-        <AddNewFiles id={this.props.folder.id} />
+        <AddNewFiles id={this.props.folder.id} sessionid={this.props.sessionid} handleAddNewFolder={this.props.handleAddNewFolder} />
         <table className="ui celled unstackable selectable table">
           <thead>
             <tr>

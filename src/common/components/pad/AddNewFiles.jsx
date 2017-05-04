@@ -1,4 +1,6 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { fetchAddNewFolder } from '../../actions/filesActions'
 import { Dropdown, Modal, Header, Button, Icon } from 'semantic-ui-react'
 
 class AddNewFiles extends React.Component {
@@ -40,6 +42,7 @@ class AddNewFiles extends React.Component {
       onFailure: this.handleInvalid.bind(this),
       onSuccess: this.handleAddNewFolder.bind(this)
     })
+    $('.ui.dropdown').dropdown()
   }
   handleAddNewFile(e) {
     console.log("addnewfile")
@@ -48,6 +51,12 @@ class AddNewFiles extends React.Component {
   handleAddNewFolder(e) {
     console.log("addnewfolder")
     e.preventDefault()
+    const formData = {}
+    for(const field in this.refs) {
+      formData[field] = this.refs[field].value
+    }
+    console.log(formData.foldername)
+    this.props.handleAddNewFolder(formData['foldername'], this.props.id, this.props.sessionid)  //(filename, folderid, sessionid)
   }
   handleInvalid(e) {
     console.log("invalid")

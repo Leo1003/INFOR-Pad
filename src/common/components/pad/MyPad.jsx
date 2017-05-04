@@ -1,5 +1,4 @@
 import React from 'react'
-import { Container } from 'semantic-ui-react'
 import FolderContent from './FolderContent.jsx'
 
 class MyPad extends React.Component {
@@ -7,7 +6,6 @@ class MyPad extends React.Component {
     super(props)
   }
   componentWillMount() {
-    // console.log(this.props)
     if(!this.props.isFetching) this.props.handleGetFiles(this.props.sessionid, this.props.rootfsid)
   }
   componentWillReceiveProps(nextProps) {
@@ -22,7 +20,7 @@ class MyPad extends React.Component {
       )
       else return (
         <div>
-          <FolderContent name={this.props.name} folder={this.props.cur_folder} />
+          <FolderContent folder={this.props.cur_folder} sessionid={this.props.sessionid} handleAddNewFolder={this.props.handleAddNewFolder} />
         </div>
       )
     }

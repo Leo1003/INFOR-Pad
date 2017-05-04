@@ -6,14 +6,12 @@ class Folder extends React.Component {
     super(props)
   }
   componentWillMount() {
-    console.log(this.props)
     if(!this.props.isFetching) this.props.handleGetFiles(this.props.sessionid, this.props.params.folderid)
   }
   componentWillReceiveProps(nextProps) {
     if(!nextProps.isFetching && nextProps.cur_folder.name.length == 0) this.props.handleGetFiles(nextProps.sessionid, this.props.params.folderid)
   }
   render() {
-    console.log("render folder")
     if(this.props.cur_folder.id != this.props.params.folderid) this.props.handleGetFiles(this.props.sessionid, this.props.params.folderid)
     let renderContent = () => {
       if(this.props.cur_folder.name.length == 0) return (
@@ -23,7 +21,7 @@ class Folder extends React.Component {
       )
       else return (
         <div>
-          <FolderContent name={this.props.name} folder={this.props.cur_folder} />
+          <FolderContent folder={this.props.cur_folder} sessionid={this.props.sessionid} handleAddNewFolder={this.props.handleAddNewFolder} />
         </div>
       )
     }

@@ -1,6 +1,6 @@
 import MyPad from '../components/pad/MyPad.jsx'
 import { connect } from 'react-redux'
-import { fetchGetFiles } from '../actions/filesActions'
+import { fetchGetFiles, fetchAddNewFolder  } from '../actions/filesActions'
 
 
 const mapStateToProps = (state) => {
@@ -17,6 +17,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   handleGetFiles: (sessionid, fsid) => {
     dispatch(fetchGetFiles(sessionid, fsid))
+  },
+  handleAddNewFolder: (filename, folderid, sessionid) => {
+    dispatch(fetchAddNewFolder(filename, folderid, sessionid))
   }
 })
 
