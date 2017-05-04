@@ -10,7 +10,7 @@ exports.extractFSData = async function (fs, complete) {
     let ret = {
         id: fs._id,
         name: fs.name,
-        parent: fs.parent,
+        parent: (fs.parent ? fs.parent : ''),
         owner: fs.owner,
         createDate: fs.createDate,
         modifyDate: fs.modifyDate,
