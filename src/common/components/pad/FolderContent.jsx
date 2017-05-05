@@ -1,5 +1,6 @@
 import React from 'react'
 import AddNewFiles from './AddNewFiles.jsx'
+import FolderDropdown from './FolderDropdown.jsx'
 import { List, Dropdown } from 'semantic-ui-react'
 import { browserHistory, Link } from 'react-router'
 
@@ -20,21 +21,7 @@ class FolderContent extends React.Component {
     $('.ui.dropdown').dropdown()
   }
   render() {
-    let ContentDropDown = () => (
-      <div className="ui dropdown button basic">
-        <div className="text"></div>
-        <i className="dropdown icon"></i>
-        <div className="menu">
-          <div className="item"><i className='add user icon'></i>Public</div>
-          <div className="item"><i className='external share icon'></i>shareid</div>
-          <div className="item"><i className='file code outline icon'></i>Open with Editor</div>
-          <div className="divider"></div>
-          <div className="item"><i className='edit icon'></i>Rename</div>
-          <div className="item"><i className='level up icon'></i>Move</div>
-          <div className="item"><i className='remove icon'></i>Delete</div>
-        </div>
-      </div>
-    )
+
     return (
       <div>
         <h2>{this.props.folder.name}</h2>
@@ -70,7 +57,7 @@ class FolderContent extends React.Component {
                       {moment(file.modifyDate).fromNow()}
                     </td>
                     <td className="right aligned collapsing">
-                      {ContentDropDown()}
+                      <FolderDropdown id={file.id} sessionid={this.props.sessionid} folderid={this.props.folder.id}/>
                     </td>
                   </tr>
                 )
@@ -91,7 +78,7 @@ class FolderContent extends React.Component {
                     {moment(file.modifyDate).fromNow()}
                   </td>
                   <td className="right aligned collapsing">
-                    {ContentDropDown()}
+                    <FolderDropdown id={file.id} sessionid={this.props.sessionid} folderid={this.props.folder.id}/>
                   </td>
                 </tr>
               )

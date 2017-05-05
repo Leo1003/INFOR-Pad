@@ -6,6 +6,7 @@ import {
   PERMISSION_DENIED,
   FILE_IS_NOT_EXIST,
   ADD_NEW_FOLDER,
+  DELETE_FILE,
   ISFETCHING,
   DIDFETCH
 } from '../constants/actionTypes'
@@ -61,5 +62,22 @@ export const fetchAddNewFolder = (filename, folderid, sessionid) => (
       }
       dispatch({ type: DIDFETCH })
     } catch(e) { console.log(e) }
+  }
+)
+
+export const fetchDeleteFile = (fsid, sessionid, folderid) => (
+  async (dispatch) => {
+    dispatch({ type: ISFETCHING })
+    let res = await fetch(`/api/fs/${fsid}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'sessionid': `${sessionid}`
+      }
+    })
+    if(res.ok) {
+      let json = await res.json()
+      dispatch(fetchGetFiles(sessionid, folderid))
+    }
   }
 )
