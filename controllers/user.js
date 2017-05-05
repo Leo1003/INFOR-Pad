@@ -26,25 +26,25 @@ function extractUserData(user, privData) {
 }
 exports.extractUserData = extractUserData
 
-exports.getUserById = async function (userid, privData) {
+exports.getUserById = async function (userid, privData, nothrow) {
     let user = await User.findById(userid)
-    if (!user) {
+    if (!user && nothrow == true) {
         throw new ApiError(404, "No such user")
     }
     return extractUserData(user, privData)
 }
 
-exports.getUserByName = async function (username, privData) {
+exports.getUserByName = async function (username, privData, nothrow) {
     let user = await User.findOne({name: new RegExp(username, 'i')})
-    if (!user) {
+    if (!user && nothrow == false) {
         throw new ApiError(404, "No such user")
     }
     return extractUserData(user, privData)
 }
 
-exports.getUserByMail = async function (email, privData) {
+exports.getUserByMail = async function (email, privData, nothrow) {
     let user = await User.findOne({email: email})
-    if (!user) {
+    if (!user && nothrow == false) {
         throw new ApiError(404, "No such user")
     }
     return extractUserData(user, privData)
@@ -52,10 +52,10 @@ exports.getUserByMail = async function (email, privData) {
 
 exports.createUser = async function (option) {
     //*** Test if existed
-    if (await exports.getUserByName(option.username)) {
+    if (await exports.getUserByName(option.username, false, true)) {
         throw new ApiError(409, "Username has already been taken!")
     }
-    if (await exports.getUserByMail(option.email)) {
+    if (await exports.getUserByMail(option.email, false, true)) {
         throw new ApiError(409, "Email address has already been used!")
     }
     let salt = randomstring.generate(16)
