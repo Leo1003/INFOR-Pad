@@ -1,15 +1,16 @@
 var socket = undefined;
 function connect(sessionid) {
-    socket = io('localhost', {
+    // socket = io();
+    socket = io('', {
         extraHeaders: {
             sessionid: sessionid
         }
     });
-    socket.on('connect', () => {
+    socket.on('connect', data => {
         console.log("Connected to server!");
     });
     socket.on('error', error => {
-        throw error;
+        console.error(error)
     });
 }
 function onResult(callback) {
@@ -34,6 +35,8 @@ function onResult(callback) {
     });
 }
 function submit(fileid, language) {
+    console.log(fileid)
+    console.log(language)
     socket.emit('Submit', {
         fileid: fileid,
         language: language

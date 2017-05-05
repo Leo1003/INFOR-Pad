@@ -52,6 +52,8 @@ app.use(api.routes(), api.allowedMethods());
 
 app.io = io
 io.use((socket, next) => {
+    debug("User connecting...")
+    debug(socket.request.headers.sessionid)
     sessionCtrl.getSessionById(socket.request.headers.sessionid).then((sess => {
         if (sess) {
             if (sess.expireAt > new Date()) {
