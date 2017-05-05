@@ -9,10 +9,10 @@ const ApiError = require('../error').ApiError
 router.prefix('/user')
 
 router.get('/', async ctx => {
-    let isSelf = (ctx.state.session && ctx.state.session.user._id.equals(ctx.params.uid))
-    let userdata = await userCtrl.getUserByName(ctx.query.name, isSelf)
+    let user = await userCtrl.getUserByName(ctx.query.name, null)
+    let isSelf = (ctx.state.session && ctx.state.session.user._id.equals(user._id))
     ctx.status = 200
-    ctx.body = userdata
+    ctx.body = userCtrl.extractUserData(user, isSelf)
 })
 router.get('/:uid', async ctx => {
     let isSelf = (ctx.state.session && ctx.state.session.user._id.equals(ctx.params.uid))

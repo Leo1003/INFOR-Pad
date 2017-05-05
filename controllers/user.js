@@ -12,6 +12,9 @@ function extractUserData(user, privData) {
     if (!user) {
         return undefined
     } else {
+        if (privData === null) {
+            return user
+        }
         ret.id = user._id
         ret.name = user.name
         ret.level = user.level

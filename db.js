@@ -28,6 +28,7 @@ var FileSystem = new Schema({
     modifyDate: { type: Date, default: new Date() },
     isFile: { type: Boolean, required: true },
     isPublic: { type: Boolean, default: false },
+    shortid: { type: String, unique: true, sparse: true },
     files: {
         type: [{ type: Schema.Types.ObjectId, ref: 'FileSystem' }],
         default: undefined
