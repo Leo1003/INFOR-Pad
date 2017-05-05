@@ -39,6 +39,7 @@ export const fetchGetFiles = (sessionid, fsid) => (
 export const fetchAddNewFolder = (filename, folderid, sessionid) => (
   async (dispatch) => {
     try {
+      dispatch({ type: ISFETCHING })
       let res = await fetch(`/api/fs/${folderid}`, {
         method: 'POST',
         headers: {
@@ -49,7 +50,8 @@ export const fetchAddNewFolder = (filename, folderid, sessionid) => (
       })
       if(res.ok){
         let json = await res.json()
-        dispatch({ type: ADD_NEW_FOLDER })
+        dispatch(fetchGetFiles(sessionid, folderid))
+        //dispatch({ type: ADD_NEW_FOLDER })
       }  else if(res.status == '401') {
         dispatch({ type: LOGIN_FIRST })
       } else if(res.status === '403') {
@@ -57,6 +59,7 @@ export const fetchAddNewFolder = (filename, folderid, sessionid) => (
       } else if(res.status == '404') {
         dispatch({ type: FILE_IS_NOT_EXIST })
       }
+      dispatch({ type: DIDFETCH })
     } catch(e) { console.log(e) }
   }
 )

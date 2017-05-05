@@ -53,9 +53,9 @@ class AddNewFiles extends React.Component {
       formData[field] = this.refs[field].value
     }
     $('#addfolderform').form('clear')
+    $('.ui.small.modal.addNewFolderModal').modal('hide')
     this.props.handleAddNewFolder(formData['foldername'], this.props.id, this.props.sessionid)  //(filename, folderid, sessionid)
-    this.props.handleGetFiles(this.props.sessionid, this.props.id)
-    console.log(this.props)
+    //console.log(this.props)
   }
   handleInvalid(e) {
     return false
