@@ -4,7 +4,6 @@ import { fetchGetFiles, fetchAddNewFolder } from '../actions/filesActions'
 
 
 const mapStateToProps = (state) => {
-  console.log(state)
   return {
     name: state.user.name,
     sessionid: state.session.sessionid,

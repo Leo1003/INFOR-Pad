@@ -10,7 +10,6 @@ class Logout extends React.Component{
   }
   onLogout(e) {
     const sessionid = cookie.load('sessionid')
-    //console.log(this.props)
     if(!sessionid) return
     else this.props.handleLogout(sessionid)
   }

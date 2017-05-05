@@ -4,8 +4,6 @@ import Sign_up from '../components/Sign_up.jsx'
 import { fetchSignUp } from '../actions/sessionActions.js'
 
 const mapStateToProps = (state) => {
-  // console.log("sign up")
-  // console.log(state)
   return {
     error_message: state.session.error_message,
     isLogin: state.session.isLogin

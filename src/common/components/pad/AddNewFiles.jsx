@@ -42,11 +42,9 @@ class AddNewFiles extends React.Component {
     $('.ui.dropdown').dropdown()
   }
   handleAddNewFile(e) {
-    console.log("addnewfile")
     e.preventDefault()
   }
   handleAddNewFolder(e) {
-    console.log("addnewfolder")
     e.preventDefault()
     const formData = {}
     for(const field in this.refs) {
@@ -55,7 +53,7 @@ class AddNewFiles extends React.Component {
     $('#addfolderform').form('clear')
     $('.ui.small.modal.addNewFolderModal').modal('hide')
     this.props.handleAddNewFolder(formData['foldername'], this.props.id, this.props.sessionid)  //(filename, folderid, sessionid)
-    //console.log(this.props)
+
   }
   handleInvalid(e) {
     return false
@@ -77,14 +75,7 @@ class AddNewFiles extends React.Component {
       onApprove: () => { return true }
     }).modal('show')
   }
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log("shoud update?")
-    console.log(nextProps)
-    console.log(nextState)
-    return true
-  }
   render() {
-    console.log("add new file render")
     return (
       <div>
         <div className="ui dropdown button basic">

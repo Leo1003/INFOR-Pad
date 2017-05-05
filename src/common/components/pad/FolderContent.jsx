@@ -11,7 +11,6 @@ class FolderContent extends React.Component {
     super(props)
   }
   componentDidMount() {
-    console.log("call dropdown")
     $('.ui.dropdown').dropdown()
   }
   componentWillReceiveProps() {

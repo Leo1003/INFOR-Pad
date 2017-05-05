@@ -14,8 +14,6 @@ const initialState = {
 }
 
 export default function configureStore(preloadedState = initialState) {
-  //console.log("store")
-  //console.log(preloadedState)
   const store = createStore(
     rootReducer,
     preloadedState,

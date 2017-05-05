@@ -16,7 +16,6 @@ router.get('*', (ctx, next) => {
      else if (props) {
 
        const store = configureStore({ session, user, file, folder, ui })
-       //console.log("jizz1")
 
        const appHtml = renderToString(
          <Provider store={store}>
@@ -24,8 +23,6 @@ router.get('*', (ctx, next) => {
          </Provider>
        )
        const preloadedState = store.getState()
-       //console.log("jizz2")
-       //console.log(preloadedState)
        ctx.body = renderPage(appHtml, preloadedState)
      }
      else {

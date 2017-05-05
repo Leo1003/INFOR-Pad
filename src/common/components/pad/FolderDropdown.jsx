@@ -13,8 +13,6 @@ class FolderDropdown extends React.Component {
     e.preventDefault()
     let selected = $(`#${this.props.id}`).dropdown('get value')
     if(selected === "delete") {
-      console.log("delete")
-      console.log(this.props)
       this.props.handleDelete(this.props.id, this.props.sessionid, this.props.folderid)
     }
   }

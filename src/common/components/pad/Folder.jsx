@@ -6,7 +6,6 @@ class Folder extends React.Component {
     super(props)
   }
   componentWillMount() {
-    console.log("componentwillmount")
     if(!this.props.isFetching) this.props.handleGetFiles(this.props.sessionid, this.props.params.folderid)
   }
   componentWillReceiveProps(nextProps) {
