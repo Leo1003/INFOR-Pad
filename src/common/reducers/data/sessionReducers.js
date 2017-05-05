@@ -1,11 +1,4 @@
 import { handleActions } from 'redux-actions'
-import {
-  SIGN_UP_SUCCESS,
-  SIGN_UP_FAIL,
-  SIGN_IN_SUCCESS,
-  SIGN_IN_FAIL,
-  CLEAN_SESSION
-} from '../../constants/actionTypes'
 import { session } from '../../constants/models.js'
 import cookie from 'react-cookie'
 import { browserHistory } from 'react-router'
@@ -33,6 +26,7 @@ const sessionReducers = handleActions({
   },
   CLEAN_SESSION: (state) => {
     cookie.remove('sessionid', { path: '/' })
+    browserHistory.replace({ pathname: '/' })
     return session
   },
   GET_INITIAL_SESSION: (state) => {
@@ -45,6 +39,12 @@ const sessionReducers = handleActions({
       })
     }
     else return session
+  },
+  LOGIN_FIRST: (state) => {
+    browserHistory.replace({ pathname: '/Sign_in'})
+    return Object.assign({}, state, {
+      error_message: 'Login first!'
+    })
   }
 }, session)
 

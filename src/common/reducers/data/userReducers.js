@@ -1,8 +1,4 @@
 import { handleActions } from 'redux-actions'
-import {
-  GET_INITIAL_USER,
-  CLEAN_USER
-} from '../../constants/actionTypes'
 import { user } from '../../constants/models.js'
 import cookie from 'react-cookie'
 import { browserHistory } from 'react-router'

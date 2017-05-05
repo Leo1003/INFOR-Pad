@@ -11,7 +11,7 @@ const uiReducers = handleActions({
     return Object.assign({}, state, {
       isFetching: false
     })
-  }
+  },
 }, ui)
 
 export default uiReducers
