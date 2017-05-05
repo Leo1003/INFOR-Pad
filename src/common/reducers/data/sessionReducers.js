@@ -15,7 +15,7 @@ const sessionReducers = handleActions({
     let d = new Date()
     d.setTime(d.getTime() + (14 * 24 * 60 * 60 * 1000))
     cookie.save('sessionid', payload.data.sessionid, { path: '/' , expires: d})
-    browserHistory.push({ pathname: '/' })
+    browserHistory.replace({ pathname: '/' })
     return Object.assign({}, state, {
       error_message: '',
       isLogin: true,
@@ -28,18 +28,16 @@ const sessionReducers = handleActions({
   SIGN_UP_SUCCESS: (state, { payload }) => {
     return Object.assign({}, state)
   },
-  SIGN_UP_FAIL: (state) => {
-    return Object.assign({}, state, { error_message: 'Username Already Used'})
+  SIGN_UP_FAIL: (state, { payload }) => {
+    return Object.assign({}, state, { error_message: `${payload.data.error}`})
   },
   CLEAN_SESSION: (state) => {
     cookie.remove('sessionid', { path: '/' })
-    browserHistory.push({ pathname: '/' })
     return session
   },
   GET_INITIAL_SESSION: (state) => {
     const sessionid = cookie.load('sessionid')
     if(sessionid) {
-      // console.log("GET SESSION REDUCER")
       return Object.assign({}, state, {
         isLogin: true,
         sessionid: `${sessionid}`,

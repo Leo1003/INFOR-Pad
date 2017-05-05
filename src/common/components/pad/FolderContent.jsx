@@ -8,24 +8,21 @@ const moment = require('moment')
 class FolderContent extends React.Component {
   constructor(props) {
     super(props)
-    this.goBack = this.goBack.bind(this)
   }
   componentDidMount() {
-    console.log("Jizz")
+    console.log("call dropdown")
     $('.ui.dropdown').dropdown()
-  }
-  goBack() {
-    browserHistory.goBack()
-    return
   }
   componentWillReceiveProps() {
     $('.ui.dropdown').dropdown()
   }
+  componentDidUpdate() {
+    $('.ui.dropdown').dropdown()
+  }
   render() {
-    console.log("jizzrender")
     let ContentDropDown = () => (
       <div className="ui dropdown button basic">
-        <div className="text">Option</div>
+        <div className="text"></div>
         <i className="dropdown icon"></i>
         <div className="menu">
           <div className="item"><i className='add user icon'></i>Public</div>
@@ -101,7 +98,6 @@ class FolderContent extends React.Component {
             })}
           </tbody>
         </table>
-        <scirpt>$('.ui.dropdown').dropdown()</scirpt>
       </div>
     )
   }

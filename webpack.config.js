@@ -12,7 +12,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.jsx?$/,
+                test: /\.jsx?/,
                 exclude: /node_modules/,
                 loader: 'babel-loader',
                 query: {
@@ -25,11 +25,11 @@ module.exports = {
         inline: true,
         port: 8080,
     },
-    plugins: [
-            new webpack.optimize.UglifyJsPlugin({
-                    compress: {
-                            warnings: false
-                    }
-            })
-    ]
+    // plugins: [
+    //         new webpack.optimize.UglifyJsPlugin({
+    //                 compress: {
+    //                         warnings: false
+    //                 }
+    //         })
+    // ]
 };

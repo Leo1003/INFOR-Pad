@@ -5,14 +5,15 @@ import {
   LOGIN_FIRST,
   PERMISSION_DENIED,
   FILE_IS_NOT_EXIST,
+  ADD_NEW_FOLDER,
   ISFETCHING,
   DIDFETCH
 } from '../constants/actionTypes'
 
 export const fetchGetFiles = (sessionid, fsid) => (
   async (dispatch) => {
+    dispatch({ type: ISFETCHING })
     try {
-      //dispatch({ type: ISFETCHING })
       let res = await fetch(`/api/fs/${fsid}`, {
         method: 'GET',
         headers: {
@@ -30,7 +31,7 @@ export const fetchGetFiles = (sessionid, fsid) => (
       } else if(res.status == '404') {
         dispatch({ type: FILE_IS_NOT_EXIST })
       }
-      //dispatch({ type: DIDFETCH })
+      dispatch({ type: DIDFETCH })
     } catch(e) { console.log(e) }
   }
 )
@@ -48,7 +49,7 @@ export const fetchAddNewFolder = (filename, folderid, sessionid) => (
       })
       if(res.ok){
         let json = await res.json()
-        dispatch({ type: ADD_NEW_FOLDER, payload: { data: json } })
+        dispatch({ type: ADD_NEW_FOLDER })
       }  else if(res.status == '401') {
         dispatch({ type: LOGIN_FIRST })
       } else if(res.status === '403') {
@@ -56,7 +57,6 @@ export const fetchAddNewFolder = (filename, folderid, sessionid) => (
       } else if(res.status == '404') {
         dispatch({ type: FILE_IS_NOT_EXIST })
       }
-
     } catch(e) { console.log(e) }
   }
 )

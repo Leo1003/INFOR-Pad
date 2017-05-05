@@ -35,7 +35,8 @@ export default function CheckAuth(Component, type) {
   }
 
   const mapStateToProps = (state) => ({
-    isLogin: state.session.isLogin
+    isLogin: state.session.isLogin,
+    name: state.user.name
   })
   return connect(mapStateToProps)(withRouter(CheckAuthComponent))
 }

@@ -69,7 +69,8 @@ export const fetchSignUp = (formData) => (
         //dispatch({ type: SIGN_UP_SUCCESS, payload: { data: json } })
         dispatch(fetchSignIn(formData))
       } else if(res.status == 409) {
-        dispatch({ type: SIGN_UP_FAIL })
+        let json = await res.json()
+        dispatch({ type: SIGN_UP_FAIL , payload: { data: json }})
       }
     } catch(e) { console.log(e) }
   }
@@ -77,10 +78,6 @@ export const fetchSignUp = (formData) => (
 
 export const GetInitialSession = () => (
   (dispatch) => {
-    //console.log("START GET INTIAL SESSION")
-    dispatch({ type: ISFETCHING })
     dispatch({ type: GET_INITIAL_SESSION })
-    dispatch({ type: DIDFETCH })
-    //console.log("FINISH GET INITIAL SESSION")
   }
 )
