@@ -25,4 +25,11 @@ module.exports = {
         inline: true,
         port: 8080,
     },
+    plugins: [
+            new webpack.optimize.UglifyJsPlugin({
+                    compress: {
+                            warnings: false
+                    }
+            })
+    ]
 };

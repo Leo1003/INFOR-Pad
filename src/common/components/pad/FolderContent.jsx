@@ -54,7 +54,7 @@ class FolderContent extends React.Component {
             {this.props.folder.parent.length > 0 ? (
               <tr className='collapsing'>
                 <td>
-                  <a href="" onClick={this.goBack}>..</a>
+                  <Link to={'/pad/folder/' + this.props.folder.parent}>..</Link>
                 </td>
               </tr>
             ) : null}
@@ -101,6 +101,7 @@ class FolderContent extends React.Component {
             })}
           </tbody>
         </table>
+        <scirpt>$('.ui.dropdown').dropdown()</scirpt>
       </div>
     )
   }
