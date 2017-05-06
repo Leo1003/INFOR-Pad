@@ -59,7 +59,6 @@ class AddNewFiles extends React.Component {
   }
   newFolderModal() {
     $('.ui.small.modal.addNewFolderModal').modal({
-      blurring: true,
       onDeny: () => {
         $('#addfolderform').form('clear')
       }
@@ -67,7 +66,6 @@ class AddNewFiles extends React.Component {
   }
   newFileModal() {
     $('.ui.small.modal.addNewFileModal').modal({
-      blurring: true,
       onDeny: () => {
         $('#addfileform').form('clear')
       },
