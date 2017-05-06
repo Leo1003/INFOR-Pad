@@ -51,35 +51,53 @@ mailCtrl.verifyConfig().then(verified => {
 app.use(api.routes(), api.allowedMethods());
 
 app.io = io
-io.use((socket, next) => {
-    debug("User connecting...")
-    debug(socket.request.headers.sessionid)
-    sessionCtrl.getSessionById(socket.request.headers.sessionid).then((sess => {
-        if (sess) {
-            if (sess.expireAt > new Date()) {
-                return sess.populate('user').execPopulate()
+io.of('/client').use((socket, next) => {
+    debug("Client connecting...")
+    debug(socket.handshake.query)
+    if (socket.handshake.query.sessionid) {
+        sessionCtrl.getSessionById(socket.handshake.query.sessionid).then((sess => {
+            if (sess) {
+                if (sess.expireAt > new Date()) {
+                    return sess.populate('user').execPopulate()
+                }
             }
-        }
-        throw new Error('Authentication Failed!')
-    }))
-    .then(sess => {
-        if (sess.user) {
-            return next()
-        }
-        throw new Error('Authentication Failed!')
-    })
-    .catch(err => {
-        next(err)
-    })
+            debug("Client Failed")
+            throw new Error('Authentication Failed!')
+        }))
+        .then(sess => {
+            if (sess.user) {
+                return next()
+            }
+            debug("Client Failed")
+            throw new Error('Authentication Failed!')
+        })
+        .catch(err => {
+            debug(err)
+            next(err)
+        })
+    }
 })
-io.on('connection', socket => {
+io.of('/client').on('connection', socket => {
     debug('Client connected')
     socket.on('Submit', data => {
+        let sid = socket.id
         fsCtrl.findFile(data.fileid).then(file => {
             lxtesterServer.sendJob({
-                socketid: socket.id,
+                socketid: sid,
                 language: data.language,
                 file: file
+            })
+        }).catch(err => {
+            socket.emit('Result', {
+                id: -1,
+                type: 2,
+                time: -1,
+                memory: -1,
+                exitcode: 0,
+                signal: 0,
+                killed: true,
+                output: '',
+                error: err.message
             })
         })
     })
@@ -90,15 +108,15 @@ io.of('/lxtester').use((socket, next) => {
 })
 io.of('/lxtester').on('connection', socket => {
     debug('lxtester connected')
-    lxtesterServer.push(socket.id)
+    lxtesterServer.push(socket)
     socket.on('Result', data => {
         let task = lxtesterServer.receiveJob(socket.id, data)
-        io.sockets.socket(task.socketid).emit('Result', task.result)
+        io.of('/client').connected[task.socketid].emit('Result', task.result)
     })
     socket.on('disconnecting', data => {
         let uncompleted = lxtesterServer.remove(socket.id)
         for (let task in uncompleted) {
-            io.sockets.socket(task.socketid).emit('Result', {
+            io.of('/client').connected[task.socketid].emit('Result', {
                 id: task.id,
                 type: 2,
                 time: -1,
@@ -107,7 +125,7 @@ io.of('/lxtester').on('connection', socket => {
                 signal: 0,
                 killed: true,
                 output: '',
-                error: ''
+                error: 'Server Stopped.'
             })
         }
     })

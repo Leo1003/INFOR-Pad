@@ -1,3 +1,10 @@
+Object.size = function(obj) {
+    let size = 0
+    for (let key in obj) {
+        if (obj.hasOwnProperty(key)) size++
+    }
+    return size
+}
 class lxtesterServer {
     constructor() {
         this.clients = {}
@@ -6,20 +13,28 @@ class lxtesterServer {
     push(socket) {
         let s = {
             pending: 0,
-            socket: socket
+            socket: socket,
+            tasks: {}
         }
+        console.log(socket)
         this.clients[socket.id] = s
+        console.log(this.clients[socket.id])
     }
     findIdlest() {
         let min = Infinity
         let id = ''
-        for (let s in this.clients) {
-            if (s.tasks.length < min) {
-                min = s.tasks.length
+        console.log(this.clients)
+        for (let sid in this.clients) {
+            let s = this.clients[sid]
+            console.log(`s = ${s}`)
+            let count = Object.size(s.tasks)
+            console.log(`count = ${count}`)
+            if (count < min) {
+                min = count
                 id = s.socket.id
             }
         }
-        return id
+        throw new Error('No lxtester available now.\nPlease contact the administrator.')
     }
     sendJob(task) {
         let clientid = this.findIdlest()
@@ -33,6 +48,8 @@ class lxtesterServer {
             stdin: task.file.stdin,
             code: task.file.code
         }
+        console.log(`TargetID: ${clientid}`)
+        console.log(this.clients[clientid])
         this.clients[clientid].socket.emit('Job', job)
         this.clients[clientid].tasks[task.id] = task
         return task.id

@@ -9,7 +9,18 @@
         <script>
             function con() {
                 var sid=$('#sessid').val();
-                connect(sid);
+                connect(sid, callback);
+            }
+            function callback(err) {
+                if (err) {
+                    $('#console').text(JSON.stringify(err));
+                } else {
+                    onResult(Result);
+                    $('#console').text("Connected!");
+                }
+            }
+            function Result(result) {
+                $('#console').text(JSON.stringify(result));
             }
             function send() {
                 var fid=$('#fileid').val();
@@ -23,5 +34,7 @@
         <input type="text" id="fileid">
         <input type="text" id="language">
         <a href="#" onclick="send()">Send</a>
+        <h6>Console:</h6>
+        <div id="console"></div>
     </body>
 </html>

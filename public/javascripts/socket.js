@@ -1,16 +1,13 @@
 var socket = undefined;
-function connect(sessionid) {
-    // socket = io();
-    socket = io('', {
-        extraHeaders: {
-            sessionid: sessionid
-        }
-    });
-    socket.on('connect', data => {
+function connect(sessionid, callback) {
+    socket = io('/client', {query: `sessionid=${sessionid}`});
+    socket.on('connect', () => {
         console.log("Connected to server!");
+        callback();
     });
     socket.on('error', error => {
         console.error(error)
+        callback(error);
     });
 }
 function onResult(callback) {
