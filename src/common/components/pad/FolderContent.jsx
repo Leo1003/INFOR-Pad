@@ -1,6 +1,7 @@
 import React from 'react'
 import AddNewFiles from './AddNewFiles.jsx'
 import FolderDropdown from './FolderDropdown.jsx'
+import FolderModal from './FolderModal.jsx'
 import { List, Dropdown } from 'semantic-ui-react'
 import { browserHistory, Link } from 'react-router'
 
@@ -53,10 +54,7 @@ class FolderContent extends React.Component {
                       Size
                     </td>
                     <td className="right aligned collapsing">
-                      {moment(file.modifyDate).fromNow()}
-                    </td>
-                    <td className="right aligned collapsing">
-                      <FolderDropdown id={file.id} sessionid={this.props.sessionid} folderid={this.props.folder.id}/>
+                      <FolderModal file={file} sessionid={this.props.sessionid} folderid={this.props.folder.id}/>
                     </td>
                   </tr>
                 )
@@ -74,10 +72,7 @@ class FolderContent extends React.Component {
                     Size
                   </td>
                   <td className="right aligned collapsing">
-                    {moment(file.modifyDate).fromNow()}
-                  </td>
-                  <td className="right aligned collapsing">
-                    <FolderDropdown id={file.id} sessionid={this.props.sessionid} folderid={this.props.folder.id}/>
+                    <FolderModal file={file} sessionid={this.props.sessionid} folderid={this.props.folder.id}/>
                   </td>
                 </tr>
               )

@@ -53,7 +53,6 @@ class AddNewFiles extends React.Component {
     $('#addfolderform').form('clear')
     $('.ui.small.modal.addNewFolderModal').modal('hide')
     this.props.handleAddNewFolder(formData['foldername'], this.props.id, this.props.sessionid)  //(filename, folderid, sessionid)
-
   }
   handleInvalid(e) {
     return false
