@@ -103,8 +103,39 @@ This document contains how to use the REST api
          * user: The user object of the login user
  		 * sessionid: The ID which can be used to login
 
+~~~http
+ POST /api/user/mail
+~~~
+ * Resend a Email for validation
+ 	 * Respond Status
+ 		 * 201: The mail request has been created successfully
+ 		 * 203: You don't have to verify
+ 		 * 403: Please try again later
+ 		 * 500: Server Error
+   	 * Respond Body
+         * mail: The mail address which the system send to
+
 ***
 #### File System
+~~~http
+ GET /api/fs/?shortid=
+~~~
+ * Query a file or a directory by short ID
+     * Respond Status
+         * 200: Succeed
+         * 401: Login first!
+         * 403: You don't have enough permission
+         * 404: The file isn't exist
+         * 500: Server Error
+     * Respond Body
+         * name: File name
+         * parent: Parent Directory
+         * owner: The user id of the file's owner
+         * createDate: CreateDate
+         * modifyDate: LastModifyDate
+         * isPublic: If the file can be viewed by anyone
+         * format: The file's format or 'Directory'
+
 ~~~http
  GET /api/fs/:fsid
 ~~~
