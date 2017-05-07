@@ -1,10 +1,13 @@
 const hash = require('./hash');
 const randomstring = require('randomstring')
 const mongoose = require('mongoose')
+const debug = require('debug')('INFOR-Pad:userController')
 const User = mongoose.model('User')
 const FileSystem = mongoose.model('FileSystem')
 const Session = mongoose.model('Session')
+const MailValidation = mongoose.model('MailValidation')
 const fsCtrl = require('./filesystem')
+const mailCtrl = require('../controllers/mail')
 const ApiError = require('../error').ApiError
 
 function extractUserData(user, privData) {
@@ -38,7 +41,7 @@ exports.getUserById = async function (userid, privData, nothrow) {
 }
 
 exports.getUserByName = async function (username, privData, nothrow) {
-    let user = await User.findOne({name: new RegExp(username, 'i')})
+    let user = await User.findOne({ name: new RegExp(username, 'i') })
     if (!user && nothrow == false) {
         throw new ApiError(404, "No such user")
     }
@@ -46,7 +49,7 @@ exports.getUserByName = async function (username, privData, nothrow) {
 }
 
 exports.getUserByMail = async function (email, privData, nothrow) {
-    let user = await User.findOne({email: email})
+    let user = await User.findOne({ email: email })
     if (!user && nothrow == false) {
         throw new ApiError(404, "No such user")
     }
@@ -63,10 +66,10 @@ exports.createUser = async function (option) {
     }
     let salt = randomstring.generate(16)
     let user = new User({
-        name : option.username,
-        password : hash.hashPassword(option.password, salt),
-        salt : salt,
-        email : option.email
+        name: option.username,
+        password: hash.hashPassword(option.password, salt),
+        salt: salt,
+        email: option.email
     })
     let root = await new FileSystem({
         name: "Root",
@@ -76,8 +79,28 @@ exports.createUser = async function (option) {
     }).save()
     user.root = root._id
     user = await user.save()
-
-    //TODO:Add email verify
-
     return user
+}
+
+exports.sendMail = async function (user, domain) {
+    if (user.level == 0) {
+        let old_mail = await MailValidation.find({ user: user._id, sentAt: { $gt: new Date(Date.now() - 10*60*1000) }, action: 'SignupCheck' })
+        
+        if (old_mail.length > 0) {
+            throw new ApiError(403, "You have sent an E-mail in the past 10 minutes. Please try again later!")
+        }
+        let mailobj = mailCtrl.createMail({
+            userid: user._id,
+            action: 'SignupCheck',
+            domain: domain
+        })
+        mailCtrl.sendMail(mailobj).then(data => {
+            debug('Send Mail Complete!')
+        }).catch(err => {
+            console.error(err)
+        })
+        return true
+    } else {
+        return false
+    }
 }

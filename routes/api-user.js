@@ -4,7 +4,9 @@ const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const userCtrl = require('../controllers/user')
 const sessionCtrl = require('../controllers/session')
+const mailCtrl = require('../controllers/mail')
 const ApiError = require('../error').ApiError
+const debug = require('debug')('INFOR-Pad:api')
 
 router.prefix('/user')
 
@@ -29,12 +31,33 @@ router.post('/', async ctx => {
     //TODO: Verify if email is valid
 
     let user = await userCtrl.createUser(data)
-    //Auto login for the new created user
+        //Auto login for the new created user
     let sessionid = await sessionCtrl.generateSession(user, false)
     ctx.status = 201
     ctx.body = {
         user: userCtrl.extractUserData(user, true),
         sessionid: sessionid
+    }
+
+    await userCtrl.sendMail(user, ctx.header.host)
+})
+router.post('/mail', async ctx => {
+    if (ctx.state.session) {
+        let user = ctx.state.session.user
+        let stat = await userCtrl.sendMail(user, ctx.header.host)
+        if (stat == true) {
+            ctx.status = 201
+            ctx.body = {
+                mail: user.email
+            }
+        } else {
+            ctx.status = 203
+            ctx.body = {
+                mail: user.email
+            }
+        }
+    } else {
+        throw new ApiError(401, "Login First!")
     }
 })
 

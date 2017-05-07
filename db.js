@@ -42,6 +42,7 @@ var MailValidation = new Schema({
     secret: { type: String, required: true, unique: true },
     user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     action: { type: String, enum: ['SignupCheck', 'PasswordReset'], required: true },
+    sentAt: { type: Date, default: new Date() },
     expireAt: { type: Date, expires: 1, required: true }
 })
 
@@ -51,11 +52,10 @@ mongoose.model('FileSystem', FileSystem)
 mongoose.model('MailValidation', MailValidation)
 
 mongoose.connect('mongodb://localhost:27017/INFOR-Pad', error => {
-    if(error) {
+    if (error) {
         console.error(`Failed to connect to mongodb.`)
         throw error
-    }
-    else {
+    } else {
         debug('connected to mongodb.')
     }
 })
