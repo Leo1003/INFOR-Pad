@@ -42,11 +42,12 @@ var testjob = [
         language : 'CPP',
         exefile : '1',
         srcfile : '1.cpp',
+        stdin: '',
         code : `
 #include <iostream>
 #include <unistd.h>
 using namespace std;
-int main(){cout<<"jizz"<<endl;sleep(5);}
+int main(){cout<<"jizz"<<endl;sleep(2);}
 `
     },
     {
@@ -54,18 +55,46 @@ int main(){cout<<"jizz"<<endl;sleep(5);}
         language : 'Python3',
         exefile : '',
         srcfile : '2.py',
+        stdin: '',
         code : `
 print('Hello, world.')
     `
-},
+    },
     {
         id : 3,
         language : 'CPP11',
         exefile : '3',
         srcfile : '3.cpp',
+        stdin: '',
         code : `
 #include <unistd.h>
 int main(){sleep(2);}
+`
+    },
+    {
+        id : 4,
+        language : 'Java',
+        exefile : '4',
+        srcfile : '4.java',
+        stdin: '',
+        code : `
+public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello, world!");
+    }
+}
+`
+    },
+    {
+        id : 5,
+        language : 'JavaScript',
+        exefile : '5',
+        srcfile : '5.js',
+        stdin: '',
+        code : `
+setTimeout(function() {
+    console.log('Hello, world!');
+}, 25000);
 `
     }
 ];
@@ -80,27 +109,13 @@ io.of('lxtester').on('connection', socket => {
     var count = 0;
     socket.on('Result', data => {
         console.log(data);
-        /*
-        if(count < testjob.length)
-            socket.emit('Job', testjob[count++]);
-            */
     });
-    // socket.emit('Job', testjob[count++]);
-    for(let i = 0; i < 10; i++)
+    let testnum = 2;
+    let testobj = testjob[testnum - 1];
+    for(let i = 0; i < 1; i++)
     {
-        socket.emit('Job', {
-        id : i,
-        language : 'CPP',
-        exefile : '1',
-        srcfile : '1.cpp',
-        stdin: '',
-        code : `
-#include <iostream>
-#include <unistd.h>
-using namespace std;
-int main(){cout<<"jizz"<<endl;sleep(2);}
-`
-    });
+        testobj.id = i;
+        socket.emit('Job', testobj);
         console.log(`Sent Task. ID: ${i}.`);
     }
 });
