@@ -18,6 +18,7 @@ export const folder = {
   name: '',               //File name
   parent: '',             //Parent Directory
   owner: '',              //The user id of the file's owner
+  shortid:'',
   createDate: new Date(), //CreateDate
   modifyDate: new Date(), //LastModifyDate
   isPublic: false,        //If the file can be viewed by anyone
@@ -29,6 +30,7 @@ export const file = {
   name: '',               //File name
   parent: '',             //Parent Directory
   owner: '',              //The user id of the file's owner
+  shortid: '',
   createDate: new Date(), //CreateDate
   modifyDate: new Date(), //LastModifyDate
   isPublic: false,        //If the file can be viewed by anyone
@@ -39,5 +41,6 @@ export const file = {
 
 export const ui = {
   isFetching: false,
-  name: ''
+  name: '',
+  shortid: ''
 }

@@ -16,7 +16,12 @@ const uiReducers = handleActions({
     return Object.assign({}, state, {
       name: payload.data.name
     })
-  }
+  },
+  CLEAN_SHORTID: (state) => {
+    return Object.assign({}, state, {
+      shortid: ''
+    })
+  },
 }, ui)
 
 export default uiReducers

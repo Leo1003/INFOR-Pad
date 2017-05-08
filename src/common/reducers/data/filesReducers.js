@@ -9,11 +9,23 @@ export const folderReducers = handleActions({
     return folder
   },
   CLEAN_FOLDER: (state) => (folder),
+  GET_SHORTID: (state, { payload}) => {
+    return folder
+    // return Object.assign({}, state, {
+    //   files: [
+    //     ...state.files,
+    //     {
+    //       "id": "12345",
+    //       "shortid": "HELLOWORLD"
+    //     }
+    //   ]
+    // })
+  }
 }, folder)
 
 export const fileReducers = handleActions({
   GET_FILE: (state, { payload }) => {
-    return file
+    return Object.assign({}, state, payload.data)
   },
   CLEAN_FILE: (state) => (file)
 }, file)

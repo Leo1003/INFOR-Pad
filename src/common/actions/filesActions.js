@@ -8,7 +8,9 @@ import {
   ADD_NEW_FOLDER,
   DELETE_FILE,
   ISFETCHING,
-  DIDFETCH
+  DIDFETCH,
+  GET_SHORTID,
+  CLEAN_SHORTID
 } from '../constants/actionTypes'
 
 export const fetchGetFiles = (sessionid, fsid) => (
@@ -67,30 +69,38 @@ export const fetchAddNewFolder = (filename, folderid, sessionid) => (
 
 export const fetchDeleteFile = (fsid, sessionid, folderid) => (
   async (dispatch) => {
-    dispatch({ type: ISFETCHING })
-    let res = await fetch(`/api/fs/${fsid}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'sessionid': `${sessionid}`
+    try {
+      dispatch({ type: ISFETCHING })
+      let res = await fetch(`/api/fs/${fsid}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'sessionid': `${sessionid}`
+        }
+      })
+      if(res.ok) {
+        let json = await res.json()
+        dispatch(fetchGetFiles(sessionid, folderid))
       }
-    })
-    if(res.ok) {
-      let json = await res.json()
-      dispatch(fetchGetFiles(sessionid, folderid))
-    }
+    } catch(e) { console.log(e) }
   }
 )
 
 export const fetchCheckPermission = (fsid, sessionid, check) => (
   async (dispatch) => {
-    let res = await fetch(`/api/fs/${fsid}`), {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'sessionid': `${sessionid}`
-      },
-      body: `isPublic=${check}`
-    }
+    try {
+      let res = await fetch(`/api/fs/${fsid}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'sessionid': `${sessionid}`
+        },
+        body: `isPublic=${check}`
+      })
+      if(res.ok) {
+        let json = await res.json()
+        dispatch({ type: GET_SHORTID, payload:{ data: json } })
+      }
+    } catch(e) { console.log(e) }
   }
 )

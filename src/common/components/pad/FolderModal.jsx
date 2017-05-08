@@ -1,8 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { fetchDeleteFile } from '../../actions/filesActions'
+import { fetchDeleteFile, fetchCheckPermission } from '../../actions/filesActions'
 import { Link } from 'react-router'
-import { fetchGetUserById, fetchCheckPermission } from '../../actions/userActions'
+import { fetchGetUserById } from '../../actions/userActions'
 const moment = require('moment')
 
 class FolderModal extends React.Component {
@@ -27,7 +27,11 @@ class FolderModal extends React.Component {
       isChecked: !this.state.isChecked
     })
     console.log(this.state.isChecked)
-    this.props.handleCheckPermission(this.props.file.id, this.props.sessionid, this.state.isChecked.toString())
+  }
+  componentWillUpdate(nextProps, nextState) {
+    console.log(nextProps)
+    console.log(nextState.isChecked)
+    if(this.state.isChecked !== nextState.isChecked) this.props.handleCheckPermission(this.props.file.id, this.props.sessionid, nextState.isChecked.toString())
   }
   render() {
     return(
@@ -45,6 +49,7 @@ class FolderModal extends React.Component {
             <p><b>Location: </b>&nbsp;{this.props.foldername}</p>
             <p><b>CreateDate: </b>&nbsp;{moment(this.props.file.createDate).subtract(10, 'days').calendar()}</p>
             <p><b>Last Modify: </b>&nbsp;{moment(this.props.file.modifyDate).subtract(10, 'days').calendar()}</p>
+            {this.props.file.shortid.length > 0 ? <p><b>Share ID:</b>&nbsp;{this.props.file.shortid}</p> : null}
             { this.props.ownername === this.props.username ?
               <div>
                 <div className="ui divider"></div>
@@ -79,7 +84,7 @@ class FolderModal extends React.Component {
 const mapStateToProps = (state) => ({
   ownername: state.ui.name,
   username: state.user.name,
-  isFetching: state.ui.isFetching
+  isFetching: state.ui.isFetching,
 })
 const mapDispatchToProps = (dispatch) => ({
   handleDelete: (fsid, sessionid, folderid) => {
