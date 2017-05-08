@@ -86,10 +86,10 @@ io.of('lxtester').on('connection', socket => {
             */
     });
     // socket.emit('Job', testjob[count++]);
-    for(let i = 0; i < 100; i++)
+    for(let i = 0; i < 10; i++)
     {
         socket.emit('Job', {
-        id : 1,
+        id : i,
         language : 'CPP',
         exefile : '1',
         srcfile : '1.cpp',
