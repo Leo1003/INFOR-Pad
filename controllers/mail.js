@@ -35,16 +35,18 @@ exports.createMail = function (option) {
         secret: hash.hashSessionId(sec),
         user: option.userid,
         action: option.action,
-        expireAt: new Date(Date.now() + 12*3600*1000)
+        expireAt: new Date(Date.now() + 12 * 3600 * 1000)
     })
     return {
+        domain: option.domain,
         secret: sec,
         maildb: mailva
     }
 }
 
 exports.sendMail = async function (mail) {
-    let user = await userCtrl.findById(mail.maildb.user)
+    let user = await userCtrl.getUserById(mail.maildb.user, true)
+    console.log(user)
     let transporter = nodemailer.createTransport(mailConf.nodemailerTransport)
     let mailOptions = {
         from: `"INFOR-Pad" <${mailConf.MailAddress}>`,
@@ -57,19 +59,19 @@ exports.sendMail = async function (mail) {
 </br>
 <p>To complete your register progress. Please click the link below.
    We will lead you to the last step to the full function access.</p>
-<a href="${mailConf.MailLinkDomain}/validation/${mail.secret}">Link</a>
+<a href="http://${mail.domain}/validation/${mail.secret}">Link</a>
 <p>If the link is unavailabled you can copy the plain text link, and paste it to the browser.</p>
-<p>${mailConf.MailLinkDomain}/validation/${mail.secret}</p>
+<p>http://${mail.domain}/validation/${mail.secret}</p>
         `
     } else if (mail.maildb.action == 'PasswordReset') {
         mailOptions.html = `
 <h1>You had made a requset for resetting your password of INFOR-Pad</h1>
 </br>
 <p>To reset your password. Please click the link below.</p>
-<a href="${mailConf.MailLinkDomain}/validation/${mail.secret}">Link</a>
+<a href="http://${mail.domain}/validation/${mail.secret}">Link</a>
 <p>If you hadn't make this request, please ignore this mail, and contact with us.</p>
 <p>If the link is unavailabled you can copy the plain text link, and paste it to the browser.</p>
-<p>${mailConf.MailLinkDomain}/validation/${mail.secret}</p>
+<p>http://${mail.domain}/validation/${mail.secret}</p>
         `
     }
     try {
@@ -86,7 +88,7 @@ exports.executeAction = async function (secret) {
     if (mailvad && mailvad.expireAt > new Date()) {
         if (mailvad == 'SignupCheck') {
             await mailvad.populate('user').execPopulate()
-            mailvad.user.level = 1
+            mailvad.user.level = (mailvad.user.level < 1 ? 1 : mailvad.user.level)
             await mailvad.user.save()
             let ret = {
                 type: 'SignupCheck',

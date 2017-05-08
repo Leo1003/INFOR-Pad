@@ -41,6 +41,14 @@ router.param('tgfsid', async (tgfsid, ctx, next) => {
     }
 })
 
+router.get('/', async ctx => {
+    if (ctx.query.shortid) {
+        let fs = await fsCtrl.findByShort()
+        ctx.status = 200
+        ctx.body = await extractFSData(fs, false)
+    }
+    throw new ApiError(400, "Invaild query parameter")
+})
 router.get('/:fsid', async ctx => {
     if (ctx.state.access >= 1) {
         let fs = await fsCtrl.findFS(ctx.params.fsid)

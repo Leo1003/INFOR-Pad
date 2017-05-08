@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <title>Test Socket.io judge</title>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="javascripts/socket.js"></script>
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <script>
+            function con() {
+                var sid=$('#sessid').val();
+                connect(sid, callback);
+            }
+            function callback(err) {
+                if (err) {
+                    $('#console').text(JSON.stringify(err));
+                } else {
+                    onResult(Result);
+                    $('#console').text("Connected!");
+                }
+            }
+            function Result(result) {
+                $('#console').text(JSON.stringify(result));
+            }
+            function send() {
+                var fid=$('#fileid').val();
+                var lang=$('#language').val();
+                submit(fid,lang);
+            }
+        </script>
+        <input type="text" id="sessid">
+        <a href="#" onclick="con()">Connect</a>
+        <br>
+        <input type="text" id="fileid">
+        <input type="text" id="language">
+        <a href="#" onclick="send()">Send</a>
+        <h6>Console:</h6>
+        <div id="console"></div>
+    </body>
+</html>

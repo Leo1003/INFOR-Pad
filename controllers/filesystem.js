@@ -1,3 +1,4 @@
+const randomstring = require('randomstring')
 const hash = require('./hash')
 const debug = require('debug')('INFOR-Pad:api')
 const mongoose = require('mongoose')
@@ -15,6 +16,7 @@ exports.extractFSData = async function (fs, complete) {
         createDate: fs.createDate,
         modifyDate: fs.modifyDate,
         isPublic: fs.isPublic,
+        shortid: (fs.shortid ? fs.shortid : ''),
         format: fs.isFile === true ? fs.format : 'Directory'
     }
     if (complete == true) {
@@ -39,6 +41,13 @@ exports.isRootDir = function (fs) {
 }
 exports.findFS = async function (fsid) {
     return await FileSystem.findById(fsid)
+}
+exports.findByShort = async function (id) {
+    let fs = await FileSystem.findOne({ shortid: id })
+    if (!fs) {
+        throw new ApiError(404, "Invaild Short URL!")
+    }
+    return fs
 }
 exports.findFile = async function (fsid) {
     let fs = await exports.findFS(fsid)
@@ -97,7 +106,9 @@ function chkValue(value, def, limit) {
     return (value != undefined ? value : def)
 }
 exports.updateFS = async function (fs, data, limit) {
-    fs.name = chkValue(data.filename, fs.name)
+    if (exports.isRootDir(fs) == false) {
+        fs.name = chkValue(data.filename, fs.name)
+    }
     fs.isPublic = chkValue(data.isPublic, fs.isPublic)
     if (fs.isFile === true) {
         fs.code = chkValue(data.code, fs.code, limit)
@@ -106,6 +117,11 @@ exports.updateFS = async function (fs, data, limit) {
             throw new ApiError(400, "You can't change a file into a directory!")
         }
         fs.format = chkValue(data.format, fs.format)
+    }
+    if (fs.isPublic == true && !fs.shortid) {
+        fs.shortid = randomstring.generate(8)
+    } else if (fs.isPublic == false && fs.shortid) {
+        fs.shortid = undefined
     }
     fs.modifyDate = new Date()
     fs = await fs.save()
