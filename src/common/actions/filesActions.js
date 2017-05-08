@@ -81,3 +81,16 @@ export const fetchDeleteFile = (fsid, sessionid, folderid) => (
     }
   }
 )
+
+export const fetchCheckPermission = (fsid, sessionid, check) => (
+  async (dispatch) => {
+    let res = await fetch(`/api/fs/${fsid}`), {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'sessionid': `${sessionid}`
+      },
+      body: `isPublic=${check}`
+    }
+  }
+)

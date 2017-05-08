@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { fetchDeleteFile } from '../../actions/filesActions'
 import { Link } from 'react-router'
-import { fetchGetUserById } from '../../actions/userActions'
+import { fetchGetUserById, fetchCheckPermission } from '../../actions/userActions'
 const moment = require('moment')
 
 class FolderModal extends React.Component {
@@ -27,6 +27,7 @@ class FolderModal extends React.Component {
       isChecked: !this.state.isChecked
     })
     console.log(this.state.isChecked)
+    this.props.handleCheckPermission(this.props.file.id, this.props.sessionid, this.state.isChecked.toString())
   }
   render() {
     return(
@@ -86,6 +87,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   handleGetUserById: (userid) => {
     dispatch(fetchGetUserById(userid))
+  },
+  handleCheckPermission: (fsid, sessionid, check) => {
+    dispatch(fetchCheckPermission(fsid, sessionid, check))
   }
 })
 
