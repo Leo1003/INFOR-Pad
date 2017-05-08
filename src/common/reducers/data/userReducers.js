@@ -10,6 +10,7 @@ const userReducers = handleActions({
     return {
       name: payload.data.user.name,
       level: payload.data.user.level,
+      id: payload.data.user.id,
       createDate: payload.data.user.createDate,
       email: payload.data.user.email,
       lastLogin: payload.data.user.lastLogin,

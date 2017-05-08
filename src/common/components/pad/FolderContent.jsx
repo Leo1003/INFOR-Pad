@@ -54,7 +54,7 @@ class FolderContent extends React.Component {
                       Size
                     </td>
                     <td className="right aligned collapsing">
-                      <FolderModal file={file} sessionid={this.props.sessionid} folderid={this.props.folder.id}/>
+                      <FolderModal file={file} sessionid={this.props.sessionid} foldername={this.props.folder.name} folderid={this.props.folder.id}/>
                     </td>
                   </tr>
                 )
@@ -72,7 +72,7 @@ class FolderContent extends React.Component {
                     Size
                   </td>
                   <td className="right aligned collapsing">
-                    <FolderModal file={file} sessionid={this.props.sessionid} folderid={this.props.folder.id}/>
+                    <FolderModal file={file} sessionid={this.props.sessionid} foldername={this.props.folder.name} folderid={this.props.folder.id}/>
                   </td>
                 </tr>
               )

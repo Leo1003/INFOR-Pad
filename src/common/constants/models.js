@@ -7,6 +7,7 @@ export const session = {
 export const user = {
   name: '',               // username,
   level: 0,               // userlevel,
+  id: '',                 // userid
   createDate: new Date(), // The time when the user created
   email: '',              // The user's email (Hidden)
   lastLogin: new Date(),  // The last time when the user login (Hidden)
@@ -37,5 +38,6 @@ export const file = {
 }
 
 export const ui = {
-  isFetching: false
+  isFetching: false,
+  name: ''
 }

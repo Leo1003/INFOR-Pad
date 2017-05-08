@@ -12,6 +12,11 @@ const uiReducers = handleActions({
       isFetching: false
     })
   },
+  GET_USER_BY_ID: (state, { payload }) => {
+    return Object.assign({}, state, {
+      name: payload.data.name
+    })
+  }
 }, ui)
 
 export default uiReducers
