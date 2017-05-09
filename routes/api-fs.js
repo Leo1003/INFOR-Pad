@@ -45,7 +45,7 @@ router.get('/', async ctx => {
     if (ctx.query.shortid) {
         let fs = await fsCtrl.findByShort()
         ctx.status = 200
-        ctx.body = await extractFSData(fs, false)
+        ctx.body = await fsCtrl.extractFSData(fs, false)
     }
     throw new ApiError(400, "Invaild query parameter")
 })
