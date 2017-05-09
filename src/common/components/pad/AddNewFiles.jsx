@@ -1,4 +1,6 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { fetchAddNewFolder } from '../../actions/filesActions'
 
 class AddNewFiles extends React.Component {
   constructor(props) {
@@ -141,4 +143,14 @@ class AddNewFiles extends React.Component {
   }
 }
 
-export default AddNewFiles
+const mapStateToProps = (state) => ({
+  sessionid : state.session.sessionid,
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  handleAddNewFolder: (filename, folderid, sessionid) => {
+    dispatch(fetchAddNewFolder(filename, folderid, sessionid))
+  }
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddNewFiles)

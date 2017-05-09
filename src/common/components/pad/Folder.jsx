@@ -25,7 +25,7 @@ class Folder extends React.Component {
       )
       else return (
         <div>
-          <FolderContent folder={this.props.cur_folder} sessionid={this.props.sessionid} handleAddNewFolder={this.props.handleAddNewFolder} handleGetFiles={this.props.handleGetFiles}/>
+          <FolderContent userid={this.props.userid} folder={this.props.cur_folder} sessionid={this.props.sessionid} />
         </div>
       )
     }

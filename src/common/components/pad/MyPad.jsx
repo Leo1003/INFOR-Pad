@@ -20,7 +20,7 @@ class MyPad extends React.Component {
       )
       else return (
         <div>
-          <FolderContent folder={this.props.cur_folder} sessionid={this.props.sessionid} handleAddNewFolder={this.props.handleAddNewFolder} />
+          <FolderContent userid={this.props.userid} folder={this.props.cur_folder} sessionid={this.props.sessionid} />
         </div>
       )
     }

@@ -10,8 +10,8 @@ import {
   ISFETCHING,
   DIDFETCH,
   GET_SHORTID,
-  TRANSFER_SHORTID
 } from '../constants/actionTypes'
+import { browserHistory } from 'react-router'
 
 export const fetchGetFiles = (sessionid, fsid) => (
   async (dispatch) => {
@@ -113,7 +113,8 @@ export const fetchTransferShortID = (shortid) => (
       })
       if(res.ok) {
         let json = await res.json()
-        dispatch({ type: TRANSFER_SHORTID, payload: { data: json } })
+        if(json.format === 'Directory') browserHistory.replace(`/pad/folder/${json.id}`)
+        else browserHistory.replace(`/file/${json.id}/view`)
       }
     } catch(e) { console.log(e) }
   }

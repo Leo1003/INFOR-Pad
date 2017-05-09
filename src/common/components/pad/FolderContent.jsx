@@ -25,7 +25,7 @@ class FolderContent extends React.Component {
     return (
       <div>
         <h2>{this.props.folder.name}</h2>
-        <AddNewFiles id={this.props.folder.id} sessionid={this.props.sessionid} handleAddNewFolder={this.props.handleAddNewFolder} />
+        {this.props.userid === this.props.folder.owner ? <AddNewFiles id={this.props.folder.id} /> : null }
         <table className="ui celled unstackable selectable table">
           <thead>
             <tr>

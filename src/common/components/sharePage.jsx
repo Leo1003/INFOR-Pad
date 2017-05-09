@@ -8,14 +8,11 @@ class sharePage extends React.Component {
     super(props)
   }
   componentWillMount() {
-    console.log(this.props.params.shortid) //shortid: this.props.params.shareid
     this.props.handleTransferShortID(this.props.params.shortid)
   }
   render() {
     return (
-      <div>
-        <h1>Share Page</h1>
-      </div>
+      <div></div>
     )
   }
 }
