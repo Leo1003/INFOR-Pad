@@ -7,8 +7,7 @@
     "pm2": "pm2 start bin/www ",
     "nodemon": "DEBUG=INFOR-Pad:* nodemon bin/www",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack-dev-server --devtool eval --progress --colors --content-base build",
-    "webpack": "webpack && node bin/www"
+    "webpack": "webpack --progress --color --watch"
   },
   "dependencies": {
     "babel-core": "^6.24.1",

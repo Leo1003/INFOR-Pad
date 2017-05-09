@@ -28,6 +28,6 @@ module.exports = (
       <Route path="view" />
     </Route>
     <Route path="user/:user" component={UserPage_Container} />
-    <Route path=":shareid" component={sharePage} /> // GET /api/fs/?shortid=
+    <Route path=":shortid" component={sharePage} /> // GET /api/fs/?shortid=
   </Route>
 )
