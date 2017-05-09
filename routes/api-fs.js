@@ -43,7 +43,7 @@ router.param('tgfsid', async (tgfsid, ctx, next) => {
 
 router.get('/', async ctx => {
     if (ctx.query.shortid) {
-        let fs = await fsCtrl.findByShort()
+        let fs = await fsCtrl.findByShort(ctx.query.shortid)
         ctx.status = 200
         ctx.body = await fsCtrl.extractFSData(fs, false)
     } else {
