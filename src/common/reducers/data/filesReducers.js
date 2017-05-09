@@ -8,18 +8,17 @@ export const folderReducers = handleActions({
   ADD_NEW_FOLDER: (state) => {
     return folder
   },
-  CLEAN_FOLDER: (state) => (folder),
-  GET_SHORTID: (state, { payload}) => {
+  CLEAN_FOLDER: (state) => {
     return folder
-    // return Object.assign({}, state, {
-    //   files: [
-    //     ...state.files,
-    //     {
-    //       "id": "12345",
-    //       "shortid": "HELLOWORLD"
-    //     }
-    //   ]
-    // })
+  },
+  GET_SHORTID: (state, { payload }) => {
+    console.log("GET_SHORTID reducer")
+    return Object.assign({}, state, {
+      files: state.files.map(file => {
+        if(file.id === payload.data.id) return Object.assign({}, file, { shortid: payload.data.shortid, isPublic: payload.data.isPublic })
+        else return file
+      })
+    })
   }
 }, folder)
 

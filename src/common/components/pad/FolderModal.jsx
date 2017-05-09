@@ -26,11 +26,8 @@ class FolderModal extends React.Component {
     this.setState({
       isChecked: !this.state.isChecked
     })
-    console.log(this.state.isChecked)
   }
   componentWillUpdate(nextProps, nextState) {
-    console.log(nextProps)
-    console.log(nextState.isChecked)
     if(this.state.isChecked !== nextState.isChecked) this.props.handleCheckPermission(this.props.file.id, this.props.sessionid, nextState.isChecked.toString())
   }
   render() {

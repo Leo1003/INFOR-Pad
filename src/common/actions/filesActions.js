@@ -99,6 +99,8 @@ export const fetchCheckPermission = (fsid, sessionid, check) => (
       })
       if(res.ok) {
         let json = await res.json()
+        console.log(json)
+        console.log("action getshortid")
         dispatch({ type: GET_SHORTID, payload:{ data: json } })
       }
     } catch(e) { console.log(e) }
