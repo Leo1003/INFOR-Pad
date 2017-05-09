@@ -46,8 +46,9 @@ router.get('/', async ctx => {
         let fs = await fsCtrl.findByShort()
         ctx.status = 200
         ctx.body = await fsCtrl.extractFSData(fs, false)
+    } else {
+        throw new ApiError(400, "Invalid query parameter")
     }
-    throw new ApiError(400, "Invaild query parameter")
 })
 router.get('/:fsid', async ctx => {
     if (ctx.state.access >= 1) {
