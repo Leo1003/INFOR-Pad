@@ -12,6 +12,7 @@ import CheckAuth from '../components/CheckAuth.jsx'
 import MyPad_Container from '../containers/MyPad_Container'
 import Folder_Container from '../containers/Folder_Container'
 import Pad from '../components/pad/Pad.jsx'
+import sharePage from '../components/sharePage.jsx'
 
 module.exports = (
   <Route path="/" component={Main_Container}>
@@ -27,6 +28,6 @@ module.exports = (
       <Route path="view" />
     </Route>
     <Route path="user/:user" component={UserPage_Container} />
-    <Route path=":shareid" component={sharePage} />
+    <Route path=":shareid" component={sharePage} /> // GET /api/fs/?shortid=
   </Route>
 )

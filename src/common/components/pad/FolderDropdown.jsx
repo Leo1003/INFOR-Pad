@@ -35,7 +35,6 @@ class FolderDropdown extends React.Component {
       }).modal('show')
   }
   handleRename(e) {
-    console.log("handleRename")
     e.preventDefault()
     const formData = {}
     for(const field in this.refs) {
@@ -47,7 +46,6 @@ class FolderDropdown extends React.Component {
   }
   handleActions(e) {
     let selected = $(`#${this.props.id}`).dropdown('get value')
-    console.log(selected)
     if(selected === "delete") {
       this.props.handleDelete(this.props.id, this.props.sessionid, this.props.folderid)
     } else if(selected === "rename") {

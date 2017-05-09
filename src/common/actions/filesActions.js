@@ -99,9 +99,21 @@ export const fetchCheckPermission = (fsid, sessionid, check) => (
       })
       if(res.ok) {
         let json = await res.json()
-        console.log(json)
-        console.log("action getshortid")
         dispatch({ type: GET_SHORTID, payload:{ data: json } })
+      }
+    } catch(e) { console.log(e) }
+  }
+)
+
+export const fetchTransferShortID = (shortid) => (
+  async (dispatch) => {
+    try {
+      let res = await fetch(`/api/fs/?shortid=${shortid}`, {
+        method: 'GET'
+      })
+      if(res.ok) {
+        let json = await res.json()
+        dispatch({ type: TRANSFER_SHORTID, payload: { data: json } })
       }
     } catch(e) { console.log(e) }
   }

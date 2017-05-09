@@ -78,6 +78,8 @@ export const fetchSignUp = (formData) => (
 
 export const GetInitialSession = () => (
   (dispatch) => {
+    dispatch({ type: ISFETCHING })
     dispatch({ type: GET_INITIAL_SESSION })
+    dispatch({ type: DIDFETCH })
   }
 )
