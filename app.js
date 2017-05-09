@@ -96,6 +96,16 @@ setTimeout(function() {
     console.log('Hello, world!');
 }, 25000);
 `
+    },
+    {
+        id : 6,
+        language : 'Bash',
+        exefile : '6',
+        srcfile : '6.sh',
+        stdin: '',
+        code : `
+echo "Hello, world!"
+`
     }
 ];
 
@@ -110,7 +120,7 @@ io.of('lxtester').on('connection', socket => {
     socket.on('Result', data => {
         console.log(data);
     });
-    let testnum = 2;
+    let testnum = 6;
     let testobj = testjob[testnum - 1];
     for(let i = 0; i < 1; i++)
     {
