@@ -10,7 +10,7 @@ import {
   ISFETCHING,
   DIDFETCH,
   GET_SHORTID,
-  CLEAN_SHORTID
+  TRANSFER_SHORTID
 } from '../constants/actionTypes'
 
 export const fetchGetFiles = (sessionid, fsid) => (
