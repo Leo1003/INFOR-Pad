@@ -17,9 +17,6 @@ class FolderContent extends React.Component {
   componentWillReceiveProps() {
     $('.ui.dropdown').dropdown()
   }
-  componentDidUpdate() {
-    $('.ui.dropdown').dropdown()
-  }
   render() {
 
     return (
