@@ -22,12 +22,10 @@ module.exports = (
     <Route path="pad" component={Pad}>
       <Route path="mypad" component={CheckAuth(MyPad_Container, 'auth')} />
       <Route path="folder/:folderid" component={Folder_Container} />
+      <Route path="file/:fileid" />
     </Route>
-    <Route path="file/:fileid">
-      <Route path="edit" />
-      <Route path="view" />
-    </Route>
+    <Route path="editor/:fileid" />
     <Route path="user/:user" component={UserPage_Container} />
-    <Route path=":shortid" component={sharePage} /> // GET /api/fs/?shortid=
+    <Route path=":shortid" component={sharePage} />
   </Route>
 )

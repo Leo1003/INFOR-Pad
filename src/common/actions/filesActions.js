@@ -39,17 +39,18 @@ export const fetchGetFiles = (sessionid, fsid) => (
   }
 )
 
-export const fetchAddNewFolder = (filename, folderid, sessionid) => (
+export const fetchAddNewFiles = (filename, folderid, sessionid, format) => (
   async (dispatch) => {
     try {
       dispatch({ type: ISFETCHING })
+      console.log(format)
       let res = await fetch(`/api/fs/${folderid}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'sessionid': `${sessionid}`
         },
-        body: `filename=${filename}&format=Directory`
+        body: `filename=${filename}&format=${format}`
       })
       if(res.ok){
         let json = await res.json()
@@ -66,6 +67,20 @@ export const fetchAddNewFolder = (filename, folderid, sessionid) => (
     } catch(e) { console.log(e) }
   }
 )
+
+// export const fetchAddNewFile = (filename, format, folderid, sessionid) => (
+//   async (dispatch) => {
+//     dispatch({ type: ISFETCHING })
+//     let res = await fetch(`/api/fs/${folderid}`), {
+//       method: "POST",
+//       headers: {
+//         'Content-Type': 'application/x-www-form-urlencoded',
+//         'sessionid': `${sessionid}`
+//       },
+//       body:
+//     }
+//   }
+// )
 
 export const fetchDeleteFile = (fsid, sessionid, folderid) => (
   async (dispatch) => {

@@ -17,27 +17,9 @@
 
   * Router
 
-    / -> homePage
-
-    /Sign_In -> only for guest
-
-    /Sign_Up -> only for guest
-
-    /mypad -> user's rootfile
-    (with 'all' 'public' 'private' buttons)
-
-    /users/:user -> user profile & user public
-      ```
-        if(this.props.name = user) {
-          render all file(folder) & edit button
-        }
-        else {
-          render profile & public file(folder)
-        }
-      ```
     /folder/:folderid -> folder page
 
-    /file/:fileid -> ace editor
+    /file/:fileid
 
     /:shareId (short Id)
 

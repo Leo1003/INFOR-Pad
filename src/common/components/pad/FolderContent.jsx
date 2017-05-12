@@ -1,5 +1,5 @@
 import React from 'react'
-import AddNewFiles from './AddNewFiles.jsx'
+import AddNewFilesDropdown from './AddNewFilesDropdown.jsx'
 import FolderDropdown from './FolderDropdown.jsx'
 import FolderModal from './FolderModal.jsx'
 import { List, Dropdown } from 'semantic-ui-react'
@@ -22,7 +22,7 @@ class FolderContent extends React.Component {
     return (
       <div>
         <h2>{this.props.folder.name}</h2>
-        {this.props.userid === this.props.folder.owner ? <AddNewFiles id={this.props.folder.id} /> : null }
+        {this.props.userid === this.props.folder.owner ? <AddNewFilesDropdown id={this.props.folder.id} /> : null }
         <table className="ui celled unstackable selectable table">
           <thead>
             <tr>
@@ -63,7 +63,7 @@ class FolderContent extends React.Component {
                 <tr key={file.id}>
                   <td className='collapsing'>
                     <i className="file outline icon"></i>
-                    <Link to={'file/' + file.id + '/view'}>{file.name}</Link>
+                    <Link to={'/pad/file/' + file.id }>{file.name}</Link>
                   </td>
                   <td>
                     Size

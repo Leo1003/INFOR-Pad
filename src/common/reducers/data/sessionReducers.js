@@ -26,7 +26,6 @@ const sessionReducers = handleActions({
   },
   CLEAN_SESSION: (state) => {
     cookie.remove('sessionid', { path: '/' })
-    browserHistory.replace({ pathname: '/' })
     return session
   },
   GET_INITIAL_SESSION: (state) => {
