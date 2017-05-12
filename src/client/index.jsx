@@ -6,7 +6,6 @@ import {
 } from 'react-router'
 import { Provider } from 'react-redux'
 import { createLogger } from 'redux-logger'
-import { fromJS } from 'immutable'
 
 import routes from '../common/routes/routes.jsx'
 import configureStore from '../common/store/configureStore'
