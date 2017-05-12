@@ -55,7 +55,6 @@ export const fetchAddNewFiles = (filename, folderid, sessionid, format) => (
       if(res.ok){
         let json = await res.json()
         dispatch(fetchGetFiles(sessionid, folderid))
-        //dispatch({ type: ADD_NEW_FOLDER })
       }  else if(res.status == '401') {
         dispatch({ type: LOGIN_FIRST })
       } else if(res.status === '403') {
@@ -67,20 +66,6 @@ export const fetchAddNewFiles = (filename, folderid, sessionid, format) => (
     } catch(e) { console.log(e) }
   }
 )
-
-// export const fetchAddNewFile = (filename, format, folderid, sessionid) => (
-//   async (dispatch) => {
-//     dispatch({ type: ISFETCHING })
-//     let res = await fetch(`/api/fs/${folderid}`), {
-//       method: "POST",
-//       headers: {
-//         'Content-Type': 'application/x-www-form-urlencoded',
-//         'sessionid': `${sessionid}`
-//       },
-//       body:
-//     }
-//   }
-// )
 
 export const fetchDeleteFile = (fsid, sessionid, folderid) => (
   async (dispatch) => {
