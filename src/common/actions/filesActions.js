@@ -114,7 +114,7 @@ export const fetchTransferShortID = (shortid) => (
       if(res.ok) {
         let json = await res.json()
         if(json.format === 'Directory') browserHistory.replace(`/pad/folder/${json.id}`)
-        else browserHistory.replace(`/file/${json.id}/view`)
+        else browserHistory.replace(`/pad/file/${json.id}`)
       }
     } catch(e) { console.log(e) }
   }

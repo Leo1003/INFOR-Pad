@@ -4,6 +4,7 @@ import cookie from 'react-cookie'
 
 import HomePage from '../components/HomePage.jsx'
 //import IndexPage from '../components/IndexPage.jsx'
+import File from '../components/pad/File.jsx'
 import UserPage_Container from '../containers/UserPage_Container'
 import Main_Container from '../containers/Main_Container'
 import Sign_in_Container from '../containers/Sign_in_Container'
@@ -22,7 +23,7 @@ module.exports = (
     <Route path="pad" component={Pad}>
       <Route path="mypad" component={CheckAuth(MyPad_Container, 'auth')} />
       <Route path="folder/:folderid" component={Folder_Container} />
-      <Route path="file/:fileid" />
+      <Route path="file/:fileid" component={File}/>
     </Route>
     <Route path="editor/:fileid" />
     <Route path="user/:user" component={UserPage_Container} />

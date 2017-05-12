@@ -1,6 +1,5 @@
 import React from 'react'
 import AddNewFilesDropdown from './AddNewFilesDropdown.jsx'
-import FolderDropdown from './FolderDropdown.jsx'
 import FolderModal from './FolderModal.jsx'
 import { List, Dropdown } from 'semantic-ui-react'
 import { browserHistory, Link } from 'react-router'
