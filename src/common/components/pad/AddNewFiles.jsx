@@ -41,7 +41,9 @@ class AddNewFiles extends React.Component {
       onFailure: this.handleInvalid.bind(this),
       onSuccess: this.handleAddNewFolder.bind(this)
     })
-    $('.ui.dropdown').dropdown()
+    $('.ui.dropdown').dropdown({
+      action: 'select'
+    })
   }
   handleAddNewFile(e) {
     e.preventDefault()
@@ -79,7 +81,7 @@ class AddNewFiles extends React.Component {
       <div>
         <div className="ui dropdown button basic">
           <i className='plus icon'></i>
-          <div className="text">New</div>
+          New
           <div className="menu">
             <div className="item" onClick={this.newFolderModal}><i className='folder icon'></i>New Folder</div>
             <div className="item" onClick={this.newFileModal}><i className='file icon'></i>New File</div>
