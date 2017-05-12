@@ -120,8 +120,6 @@ exports.updateFS = async function (fs, data, limit) {
     }
     if (fs.isPublic == true && !fs.shortid) {
         fs.shortid = randomstring.generate(8)
-    } else if (fs.isPublic == false && fs.shortid) {
-        fs.shortid = undefined
     }
     fs.modifyDate = new Date()
     fs = await fs.save()
