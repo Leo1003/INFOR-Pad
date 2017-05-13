@@ -6,19 +6,19 @@ class Folder extends React.Component {
     super(props)
   }
   componentWillMount() {
-    if(!this.props.isFetching) this.props.handleGetFiles(this.props.sessionid, this.props.params.folderid)
+    if(!this.props.isFetching) this.props.handleGetFiles(this.props.sessionid, this.props.params.folderid, "Directory")
   }
   componentWillReceiveProps(nextProps) {
-    if(!nextProps.isFetching && nextProps.cur_folder.name.length == 0) {
-      this.props.handleGetFiles(nextProps.sessionid, this.props.params.folderid)
+    if(!nextProps.isFetching && nextProps.cur_folder.id.length == 0) {
+      this.props.handleGetFiles(nextProps.sessionid, this.props.params.folderid, "Directory")
     }
     else if(!nextProps.isFetching && (nextProps.params.folderid !== this.props.cur_folder.id)) {
-      this.props.handleGetFiles(nextProps.sessionid, nextProps.params.folderid)
+      this.props.handleGetFiles(nextProps.sessionid, nextProps.params.folderid, "Directory")
     }
   }
   render() {
     let renderContent = () => {
-      if(this.props.cur_folder.name.length == 0) return (
+      if(this.props.cur_folder.id.length == 0) return (
         <div className="ui active inverted dimmer">
           <div className="ui text loader">Loading</div>
         </div>

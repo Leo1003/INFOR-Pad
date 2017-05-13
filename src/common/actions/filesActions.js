@@ -13,7 +13,7 @@ import {
 } from '../constants/actionTypes'
 import { browserHistory } from 'react-router'
 
-export const fetchGetFiles = (sessionid, fsid) => (
+export const fetchGetFiles = (sessionid, fsid, format) => (
   async (dispatch) => {
     dispatch({ type: ISFETCHING })
     try {
@@ -25,8 +25,10 @@ export const fetchGetFiles = (sessionid, fsid) => (
       })
       if (res.ok) {
         let json = await res.json()
-        if(json.format == "Directory") dispatch({ type: GET_FOLDER, payload: { data: json } })
-        else dispatch({ type: GET_FILE, payload: { data: json } })
+        console.log(format)
+        if(json.format === "Directory" && format === 'Directory') dispatch({ type: GET_FOLDER, payload: { data: json } })
+        else if(json.format !== "Directory" && format === 'File') dispatch({ type: GET_FILE, payload: { data: json } })
+        else dispatch({ type: FILE_IS_NOT_EXIST}) 
       } else if(res.status == '401') {
         dispatch({ type: LOGIN_FIRST} )
       } else if(res.status == '403') {

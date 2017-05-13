@@ -6,10 +6,10 @@ class MyPad extends React.Component {
     super(props)
   }
   componentWillMount() {
-    if(!this.props.isFetching) this.props.handleGetFiles(this.props.sessionid, this.props.rootfsid)
+    if(!this.props.isFetching) this.props.handleGetFiles(this.props.sessionid, this.props.rootfsid, "Directory")
   }
   componentWillReceiveProps(nextProps) {
-    if(!nextProps.isFetching && nextProps.cur_folder.name.length == 0) this.props.handleGetFiles(nextProps.sessionid, this.props.rootfsid)
+    if(!nextProps.isFetching && nextProps.cur_folder.id.length == 0) this.props.handleGetFiles(nextProps.sessionid, this.props.rootfsid, "Directory")
   }
   render() {
     let renderContent = () => {

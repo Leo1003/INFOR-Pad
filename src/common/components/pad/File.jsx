@@ -5,15 +5,15 @@ class File extends React.Component {
     super(props)
   }
   componentWillMount() {
-    if(!this.props.isFetching) this.props.handleGetFiles(this.props.sessionid, this.props.params.fileid)
+    if(!this.props.isFetching) this.props.handleGetFiles(this.props.sessionid, this.props.params.fileid, 'File')
   }
   componentWillReceiveProps(nextProps) {
-    // if(!nextProps.isFetching && nextProps.cur_file.name.length == 0) {
-    //   this.props.handleGetFiles(nextProps.sessionid, this.props.params.folderid)
-    // }
-    // else if(!nextProps.isFetching && (nextProps.params.fileid !== this.props.cur_folder.id)) {
-    //   this.props.handleGetFiles(nextProps.sessionid, nextProps.params.folderid)
-    // }
+    if(!nextProps.isFetching && nextProps.cur_file.id.length == 0) {
+      this.props.handleGetFiles(nextProps.sessionid, this.props.params.fileid, 'File')
+    }
+    else if(!nextProps.isFetching && (nextProps.params.fileid !== this.props.cur_folder.id)) {
+      this.props.handleGetFiles(nextProps.sessionid, nextProps.params.fileid, 'File')
+    }
   }
   render() {
     console.log(this.props)

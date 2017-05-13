@@ -3,7 +3,7 @@ import { Route, IndexRoute } from 'react-router'
 import cookie from 'react-cookie'
 
 import HomePage from '../components/HomePage.jsx'
-import PermissionDenied from '../components/PermissionDenied.jsx'
+import errorPage from '../components/errorPage.jsx'
 //import IndexPage from '../components/IndexPage.jsx'
 import UserPage_Container from '../containers/UserPage_Container'
 import Main_Container from '../containers/Main_Container'
@@ -28,7 +28,7 @@ module.exports = (
     </Route>
     <Route path="editor/:fileid" />
     <Route path="user/:user" component={UserPage_Container} />
-    <Route path="permission_denied" component={PermissionDenied}/>
+    <Route path="error" component={errorPage} />
     <Route path=":shortid" component={sharePage} />
   </Route>
 )

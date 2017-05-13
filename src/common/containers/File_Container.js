@@ -14,8 +14,8 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  handleGetFiles: (sessionid, fsid) => {
-    dispatch(fetchGetFiles(sessionid, fsid))
+  handleGetFiles: (sessionid, fsid, format) => {
+    dispatch(fetchGetFiles(sessionid, fsid, format))
   }
 })
 
