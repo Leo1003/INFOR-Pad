@@ -28,7 +28,7 @@ export const fetchGetFiles = (sessionid, fsid, format) => (
         console.log(format)
         if(json.format === "Directory" && format === 'Directory') dispatch({ type: GET_FOLDER, payload: { data: json } })
         else if(json.format !== "Directory" && format === 'File') dispatch({ type: GET_FILE, payload: { data: json } })
-        else dispatch({ type: FILE_IS_NOT_EXIST}) 
+        else dispatch({ type: FILE_IS_NOT_EXIST})
       } else if(res.status == '401') {
         dispatch({ type: LOGIN_FIRST} )
       } else if(res.status == '403') {
@@ -56,7 +56,7 @@ export const fetchAddNewFiles = (filename, folderid, sessionid, format) => (
       })
       if(res.ok){
         let json = await res.json()
-        dispatch(fetchGetFiles(sessionid, folderid))
+        dispatch(fetchGetFiles(sessionid, folderid, 'Directory'))
       }  else if(res.status == '401') {
         dispatch({ type: LOGIN_FIRST })
       } else if(res.status === '403') {
@@ -82,8 +82,9 @@ export const fetchDeleteFile = (fsid, sessionid, folderid) => (
       })
       if(res.ok) {
         let json = await res.json()
-        dispatch(fetchGetFiles(sessionid, folderid))
+        dispatch(fetchGetFiles(sessionid, folderid, 'Directory'))
       }
+      dispatch({ type: DIDFETCH })
     } catch(e) { console.log(e) }
   }
 )
@@ -91,6 +92,7 @@ export const fetchDeleteFile = (fsid, sessionid, folderid) => (
 export const fetchCheckPermission = (fsid, sessionid, check) => (
   async (dispatch) => {
     try {
+      dispatch({ type: ISFETCHING })
       let res = await fetch(`/api/fs/${fsid}`, {
         method: 'PUT',
         headers: {
@@ -103,6 +105,7 @@ export const fetchCheckPermission = (fsid, sessionid, check) => (
         let json = await res.json()
         dispatch({ type: GET_SHORTID, payload:{ data: json } })
       }
+      dispatch({ type: DIDFETCH })
     } catch(e) { console.log(e) }
   }
 )
@@ -110,6 +113,7 @@ export const fetchCheckPermission = (fsid, sessionid, check) => (
 export const fetchTransferShortID = (shortid) => (
   async (dispatch) => {
     try {
+      dispatch({ type: ISFETCHING })
       let res = await fetch(`/api/fs/?shortid=${shortid}`, {
         method: 'GET'
       })
@@ -118,6 +122,7 @@ export const fetchTransferShortID = (shortid) => (
         if(json.format === 'Directory') browserHistory.replace(`/pad/folder/${json.id}`)
         else browserHistory.replace(`/pad/file/${json.id}`)
       }
+      dispatch({ type: DIDFETCH })
     } catch(e) { console.log(e) }
   }
 )
