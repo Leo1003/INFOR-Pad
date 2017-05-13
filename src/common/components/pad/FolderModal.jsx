@@ -46,7 +46,7 @@ class FolderModal extends React.Component {
             <p><b>Location: </b>&nbsp;{this.props.foldername}</p>
             <p><b>CreateDate: </b>&nbsp;{moment(this.props.file.createDate).subtract(10, 'days').calendar()}</p>
             <p><b>Last Modify: </b>&nbsp;{moment(this.props.file.modifyDate).subtract(10, 'days').calendar()}</p>
-            {this.props.file.shortid.length > 0 ? <p><b>Share ID:</b>&nbsp;<a href={'/' + this.props.file.shortid }>{this.props.file.shortid}</a></p> : null}
+            {this.props.file.isPublic ? <p><b>Share ID:</b>&nbsp;<a href={'/' + this.props.file.shortid }>{this.props.file.shortid}</a></p> : null}
             { this.props.ownername === this.props.username ?
               <div>
                 <div className="ui divider"></div>
