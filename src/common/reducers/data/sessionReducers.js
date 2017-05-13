@@ -44,6 +44,10 @@ const sessionReducers = handleActions({
     return Object.assign({}, state, {
       error_message: 'Login first!'
     })
+  },
+  PERMISSION_DENIED: (state) => {
+    browserHistory.replace({ pathname: '/permission_denied'})
+    return state
   }
 }, session)
 

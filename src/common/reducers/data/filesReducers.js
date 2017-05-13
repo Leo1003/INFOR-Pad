@@ -6,9 +6,6 @@ export const folderReducers = handleActions({
   GET_FOLDER: (state, { payload }) => {
     return Object.assign({}, state, payload.data)
   },
-  ADD_NEW_FOLDER: (state) => {
-    return folder
-  },
   CLEAN_FOLDER: (state) => {
     return folder
   },

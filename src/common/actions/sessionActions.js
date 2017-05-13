@@ -13,7 +13,7 @@ import {
   DIDFETCH,
 
 } from '../constants/actionTypes'
-
+import { browserHistory } from 'react-router'
 import { fetchGetInitialUser } from './userActions'
 
 export const fetchSignIn = (formData) => (
@@ -41,6 +41,7 @@ export const fetchSignIn = (formData) => (
 export const fetchLogout = (sessionid) => (
   async (dispatch) => {
     try {
+      dispatch({ type: ISFETCHING })
       let res = await fetch("/api/session", {
         method: 'DELETE',
         headers: {
@@ -51,6 +52,8 @@ export const fetchLogout = (sessionid) => (
       dispatch({ type: CLEAN_USER })
       dispatch({ type: CLEAN_FILE })
       dispatch({ type: CLEAN_FOLDER })
+      browserHistory.replace({ pathname: '/' })
+      dispatch({ type: DIDFETCH })
     } catch(e) { console.log(e) }
   }
 )
