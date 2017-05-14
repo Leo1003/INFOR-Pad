@@ -67,9 +67,6 @@ class FolderModal extends React.Component {
             <div className="ui basic deny button">
               Close
             </div>
-            <div className="ui disabled blue ok button">
-              Save
-            </div>
           </div>
         </div>
       </div>
