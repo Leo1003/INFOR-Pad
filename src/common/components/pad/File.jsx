@@ -21,15 +21,14 @@ class File extends React.Component {
   }
   render() {
     let renderContent = () => {
-      if(this.props.cur_file.id.length == 0) return (
+      if(this.props.isFetching) return (
         <div className="ui active inverted dimmer">
           <div className="ui text loader">Loading</div>
         </div>
       )
       else return (
         <div>
-          <h1>Get File</h1>
-          <FileContent userid={this.props.userid} folder={this.props.cur_folder} sessionid={this.props.sessionid} />
+          <FileContent userid={this.props.userid} file={this.props.cur_file} sessionid={this.props.sessionid} />
         </div>
       )
     }
