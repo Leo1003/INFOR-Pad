@@ -95,7 +95,6 @@ export const fetchDeleteFile = (fsid, sessionid, folderid) => (
 export const fetchCheckPermission = (fsid, sessionid, check) => (
   async (dispatch) => {
     try {
-      dispatch({ type: ISFETCHING })
       let res = await fetch(`/api/fs/${fsid}`, {
         method: 'PUT',
         headers: {
@@ -108,7 +107,6 @@ export const fetchCheckPermission = (fsid, sessionid, check) => (
         let json = await res.json()
         dispatch({ type: GET_SHORTID, payload:{ data: json } })
       }
-      dispatch({ type: DIDFETCH })
     } catch(e) { console.log(e) }
   }
 )

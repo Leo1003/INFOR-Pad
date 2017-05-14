@@ -21,7 +21,7 @@ class Folder extends React.Component {
   }
   render() {
     let renderContent = () => {
-      if(this.props.cur_folder.id.length == 0) return (
+      if(this.props.isFetching) return (
         <div className="ui active inverted dimmer">
           <div className="ui text loader">Loading</div>
         </div>

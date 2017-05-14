@@ -16,7 +16,7 @@ class FolderModal extends React.Component {
   }
   openModal() {
     this.props.handleGetUserById(this.props.file.owner)
-    if(!this.props.isFetching) $(`#${this.props.file.id}`).modal('show')
+    $(`#${this.props.file.id}`).modal('show')
   }
   deleteFile() {
     $(`#${this.props.file.id}`).modal('hide')
@@ -47,7 +47,7 @@ class FolderModal extends React.Component {
             <p><b>CreateDate: </b>&nbsp;{moment(this.props.file.createDate).subtract(10, 'days').calendar()}</p>
             <p><b>Last Modify: </b>&nbsp;{moment(this.props.file.modifyDate).subtract(10, 'days').calendar()}</p>
             {this.props.file.isPublic ? <p><b>Share ID:</b>&nbsp;<a href={'/' + this.props.file.shortid }>{this.props.file.shortid}</a></p> : null}
-            { this.props.ownername === this.props.username ?
+            { this.props.file.owner === this.props.userid ?
               <div>
                 <div className="ui divider"></div>
                 <div className="ui toggle checkbox">
@@ -76,7 +76,7 @@ class FolderModal extends React.Component {
 
 const mapStateToProps = (state) => ({
   ownername: state.ui.name,
-  username: state.user.name,
+  userid: state.user.id,
   isFetching: state.ui.isFetching,
 })
 const mapDispatchToProps = (dispatch) => ({

@@ -33,7 +33,6 @@ export const fetchGetInitialUser = (sessionid) => (
 export const fetchGetUserById = (userid) => (
   async (dispatch)=> {
     try {
-      dispatch({ type: ISFETCHING })
       let res = await fetch(`/api/user/${userid}`, {
         method: 'GET',
       })
@@ -41,7 +40,6 @@ export const fetchGetUserById = (userid) => (
         let json = await res.json()
         dispatch({ type: GET_USER_BY_ID, payload: { data: json } })
       }
-      dispatch({ type: DIDFETCH })
     } catch(e) {
       console.log(e)
     }
