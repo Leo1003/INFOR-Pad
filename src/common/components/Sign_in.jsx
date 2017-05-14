@@ -15,7 +15,7 @@ class Sign_in extends React.Component {
           rules: [
             {
               type: 'empty',
-              prompt: 'Please enter your Username'
+              prompt: this.props.lang == 'en' ? 'Please enter your Username' : 'الرجاء إدخال اسم المستخدم'
             }
           ]
         },
@@ -24,7 +24,7 @@ class Sign_in extends React.Component {
           rules: [
             {
               type: 'empty',
-              prompt: 'Please enter your Password'
+              prompt: this.props.lang == 'en' ? 'Please enter your Password' : 'من فضلك أدخل رقمك السري'
             }
           ]
         },
@@ -62,18 +62,18 @@ class Sign_in extends React.Component {
     return (
       <div>
         <Container>
-          <h1>INFOR-PAD Sign in</h1>
+          <h1>{'INFOR-Pad ' + (this.props.lang == 'en' ? 'Sign In' : 'تسجيل الدخول')}</h1>
           {renderMessage()}
             <form className="ui form">
               <div className="field">
-                <label>Username:</label>
-                <input type="text" name="username" ref='username' placeholder='Input your Username' />
+                <label>{this.props.lang == 'en' ? 'Username:' : 'اسم المستخدم'}</label>
+                <input type="text" name="username" ref='username' placeholder={this.props.lang == 'en' ? 'Input your Username' : 'أدخل اسم المستخدم'} />
               </div>
               <div className="field">
-                <label>Password:</label>
-                <input type="password" name="password" ref='password' placeholder='Input your Password' />
+                <label>{this.props.lang == 'en' ? 'Password:' : 'كلمه السر'}</label>
+                <input type="password" name="password" ref='password' placeholder={this.props.lang == 'en' ? 'Input your Password' : 'أدخل كلمة المرور'} />
               </div>
-              <button className="ui button" type='submit'>Sign in</button>
+              <button className="ui button" type='submit'>{this.props.lang == 'en' ? 'Sign in' : 'تسجيل الدخول'}</button>
             </form>
         </Container>
       </div>

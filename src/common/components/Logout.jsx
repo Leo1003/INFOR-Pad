@@ -15,7 +15,9 @@ class Logout extends React.Component{
   }
   render() {
     return (
-      <Menu.Item name="Logout" as={Link} onClick={this.onLogout} />
+      <div>
+        <Menu.Item name={this.props.lang == 'en' ? 'Logout' : 'الخروج'} as={Link} onClick={this.onLogout} />
+      </div>
     )
   }
 }

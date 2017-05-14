@@ -42,5 +42,6 @@ export const file = {
 export const ui = {
   isFetching: false,
   name: '',
-  shortid: ''
+  shortid: '',
+  lang: 'ar'
 }

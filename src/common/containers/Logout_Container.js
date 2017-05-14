@@ -4,7 +4,9 @@ import Logout from '../components/Logout.jsx'
 import { fetchLogout } from '../actions/sessionActions'
 
 const mapStateToProps = (state) => {
-  return {}
+  return {
+    lang: state.ui.lang
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {

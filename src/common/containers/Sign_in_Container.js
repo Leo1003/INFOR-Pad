@@ -8,7 +8,8 @@ const mapStateToProps = (state) => {
   return {
     //message: state.auth.get('message')
     error_message: state.session.error_message,
-    isLogin: state.session.isLogin
+    isLogin: state.session.isLogin,
+    lang: state.ui.lang
   }
 }
 

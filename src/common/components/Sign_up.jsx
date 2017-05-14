@@ -14,7 +14,7 @@ class Sign_up extends React.Component {
           rules: [
             {
               type: 'empty',
-              prompt: 'Please enter your Username'
+              prompt: this.props.lang == 'en' ? 'Please enter your Username' : 'الرجاء إدخال اسم المستخدم'
             }
           ]
         },
@@ -23,11 +23,11 @@ class Sign_up extends React.Component {
           rules: [
             {
               type: 'empty',
-              prompt: 'Please enter your email'
+              prompt: this.props.lang == 'en' ? 'Please enter your email' : 'رجاءا أدخل بريدك الإلكتروني'
             },
             {
               type: 'email',
-              prompt: 'Please enter a valid email'
+              prompt: this.props.lang == 'en' ? 'Please enter a valid email' : 'يرجى إدخال البريد الإلكتروني الصحيح' 
             }
           ]
         },
@@ -36,11 +36,11 @@ class Sign_up extends React.Component {
           rules: [
             {
               type: 'empty',
-              prompt: 'Please enter your Password'
+              prompt: this.props.lang == 'en' ? 'Please enter your Password' : 'من فضلك أدخل رقمك السري'
             },
             {
               type: 'length[6]',
-              prompt: 'Your password must be at least 6 characters'
+              prompt: this.props.lang == 'en' ? 'Your password must be at least 6 characters' : 'يجب أن تتكون كلمة المرور من 6 أحرف على الأقل'
             }
           ]
         },
@@ -49,11 +49,11 @@ class Sign_up extends React.Component {
           rules: [
             {
               type: 'empty',
-              prompt: 'Please confirm your password'
+              prompt: this.props.lang == 'en' ? 'Please confirm your password' : 'يرجى التأكد من صحة كلمة المرور الخاصة بك'
             },
             {
               type: 'match[password]',
-              prompt: 'Your confirm password is wrong'
+              prompt: this.props.lang == 'en' ? 'Your confirm password is wrong' : 'كلمة مرور التأكيد غير صحيحة'
             }
           ]
         }
@@ -91,26 +91,26 @@ class Sign_up extends React.Component {
     }
     return (
       <Container>
-        <h1>INFOR-PAD Sign up</h1>
+        <h1>{'INFOR-PAD ' + (this.props.lang == 'en' ? 'Sign up' : 'سجل')}</h1>
         {renderMessage()}
         <form className="ui form">
           <div className="field">
-            <label>Username:</label>
-            <input type="text" name="username" ref='username' placeholder='Input your Username' />
+            <label>{this.props.lang == 'en' ? 'Username:' : 'اسم المستخدم'}</label>
+            <input type="text" name="username" ref='username' placeholder={this.props.lang == 'en' ? 'Input your Username' : 'أدخل اسم المستخدم'} />
           </div>
           <div className="field">
-            <label>Email:</label>
-            <input type="text" name="email" ref='email' placeholder='Input your email' />
+            <label>{this.props.lang == 'en' ? 'Email:' : 'البريد الإلكتروني'}</label>
+            <input type="text" name="email" ref='email' placeholder={this.props.lang == 'en' ? 'Input your email' : 'أدخل بريدك الإلكتروني'} />
           </div>
           <div className="field">
-            <label>Password:</label>
-            <input type="password" name="password" ref='password' placeholder='Input your Password' />
+            <label>{this.props.lang == 'en' ? 'Password:' : 'كلمه السر'}</label>
+            <input type="password" name="password" ref='password' placeholder={this.props.lang == 'en' ? 'Input your Password' : 'أدخل كلمة المرور'} />
           </div>
           <div className="field">
-            <label>Confirm:</label>
-            <input type="password" name="confirm_password" ref='confirm_password' placeholder='Confirm your Password' />
+            <label>{this.props.lang == 'en' ? 'Confirm:' : 'تؤكد'}</label>
+            <input type="password" name="confirm_password" ref='confirm_password' placeholder={this.props.lang == 'en' ? 'Confirm your Password' : 'أكد رقمك السري'} />
           </div>
-          <button className="ui button" type='submit'>Sign up</button>
+          <button className="ui button" type='submit'>{this.props.lang == 'en' ? 'Sign up' : 'سجل'}</button>
         </form>
       </Container>
     )

@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Menu } from 'semantic-ui-react'
 import { Link } from 'react-router'
 import Logout_Container from '../../containers/Logout_Container.js'
@@ -17,8 +18,8 @@ class NavBar extends React.Component {
               this.props.isLogin === false ?
               (
                 <Menu.Menu position='right'>
-                  <Menu.Item name="Sign in" as={Link} to='/Sign_in' />
-                  <Menu.Item name="Sign up" as={Link} to='/Sign_up' />
+                  <Menu.Item name={this.props.lang == 'en' ? 'Sign In' : 'تسجيل الدخول'} as={Link} to='/Sign_in' />
+                  <Menu.Item name={this.props.lang == 'en' ? 'Sign Up' : 'سجل'} as={Link} to='/Sign_up' />
                 </Menu.Menu>
               ):
               (
@@ -35,4 +36,8 @@ class NavBar extends React.Component {
 }
 
 
-export default NavBar
+export default connect(
+  (state, dispatch) => {
+    lang: state.ui.lang
+  }
+)(NavBar)

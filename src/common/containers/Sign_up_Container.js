@@ -6,7 +6,8 @@ import { fetchSignUp } from '../actions/sessionActions.js'
 const mapStateToProps = (state) => {
   return {
     error_message: state.session.error_message,
-    isLogin: state.session.isLogin
+    isLogin: state.session.isLogin,
+    lang: state.ui.lang
   }
 }
 
