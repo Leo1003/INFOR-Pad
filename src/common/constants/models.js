@@ -46,4 +46,5 @@ export const ui = {
   name: '',
   shortid: '',
   error: '',
+  redirectToError: false,
 }

@@ -41,6 +41,7 @@ class Sign_in extends React.Component {
 
   handleValid(e) {
     e.preventDefault();
+    console.log(this.refs.autologin.checked)
     this.handleSignin()
   }
   handleSignin() {
@@ -48,7 +49,8 @@ class Sign_in extends React.Component {
     for(const field in this.refs) {
       formData[field] = this.refs[field].value
     }
-    this.props.handleSignIn(formData)
+    console.log(formData)
+    this.props.handleSignIn(formData, (this.refs.autologin.checked ? 1 : 0))
   }
   render() {
     let renderMessage = () => {
@@ -67,11 +69,17 @@ class Sign_in extends React.Component {
             <form className="ui form">
               <div className="field">
                 <label>Username:</label>
-                <input type="text" name="username" ref='username' placeholder='Input your Username' />
+                <input type="text" name="username" ref='username' placeholder='Enter your Username' />
               </div>
               <div className="field">
                 <label>Password:</label>
-                <input type="password" name="password" ref='password' placeholder='Input your Password' />
+                <input type="password" name="password" ref='password' placeholder='Enter your Password' />
+              </div>
+              <div className="field">
+                <div className="ui checkbox">
+                  <input type="checkbox" name="autologin" ref='autologin'/>
+                  <label>Remember me</label>
+                </div>
               </div>
               <button className="ui button" type='submit'>Sign in</button>
             </form>

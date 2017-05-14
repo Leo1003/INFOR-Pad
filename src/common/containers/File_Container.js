@@ -1,6 +1,6 @@
 import File from '../components/pad/File.jsx'
 import { connect } from 'react-redux'
-import { fetchGetFiles } from '../actions/filesActions'
+import { fetchGetFiles, initialRedirect } from '../actions/filesActions'
 
 
 const mapStateToProps = (state) => {
@@ -9,13 +9,17 @@ const mapStateToProps = (state) => {
     sessionid: state.session.sessionid,
     isFetching: state.ui.isFetching,
     cur_file: state.file,
-    userid: state.user.id
+    userid: state.user.id,
+    redirectToError: state.ui.redirectToError
   }
 }
 
 const mapDispatchToProps = (dispatch) => ({
   handleGetFiles: (sessionid, fsid, format) => {
     dispatch(fetchGetFiles(sessionid, fsid, format))
+  },
+  initialRedirect: () => {
+    dispatch(initialRedirect())
   }
 })
 

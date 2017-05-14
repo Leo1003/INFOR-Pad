@@ -1,11 +1,13 @@
 import React from 'react'
 import FolderContent from './FolderContent.jsx'
+import { browserHistory } from 'react-router'
 
 class Folder extends React.Component {
   constructor(props) {
     super(props)
   }
   componentWillMount() {
+    this.props.initialRedirect()
     if(!this.props.isFetching) this.props.handleGetFiles(this.props.sessionid, this.props.params.folderid, "Directory")
   }
   componentWillReceiveProps(nextProps) {
@@ -15,6 +17,7 @@ class Folder extends React.Component {
     else if(!nextProps.isFetching && (nextProps.params.folderid !== this.props.cur_folder.id)) {
       this.props.handleGetFiles(nextProps.sessionid, nextProps.params.folderid, "Directory")
     }
+    if(!nextProps.isFetching && nextProps.redirectToError) browserHistory.push({pathname: '/error'})
   }
   render() {
     let renderContent = () => {

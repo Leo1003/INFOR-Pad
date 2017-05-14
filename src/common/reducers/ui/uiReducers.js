@@ -19,19 +19,23 @@ const uiReducers = handleActions({
       name: payload.data.name
     })
   },
-  PERMISSION_DENIED: (state) => {
-    browserHistory.replace({ pathname: '/error' })
+  INITIALREDIRECT: (state) => {
     return Object.assign({}, state, {
-      error: 'Permission Denied!'
+      redirectToError: false
+    })
+  },
+  PERMISSION_DENIED: (state) => {
+    return Object.assign({}, state, {
+      error: 'Permission Denied!',
+      redirectToError: true
     })
   },
   FILE_IS_NOT_EXIST: (state) => {
-    browserHistory.replace({ pathname: '/error' })
     return Object.assign({}, state, {
-      error: 'File is not exist!'
+      error: 'File is not exist!',
+      redirectToError: true
     })
   }
-
 }, ui)
 
 export default uiReducers

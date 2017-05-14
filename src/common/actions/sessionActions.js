@@ -16,13 +16,13 @@ import {
 import { browserHistory } from 'react-router'
 import { fetchGetInitialUser } from './userActions'
 
-export const fetchSignIn = (formData) => (
+export const fetchSignIn = (formData, autologin) => (
   async (dispatch) => {
     try {
       let res = await fetch('/api/session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `username=${formData.username}&password=${formData.password}`,
+        body: `username=${formData.username}&password=${formData.password}&autologin=${autologin}`,
         credentials: 'include'
       })
       if(res.ok) {
