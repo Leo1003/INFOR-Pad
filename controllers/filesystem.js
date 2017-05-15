@@ -1,5 +1,6 @@
 const randomstring = require('randomstring')
 const hash = require('./hash')
+const userCtrl = require('./user')
 const debug = require('debug')('INFOR-Pad:api')
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
@@ -7,17 +8,27 @@ const Session = mongoose.model('Session')
 const FileSystem = mongoose.model('FileSystem')
 const ApiError = require('../error').ApiError
 
-exports.extractFSData = async function (fs, complete) {
+exports.extractFSData = async function (fs, complete, extend) {
     let ret = {
         id: fs._id,
         name: fs.name,
-        parent: (fs.parent ? fs.parent : ''),
+        parent: fs.parent,
         owner: fs.owner,
         createDate: fs.createDate,
         modifyDate: fs.modifyDate,
         isPublic: fs.isPublic,
         shortid: (fs.shortid ? fs.shortid : ''),
         format: fs.isFile === true ? fs.format : 'Directory'
+    }
+    if (extend == true) {
+        if (fs.parent) {
+            await fs.populate('parent').execPopulate()
+            ret.parent = await exports.extractFSData(fs.parent, false)
+        }
+        if (fs.owner) {
+            await fs.populate('owner').execPopulate()
+            ret.owner = await userCtrl.extractUserData(fs.owner, false)
+        }
     }
     if (complete == true) {
         if (fs.isFile === true) {
@@ -34,7 +45,7 @@ exports.extractFSData = async function (fs, complete) {
     return ret
 }
 exports.isRootDir = function (fs) {
-    if (!fs.parent && fs.name == 'Root') {
+    if (!fs.parent && fs.name == 'Root' && fs.isFile == false) {
         return true
     }
     return false
@@ -75,6 +86,13 @@ exports.getAccess = async function (fsid, userid) {
     let fs = await exports.findFS(fsid)
     if (!fs) {
         return undefined
+    }
+    if (!fs.owner) {
+        if (userid && userid.equals(fs.editSecret)) {
+            return 2
+        } else {
+            return 1
+        }
     }
     if (userid && userid.equals(fs.owner)) {
         return 2
@@ -129,7 +147,6 @@ exports.updateFS = async function (fs, data, limit) {
 async function unlink(fs, parent) {
     let index = parent.files.indexOf(fs._id)
     if (index == -1) {
-        //throw new ApiError(507, `Parent doesn't contain file: ${fs._id}`)
         console.error('!!WARNING!!');
         console.error(new ApiError(507, `Parent doesn't contain file: ${fs._id}`))
     } else {
@@ -152,7 +169,9 @@ async function Delete(id) {
     if (fs.parent.isFile == true) {
         throw new ApiError(400, `Parent is not a directory: ${fs.parent._id}`)
     }
-    await unlink(fs, fs.parent)
+    if (fs.parent) {
+        await unlink(fs, fs.parent)
+    }
     await fs.remove()
     return 1
 }
