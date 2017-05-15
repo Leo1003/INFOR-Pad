@@ -1,5 +1,6 @@
 const randomstring = require('randomstring')
 const hash = require('./hash')
+const userCtrl = require('./user')
 const debug = require('debug')('INFOR-Pad:api')
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
@@ -7,7 +8,7 @@ const Session = mongoose.model('Session')
 const FileSystem = mongoose.model('FileSystem')
 const ApiError = require('../error').ApiError
 
-exports.extractFSData = async function (fs, complete) {
+exports.extractFSData = async function (fs, complete, extend) {
     let ret = {
         id: fs._id,
         name: fs.name,
@@ -18,6 +19,14 @@ exports.extractFSData = async function (fs, complete) {
         isPublic: fs.isPublic,
         shortid: (fs.shortid ? fs.shortid : ''),
         format: fs.isFile === true ? fs.format : 'Directory'
+    }
+    if (extend == true) {
+        if (fs.parent != '') {
+            await fs.populate('parent').execPopulate()
+            ret.parent = await exports.extractFSData(fs.parent, false)
+        }
+        await fs.populate('owner').execPopulate()
+        ret.owner = await userCtrl.extractUserData(fs.owner, false)
     }
     if (complete == true) {
         if (fs.isFile === true) {
