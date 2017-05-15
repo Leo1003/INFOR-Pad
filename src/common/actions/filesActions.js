@@ -26,7 +26,6 @@ export const fetchGetFiles = (sessionid, fsid, format) => (
       })
       if (res.ok) {
         let json = await res.json()
-        console.log(format)
         if(json.format === "Directory" && format === 'Directory') dispatch({ type: GET_FOLDER, payload: { data: json } })
         else if(json.format !== "Directory" && format === 'File') dispatch({ type: GET_FILE, payload: { data: json } })
         else {
@@ -47,8 +46,6 @@ export const fetchGetFiles = (sessionid, fsid, format) => (
 export const fetchAddNewFiles = (filename, folderid, sessionid, format) => (
   async (dispatch) => {
     try {
-      dispatch({ type: ISFETCHING })
-      console.log(format)
       let res = await fetch(`/api/fs/${folderid}`, {
         method: 'POST',
         headers: {
@@ -67,7 +64,6 @@ export const fetchAddNewFiles = (filename, folderid, sessionid, format) => (
       } else if(res.status == '404') {
         dispatch({ type: FILE_IS_NOT_EXIST })
       }
-      dispatch({ type: DIDFETCH })
     } catch(e) { console.log(e) }
   }
 )
@@ -75,7 +71,6 @@ export const fetchAddNewFiles = (filename, folderid, sessionid, format) => (
 export const fetchDeleteFile = (fsid, sessionid, folderid) => (
   async (dispatch) => {
     try {
-      dispatch({ type: ISFETCHING })
       let res = await fetch(`/api/fs/${fsid}`, {
         method: 'DELETE',
         headers: {
@@ -87,7 +82,6 @@ export const fetchDeleteFile = (fsid, sessionid, folderid) => (
         let json = await res.json()
         dispatch(fetchGetFiles(sessionid, folderid, 'Directory'))
       }
-      dispatch({ type: DIDFETCH })
     } catch(e) { console.log(e) }
   }
 )

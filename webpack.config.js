@@ -25,6 +25,7 @@ module.exports = {
         inline: true,
         port: 8080,
     },
+    devtool: 'source-map',
     // plugins: [
     //         new webpack.optimize.UglifyJsPlugin({
     //                 compress: {

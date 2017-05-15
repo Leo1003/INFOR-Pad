@@ -97,10 +97,6 @@ class FolderContent extends React.Component {
             })}
           </tbody>
         </table>
-        <div>
-          <h4>Test Upload</h4>
-          <input type="file" name="upload_file"/>
-        </div>
       </div>
     )
   }

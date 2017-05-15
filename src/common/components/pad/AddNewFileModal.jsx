@@ -5,6 +5,14 @@ export class AddNewFileModal extends React.Component {
     super(props)
   }
   componentDidMount() {
+    this.formValidation()
+    $('.ui.dropdown').dropdown()
+  }
+  componentDidUpdate() {
+    this.formValidation()
+    $('.ui.dropdown').dropdown()
+  }
+  formValidation() {
     $('#addfileform').form({
       fields: {
         filename: {
@@ -30,15 +38,12 @@ export class AddNewFileModal extends React.Component {
       onFailure: this.handleFileInvalid.bind(this),
       onSuccess: this.handleAddNewFile.bind(this)
     })
-    $('.ui.dropdown').dropdown()
   }
-
   handleAddNewFile(e) {
     e.preventDefault()
-    console.log(this.refs.language.value)
-    console.log(this.refs.filename.value)
+    console.log(this.refs)
     this.props.handleAddNewFiles(this.refs.filename.value, this.props.id, this.props.sessionid, this.refs.language.value)
-    $('#addfileform').form('clear')
+    $('#addfileform').form('reset')
     $('#addNewFileModal').modal('hide')
   }
   handleFileInvalid(e) {
@@ -53,7 +58,7 @@ export class AddNewFileModal extends React.Component {
           </div>
           <div className="content">
 
-            <form className="ui form" id="addfileform">
+            <form className="ui form" id="addfileform" onSubmit={() => {console.log("form submit")}}>
               <div className="field">
                 <input type="text" name="filename" ref='filename' placeholder='File Name...' />
               </div>
