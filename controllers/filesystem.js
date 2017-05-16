@@ -45,10 +45,10 @@ exports.extractFSData = async function (fs, complete, extend) {
     return ret
 }
 exports.isRootDir = function (fs) {
-    if (!fs.parent && fs.name == 'Root' && fs.isFile == false) {
-        return true
-    }
-    return false
+    return (!fs.parent && fs.name == 'Root' && fs.isFile == false)
+}
+exports.isTempFile = function (fs) {
+    return (!fs.parent && !fs.owner && fs.isFile == true)
 }
 exports.findFS = async function (fsid) {
     return await FileSystem.findById(fsid)
@@ -101,6 +101,19 @@ exports.getAccess = async function (fsid, userid) {
     } else {
         return 0
     }
+}
+
+exports.addTempFile = async function (name, format) {
+    return await new FileSystem({
+        name: name,
+        isFile: true,
+        isPublic: true,
+        shortid: randomstring.generate(8),
+        editSecret: randomstring.generate(8),
+        format: format,
+        code: "",
+        stdin: ""
+    }).save()
 }
 
 exports.link = async function (fs, pfsid) {
