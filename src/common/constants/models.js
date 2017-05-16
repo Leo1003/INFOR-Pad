@@ -75,5 +75,4 @@ export const ui = {
   shortid: '',
   error: '',
   redirectToError: false,
-  foldername: ''
 }

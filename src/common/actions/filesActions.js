@@ -11,7 +11,6 @@ import {
   DIDFETCH,
   GET_SHORTID,
   INITIALREDIRECT,
-  ADDFOLDERNAME,
 } from '../constants/actionTypes'
 import { browserHistory } from 'react-router'
 
@@ -126,11 +125,5 @@ export const fetchTransferShortID = (shortid) => (
 export const initialRedirect = () => (
   (dispatch) => {
     dispatch({ type: INITIALREDIRECT })
-  }
-)
-
-export const addFoldername = (foldername) => (
-  (dispatch) => {
-    dispatch({ type: ADDFOLDERNAME , foldername: foldername })
   }
 )

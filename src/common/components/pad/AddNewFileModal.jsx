@@ -41,10 +41,10 @@ export class AddNewFileModal extends React.Component {
   }
   handleAddNewFile(e) {
     e.preventDefault()
-    console.log(this.refs)
     this.props.handleAddNewFiles(this.refs.filename.value, this.props.id, this.props.sessionid, this.refs.language.value)
     $('#addfileform').form('reset')
     $('#addNewFileModal').modal('hide')
+    this.props.handlefetchGetFiles(this.props.sessionid, this.props.id, 'Directory')
   }
   handleFileInvalid(e) {
     return false
@@ -58,7 +58,7 @@ export class AddNewFileModal extends React.Component {
           </div>
           <div className="content">
 
-            <form className="ui form" id="addfileform" onSubmit={() => {console.log("form submit")}}>
+            <form className="ui form" id="addfileform">
               <div className="field">
                 <input type="text" name="filename" ref='filename' placeholder='File Name...' />
               </div>

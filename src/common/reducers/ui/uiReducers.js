@@ -35,11 +35,6 @@ const uiReducers = handleActions({
       error: 'File is not exist!',
       redirectToError: true
     })
-  },
-  ADDFOLDERNAME: (state, { foldername }) => {
-    return Object.assign({}, state, {
-      foldername: foldername
-    })
   }
 }, ui)
 

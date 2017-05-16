@@ -22,7 +22,7 @@ class AddNewFilesDropdown extends React.Component {
       onDeny: () => {
         $('#addfileform').form('clear')
       },
-      onApprove: () => { return true }
+     //onApprove: () => { return true }
     }).modal('show')
   }
   render() {
@@ -55,7 +55,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
   handlefetchGetFiles: (sessionid, fsid, format) => {
     dispatch(fetchGetFiles(sessionid, fsid, format))
-  }
+  },
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNewFilesDropdown)

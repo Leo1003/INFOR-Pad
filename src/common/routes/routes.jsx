@@ -9,8 +9,6 @@ import CheckAuth from '../components/CheckAuth.jsx'
 
 import Pad from '../components/pad/Pad.jsx'
 
-import Editor from '../components/editor/Editor.jsx'
-
 import UserPage_Container from '../containers/UserPage_Container'
 import Main_Container from '../containers/Main_Container'
 import Sign_in_Container from '../containers/Sign_in_Container'
@@ -18,6 +16,7 @@ import Sign_up_Container from '../containers/Sign_up_Container'
 import MyPad_Container from '../containers/MyPad_Container'
 import Folder_Container from '../containers/Folder_Container'
 import File_Container from '../containers/File_Container'
+import Editor_Container from '../containers/Editor_Container'
 
 
 
@@ -31,7 +30,7 @@ module.exports = (
       <Route path="folder/:folderid" component={Folder_Container} />
       <Route path="file/:fileid" component={File_Container}/>
     </Route>
-    <Route path="editor/:fileid" component={Editor} />
+    <Route path="editor/:fileid" component={Editor_Container} />
     <Route path="user/:user" component={UserPage_Container} />
     <Route path="error" component={errorPage} />
     <Route path=":shortid" component={sharePage} />
