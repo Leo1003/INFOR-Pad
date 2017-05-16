@@ -53,7 +53,7 @@ app.use(api.routes(), api.allowedMethods());
 app.io = io
 io.of('/client').use((socket, next) => {
     debug("Client connecting...")
-    debug(socket.handshake.query)
+    socket.sessionData = {}
     if (socket.handshake.query.sessionid) {
         sessionCtrl.getSessionById(socket.handshake.query.sessionid).then((sess => {
             if (sess && sess.expireAt > new Date()) {
@@ -64,6 +64,7 @@ io.of('/client').use((socket, next) => {
         }))
         .then(sess => {
             if (sess.user._id) {
+                socket.sessionData.userid = sess.user._id
                 return next()
             }
             debug("Client Failed")
@@ -79,7 +80,13 @@ io.of('/client').on('connection', socket => {
     debug('Client connected')
     socket.on('Submit', data => {
         let sid = socket.id
-        fsCtrl.findFile(data.fileid).then(file => {
+        fsCtrl.getAccess(data.fileid, socket.sessionData.userid).then(access => {
+            if (access > 0) {
+                return fsCtrl.findFile(data.fileid)
+            } else {
+                throw new Error('Permission denied')
+            }
+        }).then(file => {
             lxtesterServer.sendJob({
                 socketid: sid,
                 language: data.language,
@@ -113,6 +120,7 @@ io.of('/lxtester').on('connection', socket => {
     })
     socket.on('disconnecting', data => {
         let uncompleted = lxtesterServer.remove(socket.id)
+/*
         for (let task in uncompleted) {
             io.of('/client').connected[task.socketid].emit('Result', {
                 id: task.id,
@@ -126,6 +134,7 @@ io.of('/lxtester').on('connection', socket => {
                 error: 'Server Stopped.'
             })
         }
+*/
     })
 })
 
