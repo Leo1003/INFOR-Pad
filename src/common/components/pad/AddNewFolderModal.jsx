@@ -1,10 +1,24 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { addFoldername } from '../../actions/filesActions'
 
-export class AddNewFolderModal extends React.Component {
+class AddNewFolderModal extends React.Component {
   constructor(props) {
     super(props)
+    this.inputChange = this.inputChange.bind(this)
   }
+  componentWillMount() { console.log("will mount")}
+  componentWillReceiveProps() { console.log("receive props") }
+  shouldComponentUpdate() { 
+    console.log("shoud update")
+    return true
+  }
+  componentWillUpdate() { console.log("will update") }
+  componentDidUpdate() { console.log("did update") }
+  componentUnMount() { console.log("will unmount") }
   componentDidMount() {
+    console.log("did mount")
+    this.props.handleAddFoldername('')
     $('#addfolderform').form({
       fields: {
         foldername: {
@@ -25,18 +39,20 @@ export class AddNewFolderModal extends React.Component {
 
   handleAddNewFolder(e) {
     e.preventDefault()
-    const formData = {}
-    for(const field in this.refs) {
-      formData[field] = this.refs[field].value
-    }
-    $('#addfolderform').form('clear')
+    this.props.handleAddNewFiles(this.props.foldername, this.props.id, this.props.sessionid, "Directory")  //(filename, folderid, sessionid) 
+    this.props.handleAddFoldername('')
     $('#addNewFolderModal').modal('hide')
-    this.props.handleAddNewFiles(formData['foldername'], this.props.id, this.props.sessionid, "Directory")  //(filename, folderid, sessionid)
+     this.props.handlefetchGetFiles(this.props.sessionid, this.props.id, "Directory")
   }
   handleFolderInvalid(e) {
+    console.log(this.props.foldername)
     return false
   }
+  inputChange(e) {
+    this.props.handleAddFoldername(e.target.value)
+  }
   render () {
+    console.log("render")
     return (
       <div className="ui small modal" id="addNewFolderModal">
         <div className="ui icon header">
@@ -47,7 +63,7 @@ export class AddNewFolderModal extends React.Component {
 
           <form className="ui form" id="addfolderform">
             <div className="field">
-              <input type="text" name="foldername" ref='foldername' placeholder='Folder Name...' />
+              <input type="text" name="foldername"  placeholder='Folder Name...' onChange={this.inputChange} value={this.props.foldername} />
             </div>
           </form>
         </div>
@@ -65,3 +81,14 @@ export class AddNewFolderModal extends React.Component {
     )
   }
 }
+
+export default connect(
+  (state) => ({
+    foldername: state.ui.foldername
+  }),
+  (dispatch) => ({
+    handleAddFoldername: (foldername) => {
+      dispatch(addFoldername(foldername))
+    }
+  })
+)(AddNewFolderModal)

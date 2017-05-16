@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { fetchAddNewFiles } from '../../actions/filesActions'
-import { AddNewFolderModal } from './AddNewFolderModal.jsx'
+import { fetchAddNewFiles, fetchGetFiles } from '../../actions/filesActions'
+import  AddNewFolderModal  from './AddNewFolderModal.jsx'
 import { AddNewFileModal } from './AddNewFileModal.jsx'
 
 class AddNewFilesDropdown extends React.Component {
@@ -37,8 +37,8 @@ class AddNewFilesDropdown extends React.Component {
           </div>
         </div>
 
-        <AddNewFolderModal handleAddNewFiles={this.props.handleAddNewFiles} id={this.props.id} sessionid={this.props.sessionid}/>
-        <AddNewFileModal handleAddNewFiles={this.props.handleAddNewFiles} id={this.props.id} sessionid={this.props.sessionid}/>
+        <AddNewFolderModal handleAddNewFiles={this.props.handleAddNewFiles} handlefetchGetFiles={this.props.handlefetchGetFiles} id={this.props.id} sessionid={this.props.sessionid}/>
+        <AddNewFileModal handleAddNewFiles={this.props.handleAddNewFiles} handlefetchGetFiles={this.props.handlefetchGetFiles} id={this.props.id} sessionid={this.props.sessionid}/>
       </div>
 
     )
@@ -52,6 +52,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   handleAddNewFiles: (filename, folderid, sessionid, format) => {
     dispatch(fetchAddNewFiles(filename, folderid, sessionid, format))
+  },
+  handlefetchGetFiles: (sessionid, fsid, format) => {
+    dispatch(fetchGetFiles(sessionid, fsid, format))
   }
 })
 

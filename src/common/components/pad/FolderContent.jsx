@@ -41,7 +41,7 @@ class FolderContent extends React.Component {
     return (
       <div>
         <h2>{this.props.folder.name}</h2>
-        {this.props.userid === this.props.folder.owner ? <AddNewFilesDropdown id={this.props.folder.id} /> : null }
+        {this.props.userid === this.props.folder.owner.id ? <AddNewFilesDropdown id={this.props.folder.id} /> : null }
         <table className="ui celled unstackable selectable table">
           <thead>
             <tr>
@@ -53,10 +53,10 @@ class FolderContent extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {this.props.folder.parent.length > 0 ? (
+            {(this.props.folder.parent.id.length > 0 && this.props.folder.id !== this.props.folder.parent.id)? (
               <tr className='collapsing'>
                 <td>
-                  <Link to={'/pad/folder/' + this.props.folder.parent}>..</Link>
+                  <Link to={'/pad/folder/' + this.props.folder.parent.id}>..</Link>
                 </td>
               </tr>
             ) : null}
@@ -72,7 +72,7 @@ class FolderContent extends React.Component {
                       Size
                     </td>
                     <td className="right aligned collapsing">
-                      <FolderModal file={file} sessionid={this.props.sessionid} foldername={this.props.folder.name} folderid={this.props.folder.id}/>
+                      <FolderModal file={file} sessionid={this.props.sessionid} foldername={this.props.folder.name} folderid={this.props.folder.id} owner={this.props.folder.owner} />
                     </td>
                   </tr>
                 )
@@ -84,13 +84,13 @@ class FolderContent extends React.Component {
                 <tr key={file.id}>
                   <td className='collapsing'>
                     <i className="file outline icon"></i>
-                    <Link to={'/pad/file/' + file.id }>{file.name}</Link>
+                    <Link to={'/pad/file/' + file.id }><span>{file.name}</span></Link>
                   </td>
                   <td>
                     Size
                   </td>
                   <td className="right aligned collapsing">
-                    <FolderModal file={file} sessionid={this.props.sessionid} foldername={this.props.folder.name} folderid={this.props.folder.id}/>
+                    <FolderModal file={file} sessionid={this.props.sessionid} foldername={this.props.folder.name} folderid={this.props.folder.id} owner={this.props.folder.owner} />
                   </td>
                 </tr>
               )

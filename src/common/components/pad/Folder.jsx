@@ -2,6 +2,12 @@ import React from 'react'
 import FolderContent from './FolderContent.jsx'
 import { browserHistory } from 'react-router'
 
+const Loader = () => (
+  <div className="ui active inverted dimmer">
+      <div className="ui text loader">Loading</div>
+  </div>
+)
+
 class Folder extends React.Component {
   constructor(props) {
     super(props)
@@ -20,21 +26,9 @@ class Folder extends React.Component {
     if(!nextProps.isFetching && nextProps.redirectToError) browserHistory.push({pathname: '/error'})
   }
   render() {
-    let renderContent = () => {
-      if(this.props.isFetching) return (
-        <div className="ui active inverted dimmer">
-          <div className="ui text loader">Loading</div>
-        </div>
-      )
-      else return (
-        <div>
-          <FolderContent userid={this.props.userid} folder={this.props.cur_folder} sessionid={this.props.sessionid} />
-        </div>
-      )
-    }
     return (
       <div>
-        {renderContent()}
+        {this.props.isFetching ? <Loader /> : <FolderContent userid={this.props.userid} folder={this.props.cur_folder} sessionid={this.props.sessionid} />}
       </div>
     )
   }

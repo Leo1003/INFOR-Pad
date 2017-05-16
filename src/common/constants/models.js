@@ -16,8 +16,22 @@ export const user = {
 
 export const folder = {
   name: '',               //File name
-  parent: '',             //Parent Directory
-  owner: '',              //The user id of the file's owner
+  parent: {
+    id: '',
+    name: '',
+    owner: '',
+    createDate: new Date(),
+    modifyDate: new Date(),
+    isPublic: false,
+    shortid: '',
+    format: ''
+  },             //Parent Directory
+  owner: {
+    id: '',
+    name: '',
+    leve: 0,
+    createDate: new Date()
+  },              //The user id of the file's owner
   id: '',
   shortid:'',
   createDate: new Date(), //CreateDate
@@ -29,8 +43,22 @@ export const folder = {
 
 export const file = {
   name: '',               //File name
-  parent: '',             //Parent Directory
-  owner: '',              //The user id of the file's owner
+  parent: {
+    id: '',
+    name: '',
+    owner: '',
+    createDate: new Date(),
+    modifyDate: new Date(),
+    isPublic: false,
+    shortid: '',
+    format: ''
+  },             //Parent Directory
+  owner: {
+    id: '',
+    name: '',
+    leve: 0,
+    createDate: new Date()
+  },              //The user id of the file's owner
   id: '',
   shortid: '',
   createDate: new Date(), //CreateDate
@@ -47,4 +75,5 @@ export const ui = {
   shortid: '',
   error: '',
   redirectToError: false,
+  foldername: ''
 }

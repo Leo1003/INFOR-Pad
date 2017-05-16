@@ -20,6 +20,7 @@ export const GET_FILE = 'GET_FILE'
 export const ADD_NEW_FOLDER = 'ADD_NEW_FOLDER'
 export const ADD_NEW_FILE = 'ADD_NEW_FILE'
 export const DELETE_FILE = 'DELETE_FILE'
+export const ADDFOLDERNAME = 'ADDFOLDERNAME'
 
 export const INITIALREDIRECT = 'INITIALREDIRECT'
 export const LOGIN_FIRST = 'LOGIN_FIRST'

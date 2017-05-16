@@ -11,6 +11,7 @@ import {
   DIDFETCH,
   GET_SHORTID,
   INITIALREDIRECT,
+  ADDFOLDERNAME,
 } from '../constants/actionTypes'
 import { browserHistory } from 'react-router'
 
@@ -56,7 +57,7 @@ export const fetchAddNewFiles = (filename, folderid, sessionid, format) => (
       })
       if(res.ok){
         let json = await res.json()
-        dispatch(fetchGetFiles(sessionid, folderid, 'Directory'))
+        //dispatch(fetchGetFiles(sessionid, folderid, 'Directory'))
       }  else if(res.status == '401') {
         dispatch({ type: LOGIN_FIRST })
       } else if(res.status === '403') {
@@ -125,5 +126,11 @@ export const fetchTransferShortID = (shortid) => (
 export const initialRedirect = () => (
   (dispatch) => {
     dispatch({ type: INITIALREDIRECT })
+  }
+)
+
+export const addFoldername = (foldername) => (
+  (dispatch) => {
+    dispatch({ type: ADDFOLDERNAME , foldername: foldername })
   }
 )

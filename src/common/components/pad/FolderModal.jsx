@@ -15,7 +15,6 @@ class FolderModal extends React.Component {
     }
   }
   openModal() {
-    this.props.handleGetUserById(this.props.file.owner)
     $(`#${this.props.file.id}`).modal('show')
   }
   deleteFile() {
@@ -42,7 +41,7 @@ class FolderModal extends React.Component {
           <div className="content">
             <p><b>Name: </b>&nbsp;{this.props.file.name}</p>
             <p><b>Type: </b>&nbsp;{this.props.file.format}</p>
-            <p><b>Owner: </b>&nbsp;<a href={'/user/' + this.props.ownername}>{this.props.ownername}</a></p>
+            <p><b>Owner: </b>&nbsp;<a href={'/user/' + this.props.owner.name}>{this.props.owner.name}</a></p>
             <p><b>Location: </b>&nbsp;{this.props.foldername}</p>
             <p><b>CreateDate: </b>&nbsp;{moment(this.props.file.createDate).subtract(10, 'days').calendar()}</p>
             <p><b>Last Modify: </b>&nbsp;{moment(this.props.file.modifyDate).subtract(10, 'days').calendar()}</p>
@@ -75,16 +74,12 @@ class FolderModal extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  ownername: state.ui.name,
   userid: state.user.id,
   isFetching: state.ui.isFetching,
 })
 const mapDispatchToProps = (dispatch) => ({
   handleDelete: (fsid, sessionid, folderid) => {
     dispatch(fetchDeleteFile(fsid, sessionid, folderid))
-  },
-  handleGetUserById: (userid) => {
-    dispatch(fetchGetUserById(userid))
   },
   handleCheckPermission: (fsid, sessionid, check) => {
     dispatch(fetchCheckPermission(fsid, sessionid, check))

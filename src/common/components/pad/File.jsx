@@ -26,11 +26,13 @@ class File extends React.Component {
           <div className="ui text loader">Loading</div>
         </div>
       )
-      else return (
+      else {
+        console.log(this.props)
+        return (
         <div>
           <FileContent userid={this.props.userid} file={this.props.cur_file} sessionid={this.props.sessionid} />
         </div>
-      )
+      )}
     }
     return(
       <div>
