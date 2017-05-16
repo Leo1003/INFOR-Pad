@@ -34,3 +34,8 @@ npm-debug.log
 
 # VSCode Folder
 .vscode/
+
+# Secmantic & Webpack files
+semantic/
+dist/
+semantic.json
