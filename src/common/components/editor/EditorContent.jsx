@@ -3,13 +3,48 @@ import React from 'react'
 
 const Editor = (props) => {
   if (typeof window !== 'undefined') {
-    const AceEditor = require('react-ace').default;
+    const AceEditor = require('react-ace').default
     require('brace/mode/c_cpp');
-    require('brace/theme/tomorrow_night');
 
+    require('brace/keybinding/vim')
+    require('brace/keybinding/emacs')
+
+    require("brace/theme/ambiance")
+    require("brace/theme/chaos")
+    require("brace/theme/chrome")
+    require("brace/theme/clouds")
+    require("brace/theme/clouds_midnight")
+    require("brace/theme/cobalt")
+    require("brace/theme/crimson_editor")
+    require("brace/theme/dawn")
+    require("brace/theme/dreamweaver")
+    require("brace/theme/eclipse")
+    require("brace/theme/github")
+    require("brace/theme/idle_fingers")
+    require("brace/theme/iplastic")
+    require("brace/theme/katzenmilch")
+    require("brace/theme/kr_theme")
+    require("brace/theme/kuroir")
+    require("brace/theme/merbivore")
+    require("brace/theme/merbivore_soft")
+    require("brace/theme/mono_industrial")
+    require("brace/theme/monokai")
+    require("brace/theme/pastel_on_dark")
+    require("brace/theme/solarized_dark")
+    require("brace/theme/solarized_light")
+    require("brace/theme/sqlserver")
+    require("brace/theme/terminal")
+    require("brace/theme/textmate")
+    require("brace/theme/tomorrow")
+    require("brace/theme/tomorrow_night_blue")
+    require("brace/theme/tomorrow_night_bright")
+    require("brace/theme/tomorrow_night_eighties")
+    require("brace/theme/tomorrow_night")
+    require("brace/theme/twilight")
+    require("brace/theme/vibrant_ink")
+    require("brace/theme/xcode")
     return <AceEditor {...props}/>
   }
-
   return null;
 }
 
@@ -18,18 +53,53 @@ class EditorContent extends React.Component {
     constructor(props) {
         super(props)
         this.clickSetting = this.clickSetting.bind(this)
+        this.changeCode = this.changeCode.bind(this)
+        this.changeTheme = this.changeTheme.bind(this)
+        this.changeFontSize = this.changeFontSize.bind(this)
+        this.changeTabSize = this.changeTabSize.bind(this)
         this.state = {
-            showSetting: false
+            showSetting: false,
+            theme: 'tomorrow',
+            code: '',
+            fontSize: 14,
+            tabSize: 4,
         }
+    }
+    componentDidMount() {
+        $('.ui.dropdown').dropdown()
+        $('#select').dropdown()
     }
     clickSetting() {
         this.setState({
             showSetting: !this.state.showSetting
         })
     }
-    componentDidMount() {
-        $('.ui.dropdown').dropdown()
-        $('#select').dropdown()
+    changeCode(newValue) {
+        console.log(newValue)
+        this.setState({
+            code: newValue
+        })
+    }
+    changeTheme(e) {
+        e.preventDefault()
+        console.log(e.target.value)
+        this.setState({
+            theme: e.target.value
+        })
+    }
+    changeFontSize(e) {
+        e.preventDefault()
+        console.log(e.target.value)
+        this.setState({
+            fontSize: parseInt(e.target.value,10)
+        })
+    }
+    changeTabSize(e) {
+        e.preventDefault()
+        console.log(e.target.value)
+        this.setState({
+            tabSize: parseInt(e.target.value, 10)
+        })
     }
     render() {
         return(
@@ -40,7 +110,7 @@ class EditorContent extends React.Component {
                     </a>
                 </div>
                 <div className="ui bottom attached segment" style={{
-                    height: '100vh',
+                    height: '80vh',
                     padding: '0em'
                 }}>
                     <div className="toolbar" style={{
@@ -52,102 +122,90 @@ class EditorContent extends React.Component {
                             <input type="hidden" name="Language" />
                             <div className="text">Language</div>
                             <div className="menu">
-                                <div className="item">C</div>
-                                <div className="item">C++</div>
                                 <div className="item" name="HTML">HTML</div>
                                 <div className="item" name="CSS">CSS</div>
-                                <div className="item" name="markdown">Markdown</div>
+                                <div className="item" name="Markdown">Markdown</div>
                                 <div className="item" name="C">C</div>
                                 <div className="item" name="CPP">C++</div>
-                                <div className="item" name="CPP11">C++11</div>
-                                <div className="item" name="CPP14">C++14</div>
-                                <div className="item" name="Python2">Python 2</div>
-                                <div className="item" name="Python3">Python 3</div>
+                                <div className="item" name="CPP11">CPP11</div>
+                                <div className="item" name="CPP14">CPP14</div>
+                                <div className="item" name="Python2">Python2</div>
+                                <div className="item" name="Python3">Python3</div>
                                 <div className="item" name="Bash">Bash</div>
-                                <div className="item" name="Plain_text">Plain Text</div>
+                                <div className="item" name="Plain text">Plain Text</div>
                             </div>
                         </div>
+                        
                         <div className="ui icon button" style={{
                             float: 'right',
                             position: 'relative',
                             display: 'inline-block'
                         }} onClick={this.clickSetting}>
-                            <i className="setting icon"></i>
+                            <i className="setting large icon"></i>
+                        </div>
+                        <div className="ui icon button" style={{
+                            float: 'right',
+                            position: 'relative',
+                            display: 'inline-block'
+                        }}>
+                            <i className="save large icon"></i>
                         </div>
                         <div className="ui vertical pointing menu" style={{
                             right: '0.25em',
-                            margin: '0em',
+                            marginTop: '0.5em',
                             position: 'absolute',
                             zIndex: '5',
                             display: this.state.showSetting ? 'block' : 'none'
                         }}>
                             <div className="header item">Theme</div>
                             <div className="item">
-                                <div className="ui fluid search selection dropdown">
-                                    <input type="text" />
-                                    <div className="text">Theme</div>
-                                    <div className="menu">
-                                        <div className="divider"></div>
-                                        <div className="item">ambiance</div>
-                                        <div className="item">chaos</div>
-                                        <div className="item">chrome</div>
-                                        <div className="item">clouds</div>
-                                        <div className="item">clouds_midnight</div>
-                                        <div className="item">cobalt</div>
-                                        <div className="item">crimson_editor</div>
-                                        <div className="item">dawn</div>
-                                        <div className="item">dreamweaver</div>
-                                        <div className="item">eclipse</div>
-                                        <div className="item">github</div>
-                                        <div className="item">idle_fingers</div>
-                                        <div className="item">iplastic</div>
-                                        <div className="item">katzenmilch</div>
-                                        <div className="item">kr_theme</div>
-                                        <div className="item">kuroir</div>
-                                        <div className="item">merbivore</div>
-                                        <div className="item">merbivore_soft</div>
-                                        <div className="item">mono_industrial</div>
-                                        <div className="item">monokai</div>
-                                        <div className="item">pastel_on_dark</div>
-                                        <div className="item">solarized_dark</div>
-                                        <div className="item">solarized_light</div>
-                                        <div className="item">sqlserver</div>
-                                        <div className="item">terminal</div>
-                                        <div className="item">textmate</div>
-                                        <div className="item">tomorrow</div>
-                                        <div className="item">tomorrow_night_blue</div>
-                                        <div className="item">tomorrow_night_bright</div>
-                                        <div className="item">tomorrow_night_eighties</div>
-                                        <div className="item">tomorrow_night</div>
-                                        <div className="item">twilight</div>
-                                        <div className="item">vibrant_ink</div>
-                                        <div className="item">xcode</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="header item">KeyBoard</div>
-                            <div className="item">
-                                <div className="ui fluid search selection dropdown">
-                                    <input type="text" />
-                                    <div className="text">Default</div>
-                                    <div className="menu">
-                                        <div className="divider"></div>
-                                        <div className="item">Default</div>
-                                        <div className="item">Emacs</div>
-                                        <div className="item">Vim</div>
-                                    </div>
-                                </div>
+                                <select className="ui fluid search dropdown" onChange={this.changeTheme}>
+                                    <option value="ambiance">ambiance</option>
+                                    <option value="chaos">chaos</option>
+                                    <option value="chrome">chrome</option>
+                                    <option value="clouds">clouds</option>
+                                    <option value="clouds_midnight">clouds_midnight</option>
+                                    <option value="cobalt">cobalt</option>
+                                    <option value="crimson_editor">crimson_editor</option>
+                                    <option value="dawn">dawn</option>
+                                    <option value="dreamweaver">dreamweaver</option>
+                                    <option value="eclipse">eclipse</option>
+                                    <option value="github">github</option>
+                                    <option value="idle_fingers">idle_fingers</option>
+                                    <option value="iplastic">iplastic</option>
+                                    <option value="katzenmilch">katzenmilch</option>
+                                    <option value="kr_theme">kr_theme</option>
+                                    <option value="kuroir">kuroir</option>
+                                    <option value="merbivore">merbivore</option>
+                                    <option value="merbivore_soft">merbivore_soft</option>
+                                    <option value="mono_industrial">mono_industrial</option>
+                                    <option value="monokai">monokai</option>
+                                    <option value="pastel_on_dark">pastel_on_dark</option>
+                                    <option value="solarized_dark">solarized_dark</option>
+                                    <option value="solarized_light">solarized_light</option>
+                                    <option value="sqlserver">sqlserver</option>
+                                    <option value="terminal">terminal</option>
+                                    <option value="textmate">textmate</option>
+                                    <option value="tomorrow">tomorrow</option>
+                                    <option value="tomorrow_night_blue">tomorrow_night_blue</option>
+                                    <option value="tomorrow_night_bright">tomorrow_night_bright</option>
+                                    <option value="tomorrow_night_eighties">tomorrow_night_eighties</option>
+                                    <option value="tomorrow_night">tomorrow_night</option>
+                                    <option value="twilight">twilight</option>
+                                    <option value="vibrant_ink">vibrant_ink</option>
+                                    <option value="xcode">xcode</option>
+                                </select>
                             </div>
                             <div className="header item">Tab Size</div>
                             <div className="item">
                                 <div className="ui fluid input">
-                                    <input type="number" value="4" />
+                                    <input type="number" value={this.state.tabSize} onChange={this.changeTabSize} />
                                 </div>
                             </div>
                             <div className="header item">Font Size</div>
                             <div className="item">
                                 <div className="ui fluid input">
-                                    <input type="number" value="12"/>
+                                    <input type="number"  value={this.state.fontSize} onChange={this.changeFontSize} />
                                 </div>
                             </div>
                         </div>
@@ -155,11 +213,12 @@ class EditorContent extends React.Component {
                 
                     <Editor 
                         mode="c_cpp"
-                        theme="tomorrow_night"
+                        theme={this.state.theme}
                         name="editor"
-                        onLoad={this.onLoad}
-                        onChange={this.onChange}
-                        fontSize={14}
+                        onChange={this.changeCode}
+                        value={`${this.state.code}`}
+                        tabSize={this.state.tabSize}
+                        fontSize={this.state.fontSize}
                         width='100%'
                         height='100%'
                         showPrintMargin={false}
