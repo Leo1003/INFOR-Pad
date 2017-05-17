@@ -36,7 +36,7 @@ function renderPage(appHtml, preloadedState) {
   <!DOCTYPE html>
   <html>
     <head>
-      <title>Frontend Testing</title>
+      <title>INFOR-Pad</title>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <link rel="stylesheet" href="/semantic.min.css"></link>
@@ -46,6 +46,7 @@ function renderPage(appHtml, preloadedState) {
     crossorigin="anonymous"></script>
   <script src="/semantic.min.js"></script>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/tomorrow-night.min.css">
+    <link rel="stylesheet" href="/stylesheets/HomePage.css">
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
     </head>
     <body>
