@@ -65,7 +65,7 @@ export class AddNewFileModal extends React.Component {
               <div className="field">
                 <select className="ui dropdown" ref="language" name="language">
                   <option value="">Language</option>
-                  <option value="html">HTL</option>
+                  <option value="html">HTML</option>
                   <option value="css">CSS</option>
                   <option value="markdown">Markdown</option>
                   <option value="C">C</option>

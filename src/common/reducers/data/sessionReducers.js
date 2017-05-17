@@ -40,6 +40,7 @@ const sessionReducers = handleActions({
     else return session
   },
   LOGIN_FIRST: (state) => {
+    cookie.remove('sessionid', { path: '/' })
     browserHistory.replace({ pathname: '/Sign_in'})
     return Object.assign({}, state, {
       error_message: 'Login first!'
