@@ -24,7 +24,7 @@ class FileContent extends React.Component {
           { this.props.userid === this.props.file.owner.id ? <Link to={'/editor/' + this.props.file.id }>Open with Editor</Link> : null }
           {this.props.file.code.length > 0 ?
           <Highlight className='cpp'>
-            {this.props.file.code}
+            {`${this.props.file.code}`}
           </Highlight> : null }
           <br />
         </div>

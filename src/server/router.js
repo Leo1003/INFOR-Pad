@@ -5,7 +5,7 @@ import { match, RouterContext } from 'react-router'
 import { Provider } from 'react-redux'
 import Immutable, { fromJS } from 'immutable'
 import configureStore from '../common/store/configureStore'
-import { session, user, file, folder, ui } from '../common/constants/models'
+import { session, user, file, folder, ui, editor } from '../common/constants/models'
 import routes from '../common/routes/routes.jsx'
 
 router.get('*', (ctx, next) => {
@@ -15,7 +15,7 @@ router.get('*', (ctx, next) => {
      }
      else if (props) {
 
-       const store = configureStore({ session, user, file, folder, ui })
+       const store = configureStore({ session, user, file, folder, ui, editor })
 
        const appHtml = renderToString(
          <Provider store={store}>

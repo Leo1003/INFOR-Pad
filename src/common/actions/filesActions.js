@@ -16,8 +16,8 @@ import { browserHistory } from 'react-router'
 
 export const fetchGetFiles = (sessionid, fsid, format) => (
   async (dispatch) => {
-    dispatch({ type: ISFETCHING })
     try {
+      dispatch({ type: ISFETCHING })
       let res = await fetch(`/api/fs/${fsid}`, {
         method: 'GET',
         headers: {

@@ -27,3 +27,6 @@ export const PERMISSION_DENIED = 'PERMISSION_DENIED'
 export const FILE_IS_NOT_EXIST = 'FILE_IS_NOT_EXIST'
 
 export const GET_SHORTID = 'GET_SHORTID'
+
+export const SAVING = 'SAVING'
+export const DIDSAVE = 'DIDSAVE'

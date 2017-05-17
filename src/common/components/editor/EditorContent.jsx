@@ -1,4 +1,6 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { fetchSaveCode } from '../../actions/editorActions'
 // import ToolBar from './ToolBar.jsx'
 
 const Editor = (props) => {
@@ -57,12 +59,14 @@ class EditorContent extends React.Component {
         this.changeTheme = this.changeTheme.bind(this)
         this.changeFontSize = this.changeFontSize.bind(this)
         this.changeTabSize = this.changeTabSize.bind(this)
+        this.saveCode = this.saveCode.bind(this)
         this.state = {
             showSetting: false,
             theme: 'tomorrow',
             code: '',
             fontSize: 14,
             tabSize: 4,
+            changedCode: false,
         }
     }
     componentDidMount() {
@@ -77,7 +81,8 @@ class EditorContent extends React.Component {
     changeCode(newValue) {
         console.log(newValue)
         this.setState({
-            code: newValue
+            code: newValue,
+            changedCode: true
         })
     }
     changeTheme(e) {
@@ -99,6 +104,14 @@ class EditorContent extends React.Component {
         console.log(e.target.value)
         this.setState({
             tabSize: parseInt(e.target.value, 10)
+        })
+    }
+    saveCode(e) {
+        e.preventDefault()
+        console.log(this.state.code)
+        if(this.state.changedCode === true) this.props.handlefetchSaveCode(this.props.sessionid, this.props.file.id, this.state.code)
+        this.setState({
+            changedCode: false
         })
     }
     render() {
@@ -147,8 +160,8 @@ class EditorContent extends React.Component {
                             float: 'right',
                             position: 'relative',
                             display: 'inline-block'
-                        }}>
-                            <i className="save large icon"></i>
+                        }} onClick={this.saveCode} >
+                            {this.props.saving ? <i className="circle large icon"></i> : (this.state.changedCode ? <i className="save large icon"></i> : <i className="checkmark large icon"></i>)}
                         </div>
                         <div className="ui vertical pointing menu" style={{
                             right: '0.25em',
@@ -231,4 +244,14 @@ class EditorContent extends React.Component {
     }
 }
 
-export default EditorContent
+const mapStateToProps = (state) => ({
+    saving: state.editor.saving
+})
+
+const mapDispatchToProps = (dispatch) => ({
+    handlefetchSaveCode: (sessionid, fsid, code) => {
+        dispatch(fetchSaveCode(sessionid, fsid, code))
+    }
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditorContent)

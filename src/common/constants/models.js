@@ -76,3 +76,8 @@ export const ui = {
   error: '',
   redirectToError: false,
 }
+
+export const editor = {
+  openedFiles: [],
+  saving: false
+}
