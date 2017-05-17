@@ -54,8 +54,8 @@ mailCtrl.verifyConfig().then(verified => {
 // routes
 app.use(api.routes(), api.allowedMethods());
 // react routes
-app.use(serve(`./dist`))
-app.use(serve('./semantic/dist'))
+app.use(serve(__dirname + '/dist'))
+app.use(serve(__dirname + '/semantic/dist'))
 app.use(router.routes())
 
 app.io = io
