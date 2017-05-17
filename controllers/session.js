@@ -32,7 +32,7 @@ exports.generateSession = async function (user, autologin) {
 }
 
 exports.renewSession = async function (session) {
-    session.expireAt = genExpireDate(session.autologin)
+    session.expireAt = genExpireDate(session.autoLogin)
     await session.save()
     return session
 }
