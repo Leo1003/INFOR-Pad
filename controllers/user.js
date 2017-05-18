@@ -26,6 +26,8 @@ function extractUserData(user, privData) {
             ret.lastLogin = user.lastLogin
             ret.email = user.email
             ret.rootfsid = user.root
+            debug(user.settings)
+            ret.settings = user.settings
         }
     }
     return ret
@@ -82,10 +84,39 @@ exports.createUser = async function (option) {
     return user
 }
 
+let settingsArray = [
+    "theme",
+    "fontSize",
+    "showGutter",
+    "highlightActiveLine",
+    "wrapEnabled",
+    "enableBasicAutocompletion",
+    "enableLiveAutocompletion",
+    "tabSize",
+    "keyboardHandler"
+]
+
+exports.updateSettinngs = async function (user, settings) {
+    try {
+        for (let name of settingsArray) {
+            if (settings[name]) {
+                user.settings[name] = settings[name]
+            }
+        }
+        user.markModified('settings')
+        await user.save()
+    } catch (err) {
+        if (err.name == 'ValidationError') {
+            throw new ApiError(400, "Invaild settings")
+        }
+        throw err
+    }
+}
+
 exports.sendMail = async function (user, domain) {
     if (user.level == 0) {
         let old_mail = await MailValidation.find({ user: user._id, sentAt: { $gt: new Date(Date.now() - 10*60*1000) }, action: 'SignupCheck' })
-        
+
         if (old_mail.length > 0) {
             throw new ApiError(403, "You have sent an E-mail in the past 10 minutes. Please try again later!")
         }

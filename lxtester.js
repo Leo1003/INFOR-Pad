@@ -16,7 +16,6 @@ class lxtesterServer {
             socket: socket,
             tasks: {}
         }
-        console.log(socket)
         this.clients[socket.id] = s
         console.log(this.clients[socket.id])
     }
@@ -34,7 +33,10 @@ class lxtesterServer {
                 id = s.socket.id
             }
         }
-        throw new Error('No lxtester available now.\nPlease contact the administrator.')
+        if (id == '') {
+            throw new Error('No lxtester available now.\nPlease contact the administrator.')
+        }
+        return id
     }
     sendJob(task) {
         let clientid = this.findIdlest()

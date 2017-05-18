@@ -8,7 +8,7 @@ const Session = mongoose.model('Session')
 const FileSystem = mongoose.model('FileSystem')
 const ApiError = require('../error').ApiError
 
-exports.extractFSData = async function (fs, complete, extend) {
+exports.extractFSData = async function(fs, complete, extend) {
     let ret = {
         id: fs._id,
         name: fs.name,
@@ -31,6 +31,7 @@ exports.extractFSData = async function (fs, complete, extend) {
         }
     }
     if (complete == true) {
+        ret.editSecret = fs.editSecret
         if (fs.isFile === true) {
             ret.code = fs.code
             ret.stdin = fs.stdin
@@ -44,30 +45,30 @@ exports.extractFSData = async function (fs, complete, extend) {
     }
     return ret
 }
-exports.isRootDir = function (fs) {
-    if (!fs.parent && fs.name == 'Root' && fs.isFile == false) {
-        return true
-    }
-    return false
+exports.isRootDir = function(fs) {
+    return (!fs.parent && fs.name == 'Root' && fs.isFile == false)
 }
-exports.findFS = async function (fsid) {
+exports.isTempFile = function(fs) {
+    return (!fs.parent && !fs.owner && fs.isFile == true)
+}
+exports.findFS = async function(fsid) {
     return await FileSystem.findById(fsid)
 }
-exports.findByShort = async function (id) {
+exports.findByShort = async function(id) {
     let fs = await FileSystem.findOne({ shortid: id })
     if (!fs) {
         throw new ApiError(404, "Invaild Short URL!")
     }
     return fs
 }
-exports.findFile = async function (fsid) {
+exports.findFile = async function(fsid) {
     let fs = await exports.findFS(fsid)
     if (fs && fs.isFile == true) {
         return fs
     }
     return undefined
 }
-exports.findDir = async function (fsid) {
+exports.findDir = async function(fsid) {
     let fs = await exports.findFS(fsid)
     if (fs && fs.isFile == false) {
         return fs
@@ -82,28 +83,42 @@ exports.findDir = async function (fsid) {
  1 = Read Only
  0 = No Access
  */
-exports.getAccess = async function (fsid, userid) {
-    let fs = await exports.findFS(fsid)
+exports.getAccess = function(fs, userid) {
+    //let fs = await exports.findFS(fsid)
     if (!fs) {
         return undefined
     }
-    if (!fs.owner) {
-        if (userid && userid.equals(fs.editSecret)) {
+    if (exports.isTempFile(fs) == true) {
+        if (userid && userid == fs.editSecret) {
             return 2
         } else {
             return 1
         }
-    }
-    if (userid && userid.equals(fs.owner)) {
-        return 2
-    } else if (fs.isPublic === true) {
-        return 1
     } else {
-        return 0
+        if (userid && userid.equals(fs.owner)) {
+            return 2
+        } else if (fs.isPublic === true) {
+            return 1
+        } else {
+            return 0
+        }
     }
 }
 
-exports.link = async function (fs, pfsid) {
+exports.addTempFile = async function(name, format, secret) {
+    return await new FileSystem({
+        name: name,
+        isFile: true,
+        isPublic: true,
+        shortid: randomstring.generate(8),
+        editSecret: (secret ? secret : randomstring.generate(8)),
+        format: format,
+        code: "",
+        stdin: ""
+    }).save()
+}
+
+exports.link = async function(fs, pfsid) {
     let pfs = await exports.findDir(pfsid)
     if (pfs) {
         fs.parent = pfs._id
@@ -123,7 +138,7 @@ function chkValue(value, def, limit) {
     }
     return (value != undefined ? value : def)
 }
-exports.updateFS = async function (fs, data, limit) {
+exports.updateFS = async function(fs, data, limit) {
     if (exports.isRootDir(fs) == false) {
         fs.name = chkValue(data.filename, fs.name)
     }

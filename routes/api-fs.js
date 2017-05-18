@@ -7,10 +7,16 @@ const ApiError = require('../error').ApiError
 
 router.prefix('/fs')
 
-router.param('fsid', async (fsid, ctx, next) => {
-    let access = await fsCtrl.getAccess(fsid, (ctx.state.session ? ctx.state.session.user._id : undefined))
+router.param('fsid', async(fsid, ctx, next) => {
+    let fs = await fsCtrl.findFS(fsid)
+    let access = undefined
+    if (fsCtrl.isTempFile(fs) == true) {
+        access = fsCtrl.getAccess(fs, (ctx.header.secret ? ctx.header.secret : undefined))
+    } else {
+        access = fsCtrl.getAccess(fs, (ctx.state.session ? ctx.state.session.user._id : undefined))
+    }
     if (access === undefined) {
-        throw new ApiError(404, "Not found")
+        throw new ApiError(404, "File not found")
     }
     if (access == 0) {
         if (!ctx.state.session) {
@@ -22,20 +28,17 @@ router.param('fsid', async (fsid, ctx, next) => {
     ctx.state.access = access
     return await next()
 })
-router.param('tgfsid', async (tgfsid, ctx, next) => {
+router.param('tgfsid', async(tgfsid, ctx, next) => {
     if (!ctx.state.session) {
         throw new ApiError(401, "Need authorized")
     }
-    let access = await fsCtrl.getAccess(tgfsid, ctx.state.session.user._id)
+    let fsdir = await fsCtrl.findFS(tgfsid)
+    let access = fsCtrl.getAccess(fsdir, ctx.state.session.user._id)
     if (access === undefined) {
         throw new ApiError(404, "Target Directory Not found")
     }
     if (access >= 2) {
-        if (await fsCtrl.findDir(tgfsid)) {
-            return await next()
-        } else {
-            throw new ApiError(400, "Target MUST BE a directory")
-        }
+        return await next()
     } else {
         throw new ApiError(403, "Permission denied")
     }
@@ -63,6 +66,15 @@ router.get('/:fsid', async ctx => {
         throw new ApiError(403, "Permission denied")
     }
 })
+router.post('/', async ctx => {
+    let data = ctx.request.body
+    if (!data.filename || !data.format) {
+        throw new ApiError(400, "Some data are missed")
+    }
+    let newfile = await fsCtrl.addTempFile(data.filename, data.format, ctx.header.secret)
+    ctx.status = 201
+    ctx.body = await fsCtrl.extractFSData(newfile, true)
+})
 router.post('/:fsid', async ctx => {
     if (ctx.state.access >= 2) {
         let data = ctx.request.body
@@ -89,7 +101,7 @@ router.post('/:fsid', async ctx => {
 router.put('/:fsid', async ctx => {
     if (ctx.state.access >= 2) {
         let fs = await fsCtrl.findFS(ctx.params.fsid)
-        fs = await fsCtrl.updateFS(fs, ctx.request.body, 1024*128)
+        fs = await fsCtrl.updateFS(fs, ctx.request.body, 1024 * 128)
         ctx.status = 200
         ctx.body = await fsCtrl.extractFSData(fs, true)
     } else {
