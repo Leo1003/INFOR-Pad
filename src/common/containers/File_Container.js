@@ -1,23 +1,26 @@
-import MyPad from '../components/pad/MyPad.jsx'
+import File from '../components/pad/File.jsx'
 import { connect } from 'react-redux'
-import { fetchGetFiles } from '../actions/filesActions'
+import { fetchGetFiles, initialRedirect } from '../actions/filesActions'
 
 
 const mapStateToProps = (state) => {
   return {
     name: state.user.name,
-    rootfsid: state.user.rootfsid,
     sessionid: state.session.sessionid,
     isFetching: state.ui.isFetching,
-    cur_folder: state.folder,
-    userid: state.user.id
+    cur_file: state.file,
+    userid: state.user.id,
+    redirectToError: state.ui.redirectToError
   }
 }
 
 const mapDispatchToProps = (dispatch) => ({
   handleGetFiles: (sessionid, fsid, format) => {
     dispatch(fetchGetFiles(sessionid, fsid, format))
+  },
+  initialRedirect: () => {
+    dispatch(initialRedirect())
   }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(MyPad)
+export default connect(mapStateToProps, mapDispatchToProps)(File)

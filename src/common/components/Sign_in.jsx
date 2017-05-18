@@ -41,6 +41,7 @@ class Sign_in extends React.Component {
 
   handleValid(e) {
     e.preventDefault();
+    console.log(this.refs.autologin.checked)
     this.handleSignin()
   }
   handleSignin() {
@@ -48,7 +49,8 @@ class Sign_in extends React.Component {
     for(const field in this.refs) {
       formData[field] = this.refs[field].value
     }
-    this.props.handleSignIn(formData)
+    console.log(formData)
+    this.props.handleSignIn(formData, (this.refs.autologin.checked ? 1 : 0))
   }
   render() {
     let renderMessage = () => {
@@ -72,6 +74,12 @@ class Sign_in extends React.Component {
               <div className="field">
                 <label>{this.props.lang == 'en' ? 'Password:' : 'كلمه السر'}</label>
                 <input type="password" name="password" ref='password' placeholder={this.props.lang == 'en' ? 'Input your Password' : 'أدخل كلمة المرور'} />
+              </div>
+              <div className="field">
+                <div className="ui checkbox">
+                  <input type="checkbox" name="autologin" ref='autologin'/>
+                  <label>{this.props.lang == 'en' ? 'Remember me' : 'تذكرنى'}</label>
+                </div>
               </div>
               <button className="ui button" type='submit'>{this.props.lang == 'en' ? 'Sign in' : 'تسجيل الدخول'}</button>
             </form>

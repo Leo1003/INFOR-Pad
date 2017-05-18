@@ -5,7 +5,7 @@ import { match, RouterContext } from 'react-router'
 import { Provider } from 'react-redux'
 import Immutable, { fromJS } from 'immutable'
 import configureStore from '../common/store/configureStore'
-import { session, user, file, folder, ui } from '../common/constants/models'
+import { session, user, file, folder, ui, editor } from '../common/constants/models'
 import routes from '../common/routes/routes.jsx'
 
 router.get('*', (ctx, next) => {
@@ -15,7 +15,7 @@ router.get('*', (ctx, next) => {
      }
      else if (props) {
 
-       const store = configureStore({ session, user, file, folder, ui })
+       const store = configureStore({ session, user, file, folder, ui, editor })
 
        const appHtml = renderToString(
          <Provider store={store}>
@@ -36,7 +36,7 @@ function renderPage(appHtml, preloadedState) {
   <!DOCTYPE html>
   <html>
     <head>
-      <title>Frontend Testing</title>
+      <title>INFOR-Pad</title>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <link rel="stylesheet" href="/semantic.min.css"></link>
@@ -45,6 +45,9 @@ function renderPage(appHtml, preloadedState) {
     integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
     crossorigin="anonymous"></script>
   <script src="/semantic.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/tomorrow-night.min.css">
+    <link rel="stylesheet" href="/stylesheets/HomePage.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
     </head>
     <body>
       <div id="app">${appHtml}</div>

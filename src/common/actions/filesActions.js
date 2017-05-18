@@ -10,13 +10,14 @@ import {
   ISFETCHING,
   DIDFETCH,
   GET_SHORTID,
+  INITIALREDIRECT,
 } from '../constants/actionTypes'
 import { browserHistory } from 'react-router'
 
-export const fetchGetFiles = (sessionid, fsid) => (
+export const fetchGetFiles = (sessionid, fsid, format) => (
   async (dispatch) => {
-    dispatch({ type: ISFETCHING })
     try {
+      dispatch({ type: ISFETCHING })
       let res = await fetch(`/api/fs/${fsid}`, {
         method: 'GET',
         headers: {
@@ -25,8 +26,11 @@ export const fetchGetFiles = (sessionid, fsid) => (
       })
       if (res.ok) {
         let json = await res.json()
-        if(json.format == "Directory") dispatch({ type: GET_FOLDER, payload: { data: json } })
-        else dispatch({ type: GET_FILE, payload: { data: json } })
+        if(json.format === "Directory" && format === 'Directory') dispatch({ type: GET_FOLDER, payload: { data: json } })
+        else if(json.format !== "Directory" && format === 'File') dispatch({ type: GET_FILE, payload: { data: json } })
+        else {
+          dispatch({ type: FILE_IS_NOT_EXIST})
+        }
       } else if(res.status == '401') {
         dispatch({ type: LOGIN_FIRST} )
       } else if(res.status == '403') {
@@ -39,22 +43,20 @@ export const fetchGetFiles = (sessionid, fsid) => (
   }
 )
 
-export const fetchAddNewFolder = (filename, folderid, sessionid) => (
+export const fetchAddNewFiles = (filename, folderid, sessionid, format) => (
   async (dispatch) => {
     try {
-      dispatch({ type: ISFETCHING })
       let res = await fetch(`/api/fs/${folderid}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'sessionid': `${sessionid}`
         },
-        body: `filename=${filename}&format=Directory`
+        body: `filename=${filename}&format=${format}`
       })
       if(res.ok){
         let json = await res.json()
-        dispatch(fetchGetFiles(sessionid, folderid))
-        //dispatch({ type: ADD_NEW_FOLDER })
+        //dispatch(fetchGetFiles(sessionid, folderid, 'Directory'))
       }  else if(res.status == '401') {
         dispatch({ type: LOGIN_FIRST })
       } else if(res.status === '403') {
@@ -62,7 +64,6 @@ export const fetchAddNewFolder = (filename, folderid, sessionid) => (
       } else if(res.status == '404') {
         dispatch({ type: FILE_IS_NOT_EXIST })
       }
-      dispatch({ type: DIDFETCH })
     } catch(e) { console.log(e) }
   }
 )
@@ -70,7 +71,6 @@ export const fetchAddNewFolder = (filename, folderid, sessionid) => (
 export const fetchDeleteFile = (fsid, sessionid, folderid) => (
   async (dispatch) => {
     try {
-      dispatch({ type: ISFETCHING })
       let res = await fetch(`/api/fs/${fsid}`, {
         method: 'DELETE',
         headers: {
@@ -80,7 +80,7 @@ export const fetchDeleteFile = (fsid, sessionid, folderid) => (
       })
       if(res.ok) {
         let json = await res.json()
-        dispatch(fetchGetFiles(sessionid, folderid))
+        dispatch(fetchGetFiles(sessionid, folderid, 'Directory'))
       }
     } catch(e) { console.log(e) }
   }
@@ -108,14 +108,22 @@ export const fetchCheckPermission = (fsid, sessionid, check) => (
 export const fetchTransferShortID = (shortid) => (
   async (dispatch) => {
     try {
+      dispatch({ type: ISFETCHING })
       let res = await fetch(`/api/fs/?shortid=${shortid}`, {
         method: 'GET'
       })
       if(res.ok) {
         let json = await res.json()
         if(json.format === 'Directory') browserHistory.replace(`/pad/folder/${json.id}`)
-        else browserHistory.replace(`/file/${json.id}/view`)
+        else browserHistory.replace(`/pad/file/${json.id}`)
       }
+      dispatch({ type: DIDFETCH })
     } catch(e) { console.log(e) }
+  }
+)
+
+export const initialRedirect = () => (
+  (dispatch) => {
+    dispatch({ type: INITIALREDIRECT })
   }
 )

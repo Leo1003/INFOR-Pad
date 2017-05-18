@@ -1,5 +1,5 @@
 import React from 'react'
-import { Menu } from 'semantic-ui-react'
+import { Menu, Button } from 'semantic-ui-react'
 import { Link, browserHistory } from 'react-router'
 import cookie from 'react-cookie'
 
@@ -15,9 +15,9 @@ class Logout extends React.Component{
   }
   render() {
     return (
-      <div>
-        <Menu.Item name={this.props.lang == 'en' ? 'Logout' : 'الخروج'} as={Link} onClick={this.onLogout} />
-      </div>
+      <Menu.Item>
+        <Button inverted as={Link} onClick={this.onLogout}>{this.props.lang == 'en' ? 'Logout' : 'الخروج'}</Button>
+      </Menu.Item>
     )
   }
 }

@@ -15,8 +15,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    handleSignIn: (formData) => {
-      dispatch(fetchSignIn(formData))
+    handleSignIn: (formData, autologin) => {
+      dispatch(fetchSignIn(formData, autologin))
     }
   }
 }

@@ -23,12 +23,13 @@ var Session = new Schema({
 var FileSystem = new Schema({
     name: { type: String, required: true },
     parent: { type: Schema.Types.ObjectId, ref: 'FileSystem' },
-    owner: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    owner: { type: Schema.Types.ObjectId, ref: 'User'},
     createDate: { type: Date, default: new Date() },
     modifyDate: { type: Date, default: new Date() },
     isFile: { type: Boolean, required: true },
     isPublic: { type: Boolean, default: false },
     shortid: { type: String, unique: true, sparse: true },
+    editSecret: { type: String },
     files: {
         type: [{ type: Schema.Types.ObjectId, ref: 'FileSystem' }],
         default: undefined

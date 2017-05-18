@@ -54,8 +54,8 @@ mailCtrl.verifyConfig().then(verified => {
 // routes
 app.use(api.routes(), api.allowedMethods());
 // react routes
-app.use(serve(`./dist`))
-app.use(serve('./semantic/dist'))
+app.use(serve(__dirname + '/dist'))
+app.use(serve(__dirname + '/semantic/dist'))
 app.use(router.routes())
 
 app.io = io
@@ -64,16 +64,14 @@ io.of('/client').use((socket, next) => {
     debug(socket.handshake.query)
     if (socket.handshake.query.sessionid) {
         sessionCtrl.getSessionById(socket.handshake.query.sessionid).then((sess => {
-            if (sess) {
-                if (sess.expireAt > new Date()) {
-                    return sess.populate('user').execPopulate()
-                }
+            if (sess && sess.expireAt > new Date()) {
+                return sess.populate('user').execPopulate()
             }
             debug("Client Failed")
             throw new Error('Authentication Failed!')
         }))
         .then(sess => {
-            if (sess.user) {
+            if (sess.user._id) {
                 return next()
             }
             debug("Client Failed")

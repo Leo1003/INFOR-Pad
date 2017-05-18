@@ -16,20 +16,50 @@ export const user = {
 
 export const folder = {
   name: '',               //File name
-  parent: '',             //Parent Directory
-  owner: '',              //The user id of the file's owner
+  parent: {
+    id: '',
+    name: '',
+    owner: '',
+    createDate: new Date(),
+    modifyDate: new Date(),
+    isPublic: false,
+    shortid: '',
+    format: ''
+  },             //Parent Directory
+  owner: {
+    id: '',
+    name: '',
+    leve: 0,
+    createDate: new Date()
+  },              //The user id of the file's owner
+  id: '',
   shortid:'',
   createDate: new Date(), //CreateDate
   modifyDate: new Date(), //LastModifyDate
   isPublic: false,        //If the file can be viewed by anyone
   format: '',             //The file's format or 'Directory'
-  files: []               //The list of the files contained (Directory Only)
+  files: [],              //The list of the files contained (Directory Only)
 }
 
 export const file = {
   name: '',               //File name
-  parent: '',             //Parent Directory
-  owner: '',              //The user id of the file's owner
+  parent: {
+    id: '',
+    name: '',
+    owner: '',
+    createDate: new Date(),
+    modifyDate: new Date(),
+    isPublic: false,
+    shortid: '',
+    format: ''
+  },             //Parent Directory
+  owner: {
+    id: '',
+    name: '',
+    leve: 0,
+    createDate: new Date()
+  },              //The user id of the file's owner
+  id: '',
   shortid: '',
   createDate: new Date(), //CreateDate
   modifyDate: new Date(), //LastModifyDate
@@ -43,5 +73,12 @@ export const ui = {
   isFetching: false,
   name: '',
   shortid: '',
-  lang: 'ar'
+  lang: 'ar',
+  error: '',
+  redirectToError: false
+}
+
+export const editor = {
+  openedFiles: [],
+  saving: false
 }

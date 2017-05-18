@@ -1,4 +1,4 @@
-import Folder from '../components/pad/Folder.jsx'
+import Editor from '../components/editor/Editor.jsx'
 import { connect } from 'react-redux'
 import { fetchGetFiles, initialRedirect } from '../actions/filesActions'
 
@@ -8,7 +8,7 @@ const mapStateToProps = (state) => {
     name: state.user.name,
     sessionid: state.session.sessionid,
     isFetching: state.ui.isFetching,
-    cur_folder: state.folder,
+    cur_file: state.file,
     userid: state.user.id,
     redirectToError: state.ui.redirectToError
   }
@@ -23,4 +23,4 @@ const mapDispatchToProps = (dispatch) => ({
   }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Folder)
+export default connect(mapStateToProps, mapDispatchToProps)(Editor)
