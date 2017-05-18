@@ -1,6 +1,5 @@
 import React from 'react'
 import { browserHistory } from 'react-router'
-import { Button, Form, Container, Message } from 'semantic-ui-react'
 import cookie from 'react-cookie'
 
 class Sign_in extends React.Component {
@@ -56,34 +55,40 @@ class Sign_in extends React.Component {
     let renderMessage = () => {
       if (this.props.error_message.length == 0) return
       return (
-        <Message negative>
-          <Message.Header>{this.props.error_message}</Message.Header>
-        </Message>
+        <div className="ui negative message">
+          <div class="header">{this.props.error_message}</div>
+        </div>
       )
     }
     return (
-      <div>
-        <Container>
-          <h1>{'INFOR-Pad ' + (this.props.lang == 'en' ? 'Sign In' : 'تسجيل الدخول')}</h1>
+      <div className="ui middle aligned center aligned grid" style={{height: "90vh"}}>
+        <div className="column">
+          <h1 className="ui black header">{'INFOR-Pad ' + (this.props.lang == 'en' ? 'Sign In' : 'تسجيل الدخول')}</h1>
           {renderMessage()}
-            <form className="ui form">
+          <form className="ui large form">
+            <div className="ui stacked segment">
               <div className="field">
-                <label>{this.props.lang == 'en' ? 'Username:' : 'اسم المستخدم'}</label>
-                <input type="text" name="username" ref='username' placeholder={this.props.lang == 'en' ? 'Input your Username' : 'أدخل اسم المستخدم'} />
-              </div>
-              <div className="field">
-                <label>{this.props.lang == 'en' ? 'Password:' : 'كلمه السر'}</label>
-                <input type="password" name="password" ref='password' placeholder={this.props.lang == 'en' ? 'Input your Password' : 'أدخل كلمة المرور'} />
-              </div>
-              <div className="field">
-                <div className="ui checkbox">
-                  <input type="checkbox" name="autologin" ref='autologin'/>
-                  <label>{this.props.lang == 'en' ? 'Remember me' : 'تذكرنى'}</label>
+                <div className="ui left icon input">
+                  <i className="user icon"></i>
+                  <input type="text" name="username" ref='username' placeholder={this.props.lang == 'en' ? 'Username:' : 'اسم المستخدم'} />
                 </div>
               </div>
-              <button className="ui button" type='submit'>{this.props.lang == 'en' ? 'Sign in' : 'تسجيل الدخول'}</button>
-            </form>
-        </Container>
+              <div className="field">
+                <div className="ui left icon input">
+                  <i className="privacy icon"></i>
+                  <input type="password" name="password" ref='password' placeholder={this.props.lang == 'en' ? 'Password:' : 'كلمه السر'} />
+                </div>
+              </div>
+              <div className="field">
+                  <div className="ui checkbox">
+                    <input type="checkbox" name="autologin" ref='autologin'/>
+                    <label>{this.props.lang == 'en' ? 'Remember me' : 'تذكرنى'}</label>
+                  </div>
+              </div>
+              <button className="ui fluid large blue submit button" type='submit'>تسجيل الدخول</button>
+            </div>
+          </form>
+        </div>
       </div>
     )
   }
