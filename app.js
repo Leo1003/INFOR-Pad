@@ -15,7 +15,8 @@ const io = require('socket.io')();
 const password = require('./password.json')
 const lxtesterServer = new(require('./lxtester').lxtesterServer)()
 
-const api = require('./routes/api');
+const api = require('./routes/api')
+const vaildation = require('./routes/mail-vaildation')
 
 // error handler
 onerror(app);
@@ -41,14 +42,15 @@ app.use(async(ctx, next) => {
 mailCtrl.verifyConfig().then(verified => {
     if (verified == false) {
         console.error('Mail config verify failed!')
-        console.error('Mail verify will not work!')
+        console.error('Mail verify will not work!') 
     } else {
         console.error('Mail verify successfully!')
     }
 })
 
 // routes
-app.use(api.routes(), api.allowedMethods());
+app.use(api.routes(), api.allowedMethods())
+app.use(vaildation.routes(), vaildation.allowedMethods())
 
 app.io = io
 io.of('/client').use((socket, next) => {
