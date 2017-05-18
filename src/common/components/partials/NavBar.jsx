@@ -12,7 +12,9 @@ class NavBar extends React.Component {
     return (
       <div>
         <Menu secondary inverted style={{background: '#1b1c1d', margin: '0'}}>
-          <Menu.Item name="INFOR PAD" as={Link} to='/' />
+          <Menu.Item as={Link} to='/'>
+            <h2>INFOR PAD</h2>
+          </Menu.Item>
             {
               this.props.isLogin === false ?
               (
