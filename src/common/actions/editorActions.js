@@ -3,6 +3,7 @@ import {
     SAVING,
     DIDSAVE,
     EDITOR_GET_FILE,
+    CHANGE_CODE,
     ISFETCHING,
     DIDFETCH
 } from '../constants/actionTypes'
@@ -51,5 +52,11 @@ export const fetchEditorGetFiles = (sessionid, fsid) => (
       }
       dispatch({ type: DIDFETCH })
     } catch(e) { console.log(e) }
+  }
+)
+
+export const changeCode = (code, fsid) => (
+  (dispatch) => {
+    dispatch({type: CHANGE_CODE, code: code, fsid: fsid})
   }
 )

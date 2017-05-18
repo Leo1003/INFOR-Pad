@@ -1,6 +1,6 @@
 import React from 'react'
 import EditorContent from './EditorContent.jsx'
-import { browserHistory } from 'react-router'
+import { browserHistory, Link } from 'react-router'
 
 const Loader = () => (
   <div className="ui active inverted dimmer">
@@ -32,9 +32,22 @@ class Editor extends React.Component {
         console.log("unmount")
     }
     render() {
+        console.log("render")
+        console.log(this.props.isFetching.toString())
+        console.log(this.props.openedFiles)
         return (
             <div>
-                {this.props.isFetching ? <Loader /> : <EditorContent sessionid={this.props.sessionid} file={this.props.cur_file} />}
+                {this.props.isFetching || !this.props.openedFiles.find(file => (file.id === this.props.params.fileid)) ? <Loader /> :
+                <div>
+                    <div className="ui top attached tabular menu">
+                        {this.props.openedFiles.map(file => {
+                            if(file.id === this.props.params.fileid) return ( <a key={file.id} className="item active">{file.name}</a> )
+                            else return ( <a key={file.id} className="item">{file.name}</a> )
+                        })}
+                    </div>
+                    <EditorContent sessionid={this.props.sessionid} file={this.props.openedFiles.find(file => (file.id === this.props.params.fileid))} />
+                </div>
+                }
             </div>
         )
     }

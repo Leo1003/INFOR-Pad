@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { fetchSaveCode } from '../../actions/editorActions'
+import { fetchSaveCode, changeCode } from '../../actions/editorActions'
 // import ToolBar from './ToolBar.jsx'
 
 const Editor = (props) => {
@@ -70,6 +70,7 @@ class EditorContent extends React.Component {
     componentDidMount() {
         $('.ui.dropdown').dropdown()
         $('#select').dropdown()
+        console.log("editor content did mount")
     }
     clickSetting() {
         this.setState({
@@ -78,8 +79,8 @@ class EditorContent extends React.Component {
     }
     changeCode(newValue) {
         console.log(newValue)
+        this.props.handleChangeCode(newValue, this.props.file.id)
         this.setState({
-            code: newValue,
             changedCode: true
         })
     }
@@ -107,136 +108,129 @@ class EditorContent extends React.Component {
     saveCode(e) {
         e.preventDefault()
         console.log(typeof this.state.code)
-        if(this.state.changedCode === true) this.props.handlefetchSaveCode(this.props.sessionid, this.props.file.id, this.state.code.toString())
+        if(this.state.changedCode === true) this.props.handlefetchSaveCode(this.props.sessionid, this.props.file.id, this.props.file.code)
         this.setState({
             changedCode: false
         })
     }
     render() {
-        return(
-            <div>
-                <div className="ui top attached tabular menu">
-                    <a className="item active">
-                        {this.props.file.name}
-                    </a>
-                </div>
-                <div className="ui bottom attached segment" style={{
-                    height: '80vh',
-                    padding: '0em'
+        return(  
+            <div className="ui bottom attached segment" style={{
+                height: '80vh',
+                padding: '0em'
+            }}>
+                <div className="toolbar" style={{
+                    margin: '0.5rem 0'
                 }}>
-                    <div className="toolbar" style={{
-                        margin: '0.5rem 0'
+                    <div className="ui selection dropdown" style={{
+                        marginLeft: '0.5rem'
                     }}>
-                        <div className="ui selection dropdown" style={{
-                            marginLeft: '0.5rem'
-                        }}>
-                            <input type="hidden" name="Language" />
-                            <div className="text">Language</div>
-                            <div className="menu">
-                                <div className="item" name="HTML">HTML</div>
-                                <div className="item" name="CSS">CSS</div>
-                                <div className="item" name="Markdown">Markdown</div>
-                                <div className="item" name="C">C</div>
-                                <div className="item" name="CPP">C++</div>
-                                <div className="item" name="CPP11">CPP11</div>
-                                <div className="item" name="CPP14">CPP14</div>
-                                <div className="item" name="Python2">Python2</div>
-                                <div className="item" name="Python3">Python3</div>
-                                <div className="item" name="Bash">Bash</div>
-                                <div className="item" name="Plain text">Plain Text</div>
+                        <input type="hidden" name="Language" />
+                        <div className="text">Language</div>
+                        <div className="menu">
+                            <div className="item" name="HTML">HTML</div>
+                            <div className="item" name="CSS">CSS</div>
+                            <div className="item" name="Markdown">Markdown</div>
+                            <div className="item" name="C">C</div>
+                            <div className="item" name="CPP">C++</div>
+                            <div className="item" name="CPP11">CPP11</div>
+                            <div className="item" name="CPP14">CPP14</div>
+                            <div className="item" name="Python2">Python2</div>
+                            <div className="item" name="Python3">Python3</div>
+                            <div className="item" name="Bash">Bash</div>
+                            <div className="item" name="Plain text">Plain Text</div>
+                        </div>
+                    </div>
+                    
+                    <div className="ui icon button" style={{
+                        float: 'right',
+                        position: 'relative',
+                        display: 'inline-block'
+                    }} onClick={this.clickSetting}>
+                        <i className="setting large icon"></i>
+                    </div>
+                    <div className="ui icon button" style={{
+                        float: 'right',
+                        position: 'relative',
+                        display: 'inline-block'
+                    }} onClick={this.saveCode} >
+                        {this.props.saving ? <i className="circle large icon"></i> : (this.state.changedCode ? <i className="save large icon"></i> : <i className="checkmark large icon"></i>)}
+                    </div>
+                    <div className="ui vertical pointing menu" style={{
+                        right: '0.25em',
+                        marginTop: '0.5em',
+                        position: 'absolute',
+                        zIndex: '5',
+                        display: this.state.showSetting ? 'block' : 'none'
+                    }}>
+                        <div className="header item">Theme</div>
+                        <div className="item">
+                            <select className="ui fluid search dropdown" onChange={this.changeTheme}>
+                                <option value="ambiance">ambiance</option>
+                                <option value="chaos">chaos</option>
+                                <option value="chrome">chrome</option>
+                                <option value="clouds">clouds</option>
+                                <option value="clouds_midnight">clouds_midnight</option>
+                                <option value="cobalt">cobalt</option>
+                                <option value="crimson_editor">crimson_editor</option>
+                                <option value="dawn">dawn</option>
+                                <option value="dreamweaver">dreamweaver</option>
+                                <option value="eclipse">eclipse</option>
+                                <option value="github">github</option>
+                                <option value="idle_fingers">idle_fingers</option>
+                                <option value="iplastic">iplastic</option>
+                                <option value="katzenmilch">katzenmilch</option>
+                                <option value="kr_theme">kr_theme</option>
+                                <option value="kuroir">kuroir</option>
+                                <option value="merbivore">merbivore</option>
+                                <option value="merbivore_soft">merbivore_soft</option>
+                                <option value="mono_industrial">mono_industrial</option>
+                                <option value="monokai">monokai</option>
+                                <option value="pastel_on_dark">pastel_on_dark</option>
+                                <option value="solarized_dark">solarized_dark</option>
+                                <option value="solarized_light">solarized_light</option>
+                                <option value="sqlserver">sqlserver</option>
+                                <option value="terminal">terminal</option>
+                                <option value="textmate">textmate</option>
+                                <option value="tomorrow">tomorrow</option>
+                                <option value="tomorrow_night_blue">tomorrow_night_blue</option>
+                                <option value="tomorrow_night_bright">tomorrow_night_bright</option>
+                                <option value="tomorrow_night_eighties">tomorrow_night_eighties</option>
+                                <option value="tomorrow_night">tomorrow_night</option>
+                                <option value="twilight">twilight</option>
+                                <option value="vibrant_ink">vibrant_ink</option>
+                                <option value="xcode">xcode</option>
+                            </select>
+                        </div>
+                        <div className="header item">Tab Size</div>
+                        <div className="item">
+                            <div className="ui fluid input">
+                                <input type="number" value={this.state.tabSize} onChange={this.changeTabSize} />
                             </div>
                         </div>
-                        
-                        <div className="ui icon button" style={{
-                            float: 'right',
-                            position: 'relative',
-                            display: 'inline-block'
-                        }} onClick={this.clickSetting}>
-                            <i className="setting large icon"></i>
-                        </div>
-                        <div className="ui icon button" style={{
-                            float: 'right',
-                            position: 'relative',
-                            display: 'inline-block'
-                        }} onClick={this.saveCode} >
-                            {this.props.saving ? <i className="circle large icon"></i> : (this.state.changedCode ? <i className="save large icon"></i> : <i className="checkmark large icon"></i>)}
-                        </div>
-                        <div className="ui vertical pointing menu" style={{
-                            right: '0.25em',
-                            marginTop: '0.5em',
-                            position: 'absolute',
-                            zIndex: '5',
-                            display: this.state.showSetting ? 'block' : 'none'
-                        }}>
-                            <div className="header item">Theme</div>
-                            <div className="item">
-                                <select className="ui fluid search dropdown" onChange={this.changeTheme}>
-                                    <option value="ambiance">ambiance</option>
-                                    <option value="chaos">chaos</option>
-                                    <option value="chrome">chrome</option>
-                                    <option value="clouds">clouds</option>
-                                    <option value="clouds_midnight">clouds_midnight</option>
-                                    <option value="cobalt">cobalt</option>
-                                    <option value="crimson_editor">crimson_editor</option>
-                                    <option value="dawn">dawn</option>
-                                    <option value="dreamweaver">dreamweaver</option>
-                                    <option value="eclipse">eclipse</option>
-                                    <option value="github">github</option>
-                                    <option value="idle_fingers">idle_fingers</option>
-                                    <option value="iplastic">iplastic</option>
-                                    <option value="katzenmilch">katzenmilch</option>
-                                    <option value="kr_theme">kr_theme</option>
-                                    <option value="kuroir">kuroir</option>
-                                    <option value="merbivore">merbivore</option>
-                                    <option value="merbivore_soft">merbivore_soft</option>
-                                    <option value="mono_industrial">mono_industrial</option>
-                                    <option value="monokai">monokai</option>
-                                    <option value="pastel_on_dark">pastel_on_dark</option>
-                                    <option value="solarized_dark">solarized_dark</option>
-                                    <option value="solarized_light">solarized_light</option>
-                                    <option value="sqlserver">sqlserver</option>
-                                    <option value="terminal">terminal</option>
-                                    <option value="textmate">textmate</option>
-                                    <option value="tomorrow">tomorrow</option>
-                                    <option value="tomorrow_night_blue">tomorrow_night_blue</option>
-                                    <option value="tomorrow_night_bright">tomorrow_night_bright</option>
-                                    <option value="tomorrow_night_eighties">tomorrow_night_eighties</option>
-                                    <option value="tomorrow_night">tomorrow_night</option>
-                                    <option value="twilight">twilight</option>
-                                    <option value="vibrant_ink">vibrant_ink</option>
-                                    <option value="xcode">xcode</option>
-                                </select>
-                            </div>
-                            <div className="header item">Tab Size</div>
-                            <div className="item">
-                                <div className="ui fluid input">
-                                    <input type="number" value={this.state.tabSize} onChange={this.changeTabSize} />
-                                </div>
-                            </div>
-                            <div className="header item">Font Size</div>
-                            <div className="item">
-                                <div className="ui fluid input">
-                                    <input type="number"  value={this.state.fontSize} onChange={this.changeFontSize} />
-                                </div>
+                        <div className="header item">Font Size</div>
+                        <div className="item">
+                            <div className="ui fluid input">
+                                <input type="number"  value={this.state.fontSize} onChange={this.changeFontSize} />
                             </div>
                         </div>
                     </div>
-                
-                    <Editor 
-                        mode="c_cpp"
-                        theme={this.state.theme}
-                        name="editor"
-                        onChange={this.changeCode}
-                        value={`${this.props.file.code}`}
-                        tabSize={this.state.tabSize}
-                        fontSize={this.state.fontSize}
-                        width='100%'
-                        height='100%'
-                        showPrintMargin={false}
-                        showGutter={true}
-                        highlightActiveLine={true}
-                       />
                 </div>
+            
+                <Editor 
+                    mode="c_cpp"
+                    theme={this.state.theme}
+                    name="editor"
+                    onChange={this.changeCode}
+                    value={`${this.props.file.code}`}
+                    tabSize={this.state.tabSize}
+                    fontSize={this.state.fontSize}
+                    width='100%'
+                    height='100%'
+                    showPrintMargin={false}
+                    showGutter={true}
+                    highlightActiveLine={true}
+                    />
             </div>
         )
     }
@@ -251,8 +245,8 @@ const mapDispatchToProps = (dispatch) => ({
     handlefetchSaveCode: (sessionid, fsid, code) => {
         dispatch(fetchSaveCode(sessionid, fsid, code))
     },
-    handleChangeCode: (code) => {
-        dispatch(changeCode())
+    handleChangeCode: (code, fsid) => {
+        dispatch(changeCode(code, fsid))
     }
 })
 
