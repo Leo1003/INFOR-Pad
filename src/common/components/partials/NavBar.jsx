@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Menu, Button } from 'semantic-ui-react'
 import { Link } from 'react-router'
 import Logout_Container from '../../containers/Logout_Container.js'
+import LanguageSelect from './LanguageSelect.jsx'
 import cookie from 'react-cookie'
 
 class NavBar extends React.Component {
@@ -37,6 +38,7 @@ class NavBar extends React.Component {
                 </Menu.Menu>
               )
             }
+            <LanguageSelect/>
         </Menu>
       </div>
     )

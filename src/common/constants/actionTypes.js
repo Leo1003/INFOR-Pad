@@ -30,3 +30,5 @@ export const GET_SHORTID = 'GET_SHORTID'
 
 export const SAVING = 'SAVING'
 export const DIDSAVE = 'DIDSAVE'
+
+export const CHANGE_LANGUAGE = 'CHANGE_LANGUAGE'

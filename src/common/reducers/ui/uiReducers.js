@@ -35,6 +35,12 @@ const uiReducers = handleActions({
       error: 'File is not exist!',
       redirectToError: true
     })
+  },
+  CHANGE_LANGUAGE: (state, {lang}) => {
+    // console.log("CHANGE_LANGUAGE: " + lang.toString())
+    return Object.assign({}, state, {
+      lang: lang
+    })
   }
 }, ui)
 

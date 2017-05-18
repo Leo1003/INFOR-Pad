@@ -73,7 +73,7 @@ export const ui = {
   isFetching: false,
   name: '',
   shortid: '',
-  lang: 'ar',
+  lang: 'en',
   error: '',
   redirectToError: false
 }
