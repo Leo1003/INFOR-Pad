@@ -1,7 +1,10 @@
 import 'whatwg-fetch'
 import {
     SAVING,
-    DIDSAVE
+    DIDSAVE,
+    EDITOR_GET_FILE,
+    ISFETCHING,
+    DIDFETCH
 } from '../constants/actionTypes'
 
 export const fetchSaveCode = (sessionid, fsid, code) => (
@@ -14,10 +17,39 @@ export const fetchSaveCode = (sessionid, fsid, code) => (
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'sessionid': `${sessionid}`
                 },
-                body: `code=${code}`
+                body: `code=${encodeURIComponent(code)}`
             })
             //todo status error 
             dispatch({ type: DIDSAVE })
         } catch(e) { console.log(e) }
     }
+)
+
+export const fetchEditorGetFiles = (sessionid, fsid) => (
+  async (dispatch) => {
+    try {
+      dispatch({ type: ISFETCHING })
+      let res = await fetch(`/api/fs/${fsid}`, {
+        method: 'GET',
+        headers: {
+          'sessionid': `${sessionid}`
+        }
+      })
+      if (res.ok) {
+        let json = await res.json()
+        if(json.format !== "Directory") dispatch({ type: EDITOR_GET_FILE, payload: { data: json } })
+        else {
+          dispatch({ type: FILE_IS_NOT_EXIST})
+        }
+      } else if(res.status == '401') {
+        dispatch({ type: CLEAN_SESSION })
+        dispatch({ type: LOGIN_FIRST} )
+      } else if(res.status == '403') {
+        dispatch({ type: PERMISSION_DENIED })
+      } else if(res.status == '404') {
+        dispatch({ type: FILE_IS_NOT_EXIST })
+      }
+      dispatch({ type: DIDFETCH })
+    } catch(e) { console.log(e) }
+  }
 )

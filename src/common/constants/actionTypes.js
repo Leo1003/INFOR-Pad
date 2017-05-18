@@ -28,5 +28,7 @@ export const FILE_IS_NOT_EXIST = 'FILE_IS_NOT_EXIST'
 
 export const GET_SHORTID = 'GET_SHORTID'
 
+//editor
 export const SAVING = 'SAVING'
 export const DIDSAVE = 'DIDSAVE'
+export const EDITOR_GET_FILE = 'EDITOR_GET_FILE'

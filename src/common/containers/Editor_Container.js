@@ -1,6 +1,7 @@
 import Editor from '../components/editor/Editor.jsx'
 import { connect } from 'react-redux'
 import { fetchGetFiles, initialRedirect } from '../actions/filesActions'
+import { fetchEditorGetFiles } from '../actions/editorActions'
 
 
 const mapStateToProps = (state) => {
@@ -10,7 +11,8 @@ const mapStateToProps = (state) => {
     isFetching: state.ui.isFetching,
     cur_file: state.file,
     userid: state.user.id,
-    redirectToError: state.ui.redirectToError
+    redirectToError: state.ui.redirectToError,
+    openedFiles: state.editor.openedFiles
   }
 }
 
@@ -20,6 +22,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   initialRedirect: () => {
     dispatch(initialRedirect())
+  },
+  handleEditorGetFiles: (sessionid, fsid) => {
+    dispatch(fetchEditorGetFiles(sessionid, fsid))
   }
 })
 

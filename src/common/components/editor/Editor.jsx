@@ -14,16 +14,22 @@ class Editor extends React.Component {
     }
     componentWillMount() {
         this.props.initialRedirect()
-        if(!this.props.isFetching) this.props.handleGetFiles(this.props.sessionid, this.props.params.fileid, 'File')
+        console.log(this.props)
+        if(!this.props.isFetching) this.props.handleEditorGetFiles(this.props.sessionid, this.props.params.fileid)
     }
     componentWillReceiveProps(nextProps) {
-        if(!nextProps.isFetching && nextProps.cur_file.id.length == 0) {
-            this.props.handleGetFiles(nextProps.sessionid, this.props.params.fileid, 'File')
-        }
-        else if(!nextProps.isFetching && (nextProps.params.fileid !== this.props.cur_file.id)) {
-            this.props.handleGetFiles(nextProps.sessionid, nextProps.params.fileid, 'File')
+        console.log(nextProps)
+        let findId = false;
+        this.props.openedFiles.map(file => {
+            if(!findId && file.id === this.props.params.fileid) findId = true;
+        })
+        if(!nextProps.isFetching && !findId) {
+            this.props.handleEditorGetFiles(nextProps.sessionid, this.props.params.fileid)
         }
         if(!nextProps.isFetching && nextProps.redirectToError) browserHistory.replace({pathname: '/error'})
+    }
+    componentWillUnMount() {
+        console.log("unmount")
     }
     render() {
         return (

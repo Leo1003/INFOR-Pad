@@ -11,5 +11,13 @@ export const editorReducers = handleActions({
         return Object.assign({}, state, {
             saving: false
         })
+    },
+    EDITOR_GET_FILE: (state, { payload }) => {
+        return Object.assign({}, state, {
+            openedFiles: [
+                ...state.openedFiles,
+                payload.data
+            ]
+        })
     }
 }, editor)

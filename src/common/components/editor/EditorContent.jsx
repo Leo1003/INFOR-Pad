@@ -7,10 +7,8 @@ const Editor = (props) => {
   if (typeof window !== 'undefined') {
     const AceEditor = require('react-ace').default
     require('brace/mode/c_cpp');
-
     require('brace/keybinding/vim')
     require('brace/keybinding/emacs')
-
     require("brace/theme/ambiance")
     require("brace/theme/chaos")
     require("brace/theme/chrome")
@@ -108,8 +106,8 @@ class EditorContent extends React.Component {
     }
     saveCode(e) {
         e.preventDefault()
-        console.log(this.state.code)
-        if(this.state.changedCode === true) this.props.handlefetchSaveCode(this.props.sessionid, this.props.file.id, this.state.code)
+        console.log(typeof this.state.code)
+        if(this.state.changedCode === true) this.props.handlefetchSaveCode(this.props.sessionid, this.props.file.id, this.state.code.toString())
         this.setState({
             changedCode: false
         })
@@ -229,7 +227,7 @@ class EditorContent extends React.Component {
                         theme={this.state.theme}
                         name="editor"
                         onChange={this.changeCode}
-                        value={`${this.state.code}`}
+                        value={`${this.props.file.code}`}
                         tabSize={this.state.tabSize}
                         fontSize={this.state.fontSize}
                         width='100%'
@@ -245,12 +243,16 @@ class EditorContent extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    saving: state.editor.saving
+    saving: state.editor.saving,
+    settings: state.user.settings
 })
 
 const mapDispatchToProps = (dispatch) => ({
     handlefetchSaveCode: (sessionid, fsid, code) => {
         dispatch(fetchSaveCode(sessionid, fsid, code))
+    },
+    handleChangeCode: (code) => {
+        dispatch(changeCode())
     }
 })
 

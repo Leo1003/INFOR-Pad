@@ -11,7 +11,18 @@ export const user = {
   createDate: new Date(), // The time when the user created
   email: '',              // The user's email (Hidden)
   lastLogin: new Date(),  // The last time when the user login (Hidden)
-  rootfsid: ''            // user's root directory fsid (Hidden)
+  rootfsid: '',            // user's root directory fsid (Hidden)
+  settings: {
+    enableBasicAutocompletion: true,
+    enableLiveAutocompletion: true,
+    fontSize: 12,
+    highlightActiveLine: true,
+    keyboardHandler: "Default",
+    showGutter: true,
+    tabSize: 4,
+    theme: "monokai",
+    wrapEnabled: false
+  }
 }
 
 export const folder = {
