@@ -90,29 +90,41 @@ class Sign_up extends React.Component {
       )
     }
     return (
-      <Container>
-        <h1>INFOR-PAD Sign up</h1>
-        {renderMessage()}
-        <form className="ui form">
-          <div className="field">
-            <label>Username:</label>
-            <input type="text" name="username" ref='username' placeholder='Input your Username' />
-          </div>
-          <div className="field">
-            <label>Email:</label>
-            <input type="text" name="email" ref='email' placeholder='Input your email' />
-          </div>
-          <div className="field">
-            <label>Password:</label>
-            <input type="password" name="password" ref='password' placeholder='Input your Password' />
-          </div>
-          <div className="field">
-            <label>Confirm:</label>
-            <input type="password" name="confirm_password" ref='confirm_password' placeholder='Confirm your Password' />
-          </div>
-          <button className="ui button" type='submit'>Sign up</button>
-        </form>
-      </Container>
+      <div className="ui middle aligned center aligned grid" style={{height: "90vh", margin: '0'}}>
+        <div className="column">
+          <h1 className="ui black header">Sign up</h1>
+          {renderMessage()}
+          <form className="ui large form">
+            <div className="ui stacked segment">
+              <div className="field">
+                <div className="ui left icon input">
+                  <i className="user icon"></i>
+                  <input type="text" name="username" ref='username' placeholder='Username' />
+                </div>
+              </div>
+              <div className="field">
+                <div className="ui left icon input">
+                  <i className="mail icon"></i>
+                  <input type="text" name="email" ref='email' placeholder='Email' />
+                </div>
+              </div>
+              <div className="field">
+                <div className="ui left icon input">
+                  <i className="privacy icon"></i>
+                  <input type="password" name="password" ref='password' placeholder='Password' />
+                </div>
+              </div>
+              <div className="field">
+                <div className="ui left icon input">
+                  <i className="checkmark icon"></i>
+                  <input type="password" name="confirm_password" ref='confirm_password' placeholder='Confirm Password' />
+                </div>
+              </div>
+              <button className="ui fluid large blue submit button" type='submit'>Sign up</button>
+            </div>
+          </form>
+        </div>
+      </div>
     )
   }
 }
