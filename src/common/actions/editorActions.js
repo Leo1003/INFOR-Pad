@@ -7,7 +7,8 @@ import {
     CHANGE_CODE,
     ISFETCHING,
     DIDFETCH,
-    CHANGE_SETTINGS
+    CHANGE_SETTINGS,
+    EDITOR_FILE_MODIFY
 } from '../constants/actionTypes'
 
 export const fetchSaveCode = (sessionid, fsid, code) => (
@@ -79,4 +80,21 @@ export const fetchChangeSettings = (sessionid, settingName, settingValue) => (
             }
         } catch(e) { console.log(e) }
     }
+)
+export const fetchEditorModify = (sessionid, fsid, modifyType, modifyValue) => (
+  async (dispatch) => {
+    try {
+      console.log("in action")
+      let res = await fetch(`/api/fs/${fsid}`, {
+          method: 'PUT',
+          headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'sessionid': `${sessionid}`
+          },
+          body: `${modifyType}=${modifyValue}`
+      })
+      if(res.ok) dispatch({ type: EDITOR_FILE_MODIFY,  modifyType: modifyType, modifyValue: modifyValue, fsid: fsid})
+      //todo status error 
+    } catch(e) { console.log(e) }
+  }
 )

@@ -131,3 +131,12 @@ export const initialRedirect = () => (
     dispatch({ type: INITIALREDIRECT })
   }
 )
+
+export const fetchFileModify = (sessionid, fsid, modifyType, modifyValue) => (
+  async (dispatch) => {
+    try {
+      //dispatch({ type: Modify })
+      //todo rename move 
+    } catch(e) { console.log(e) }
+  }
+)

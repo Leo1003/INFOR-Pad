@@ -1,33 +1,31 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { fetchSaveCode, changeCode, fetchChangeSettings } from '../../actions/editorActions'
+import { fetchSaveCode, changeCode, fetchChangeSettings,fetchEditorModify } from '../../actions/editorActions'
 // import ToolBar from './ToolBar.jsx'
 
 const Editor = (props) => {
   if (typeof window !== 'undefined') {
     const AceEditor = require('react-ace').default
-    require('brace/mode/c_cpp');
-    require('brace/mode/jsx')
-    require('brace/mode/javascript')
-    require('brace/mode/csharp')
-    require('brace/mode/css')
-    require('brace/mode/ejs')
-    require('brace/mode/haskell')
-    require('brace/mode/html')
-    require('brace/mode/css')
-    require('brace/mode/java')
-    require('brace/mode/json')
-    require('brace/mode/markdown')
-    require('brace/mode/php')
-    require('brace/mode/objectivec')
-    require('brace/mode/plain_text')
-    require('brace/mode/python')
-    require('brace/mode/swift')
-    require('brace/mode/stylus')
-    require('brace/mode/scss')
-    require('brace/mode/less')
-    require('brace/mode/typescript')
-    require('brace/mode/xml')
+    require('brace/mode/c_cpp');     //CPP CPP11 CPP14
+    require('brace/mode/jsx')        //JSX
+    require('brace/mode/javascript') //Javascript
+    require('brace/mode/csharp')     //C#
+    require('brace/mode/css')        //CSS
+    require('brace/mode/haskell')    //Haskell
+    require('brace/mode/html')       //HTML
+    require('brace/mode/java')       //Java
+    require('brace/mode/json')       //JSON
+    require('brace/mode/markdown')   //Markdown
+    require('brace/mode/php')        //PHP
+    require('brace/mode/objectivec') //ObjectiveC
+    require('brace/mode/plain_text') //Plain_Text
+    require('brace/mode/python')     //Python2 Python3
+    require('brace/mode/swift')      //Swift
+    require('brace/mode/stylus')     //Stylus
+    require('brace/mode/scss')       //Scss
+    require('brace/mode/less')       //Less
+    require('brace/mode/xml')        //XML
+    require('brace/mode/sh')
 
     require('brace/keybinding/vim')
     require('brace/keybinding/emacs')
@@ -79,6 +77,7 @@ class EditorContent extends React.Component {
         this.changeFontSize = this.changeFontSize.bind(this)
         this.changeTabSize = this.changeTabSize.bind(this)
         this.saveCode = this.saveCode.bind(this)
+        this.changeMode = this.changeMode.bind(this)
         this.state = {
             showSetting: false,
             fontSize: 14,
@@ -120,7 +119,38 @@ class EditorContent extends React.Component {
             changedCode: false
         })
     }
+    changeMode(e) {
+        e.preventDefault()
+        console.log(e.target.value)
+        this.props.handleChangeMode(this.props.sessionid, this.props.file.id, 'format', e.target.value)
+    }
     render() {
+        let mode = {
+            C: 'c_cpp',
+            CPP: 'c_cpp',
+            CPP11: 'c_cpp',
+            CPP14: 'c_cpp',
+            JSX: 'jsx',
+            Javascript: 'javascript',
+            CSharp: 'csharp',
+            CSS: 'css',
+            Haskell: 'haskell',
+            HTML: 'html',
+            Java: 'java',
+            JSON: 'json',
+            Markdown: 'markdown',
+            PHP: 'php',
+            ObjectiveC: 'opjectivec',
+            Plain_Text: 'plain_text',
+            Python2: 'python',
+            Python3: 'python',
+            Swift: 'swift',
+            Stylus: 'stylus',
+            Scss: 'scss',
+            Less: 'less',
+            XML: 'xml',
+            Bash: 'sh'
+        }
         return(  
             <div className="ui bottom attached segment" style={{
                 height: '80vh',
@@ -129,25 +159,35 @@ class EditorContent extends React.Component {
                 <div className="toolbar" style={{
                     margin: '0.5rem 0'
                 }}>
-                    <div className="ui selection dropdown" style={{
+                    <select className="ui search dropdown" onChange={this.changeMode} style={{
                         marginLeft: '0.5rem'
                     }}>
-                        <input type="hidden" name="Language" />
-                        <div className="text">Language</div>
-                        <div className="menu">
-                            <div className="item" name="HTML">HTML</div>
-                            <div className="item" name="CSS">CSS</div>
-                            <div className="item" name="Markdown">Markdown</div>
-                            <div className="item" name="C">C</div>
-                            <div className="item" name="CPP">C++</div>
-                            <div className="item" name="CPP11">CPP11</div>
-                            <div className="item" name="CPP14">CPP14</div>
-                            <div className="item" name="Python2">Python2</div>
-                            <div className="item" name="Python3">Python3</div>
-                            <div className="item" name="Bash">Bash</div>
-                            <div className="item" name="Plain text">Plain Text</div>
-                        </div>
-                    </div>
+                        <option value="">{this.props.file.format}</option>
+                        <option value="C">C</option>
+                        <option value="CPP">CPP</option>
+                        <option value="CPP11">CPP11</option>
+                        <option value="CPP14">CPP14</option>
+                        <option value="CSharp">CSharp</option>
+                        <option value="Python2">Python2</option>
+                        <option value="Python3">Python3</option>
+                        <option value="Java">Java</option>
+                        <option value="JSX">JSX</option>
+                        <option value="HTML">HTML</option>
+                        <option value="XML">XML</option>
+                        <option value="CSS">CSS</option>
+                        <option value="Stylus">Stylus</option>
+                        <option value="Scss">Scss</option>
+                        <option value="Less">Less</option>
+                        <option value="Javascript">Javascript</option>
+                        <option value="JSON">JSON</option>
+                        <option value="Swift">Swift</option>
+                        <option value="ObjectiveC">ObjectiveC</option>
+                        <option value="PHP">PHP</option>
+                        <option value="Haskell">Haskell</option>
+                        <option value="Markdown">Markdown</option>
+                        <option value="Bash">Bash</option>
+                        <option value="Plain_Text">Plain_Text</option>
+                    </select>
                     
                     <div className="ui icon button" style={{
                         float: 'right',
@@ -173,6 +213,7 @@ class EditorContent extends React.Component {
                         <div className="header item">Theme</div>
                         <div className="item">
                             <select className="ui fluid search dropdown" onChange={this.changeTheme}>
+                                <option value="">{this.props.settings.theme}</option>
                                 <option value="ambiance">ambiance</option>
                                 <option value="chaos">chaos</option>
                                 <option value="chrome">chrome</option>
@@ -225,7 +266,7 @@ class EditorContent extends React.Component {
                 </div>
             
                 <Editor 
-                    mode="javascript"
+                    mode={mode[this.props.file.format]}
                     theme={this.props.settings.theme}
                     name="editor"
                     onChange={this.changeCode}
@@ -257,6 +298,9 @@ const mapDispatchToProps = (dispatch) => ({
     },
     handleChangeSettings: (sessionid, settingName, settingValue) => {
         dispatch(fetchChangeSettings(sessionid, settingName, settingValue))
+    },
+    handleChangeMode: (sessionid, fsid, modifyType, modifyValue) => {
+        dispatch(fetchEditorModify(sessionid, fsid, modifyType, modifyValue))
     }
 })
 

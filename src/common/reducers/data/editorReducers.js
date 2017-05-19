@@ -29,5 +29,15 @@ export const editorReducers = handleActions({
                 })
             })
         })
+    },
+    EDITOR_FILE_MODIFY: (state, { fsid, modifyType, modifyValue }) => {
+        let tmp = {}
+        tmp[modifyType] = modifyValue
+        return Object.assign({}, state, {
+            openedFiles: state.openedFiles.map(file => {
+                if(file.id !== fsid) return file
+                else return Object.assign({}, file, tmp)
+            })
+        })
     }
 }, editor)

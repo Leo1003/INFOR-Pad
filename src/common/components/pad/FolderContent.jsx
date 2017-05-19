@@ -60,8 +60,8 @@ class FolderContent extends React.Component {
           <thead>
             <tr>
               <th>FileName</th>
-              <th style={{width: '30%'}}>Type</th>
-              <th style={{width: '30%'}}>ModifyDate</th>
+              <th style={{width: '31%'}}>Type</th>
+              <th style={{width: '31%'}}>ModifyDate</th>
               <th style={{width: '44px'}}></th>
             </tr>
           </thead>

@@ -63,20 +63,33 @@ export class AddNewFileModal extends React.Component {
                 <input type="text" name="filename" ref='filename' placeholder='File Name...' />
               </div>
               <div className="field">
-                <select className="ui dropdown" ref="language" name="language">
-                  <option value="">Language</option>
-                  <option value="html">HTML</option>
-                  <option value="css">CSS</option>
-                  <option value="markdown">Markdown</option>
-                  <option value="C">C</option>
-                  <option value="CPP">C++</option>
-                  <option value="CPP11">C++11</option>
-                  <option value="CPP14">C++14</option>
-                  <option value="Python2">Python 2</option>
-                  <option value="Python3">Python 3</option>
-                  <option value="Bash">Bash</option>
-                  <option value="Plain_text">Plain Text</option>
-                </select>
+                <select className="ui search dropdown" ref="language" name="language">
+                      <option value="">Language</option>
+                      <option value="C">C</option>
+                      <option value="CPP">CPP</option>
+                      <option value="CPP11">CPP11</option>
+                      <option value="CPP14">CPP14</option>
+                      <option value="CSharp">CSharp</option>
+                      <option value="Python2">Python2</option>
+                      <option value="Python3">Python3</option>
+                      <option value="Java">Java</option>
+                      <option value="JSX">JSX</option>
+                      <option value="HTML">HTML</option>
+                      <option value="XML">XML</option>
+                      <option value="CSS">CSS</option>
+                      <option value="Stylus">Stylus</option>
+                      <option value="Scss">Scss</option>
+                      <option value="Less">Less</option>
+                      <option value="Javascript">Javascript</option>
+                      <option value="JSON">JSON</option>
+                      <option value="Swift">Swift</option>
+                      <option value="ObjectiveC">ObjectiveC</option>
+                      <option value="PHP">PHP</option>
+                      <option value="Haskell">Haskell</option>
+                      <option value="Markdown">Markdown</option>
+                      <option value="Bash">Bash</option>
+                      <option value="Plain_Text">Plain_Text</option>
+                  </select>
               </div>
             </form>
 
