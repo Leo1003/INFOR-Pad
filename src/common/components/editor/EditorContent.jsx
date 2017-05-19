@@ -1,12 +1,34 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { fetchSaveCode, changeCode } from '../../actions/editorActions'
+import { fetchSaveCode, changeCode, fetchChangeSettings } from '../../actions/editorActions'
 // import ToolBar from './ToolBar.jsx'
 
 const Editor = (props) => {
   if (typeof window !== 'undefined') {
     const AceEditor = require('react-ace').default
     require('brace/mode/c_cpp');
+    require('brace/mode/jsx')
+    require('brace/mode/javascript')
+    require('brace/mode/csharp')
+    require('brace/mode/css')
+    require('brace/mode/ejs')
+    require('brace/mode/haskell')
+    require('brace/mode/html')
+    require('brace/mode/css')
+    require('brace/mode/java')
+    require('brace/mode/json')
+    require('brace/mode/markdown')
+    require('brace/mode/php')
+    require('brace/mode/objectivec')
+    require('brace/mode/plain_text')
+    require('brace/mode/python')
+    require('brace/mode/swift')
+    require('brace/mode/stylus')
+    require('brace/mode/scss')
+    require('brace/mode/less')
+    require('brace/mode/typescript')
+    require('brace/mode/xml')
+
     require('brace/keybinding/vim')
     require('brace/keybinding/emacs')
     require("brace/theme/ambiance")
@@ -48,7 +70,6 @@ const Editor = (props) => {
   return null;
 }
 
-
 class EditorContent extends React.Component {
     constructor(props) {
         super(props)
@@ -60,8 +81,6 @@ class EditorContent extends React.Component {
         this.saveCode = this.saveCode.bind(this)
         this.state = {
             showSetting: false,
-            theme: 'tomorrow',
-            code: '',
             fontSize: 14,
             tabSize: 4,
             changedCode: false,
@@ -70,7 +89,6 @@ class EditorContent extends React.Component {
     componentDidMount() {
         $('.ui.dropdown').dropdown()
         $('#select').dropdown()
-        console.log("editor content did mount")
     }
     clickSetting() {
         this.setState({
@@ -78,7 +96,6 @@ class EditorContent extends React.Component {
         })
     }
     changeCode(newValue) {
-        console.log(newValue)
         this.props.handleChangeCode(newValue, this.props.file.id)
         this.setState({
             changedCode: true
@@ -86,28 +103,18 @@ class EditorContent extends React.Component {
     }
     changeTheme(e) {
         e.preventDefault()
-        console.log(e.target.value)
-        this.setState({
-            theme: e.target.value
-        })
+        this.props.handleChangeSettings(this.props.sessionid, 'theme', e.target.value)
     }
     changeFontSize(e) {
         e.preventDefault()
-        console.log(e.target.value)
-        this.setState({
-            fontSize: parseInt(e.target.value,10)
-        })
+        this.props.handleChangeSettings(this.props.sessionid, 'fontSize', e.target.value)
     }
     changeTabSize(e) {
         e.preventDefault()
-        console.log(e.target.value)
-        this.setState({
-            tabSize: parseInt(e.target.value, 10)
-        })
+        this.props.handleChangeSettings(this.props.sessionid, 'tabSize', e.target.value)
     }
     saveCode(e) {
         e.preventDefault()
-        console.log(typeof this.state.code)
         if(this.state.changedCode === true) this.props.handlefetchSaveCode(this.props.sessionid, this.props.file.id, this.props.file.code)
         this.setState({
             changedCode: false
@@ -154,7 +161,7 @@ class EditorContent extends React.Component {
                         position: 'relative',
                         display: 'inline-block'
                     }} onClick={this.saveCode} >
-                        {this.props.saving ? <i className="circle large icon"></i> : (this.state.changedCode ? <i className="save large icon"></i> : <i className="checkmark large icon"></i>)}
+                        {this.props.saving ? <i className="spinner large icon"></i> : (this.state.changedCode ? <i className="save large icon"></i> : <i className="checkmark large icon"></i>)}
                     </div>
                     <div className="ui vertical pointing menu" style={{
                         right: '0.25em',
@@ -205,26 +212,26 @@ class EditorContent extends React.Component {
                         <div className="header item">Tab Size</div>
                         <div className="item">
                             <div className="ui fluid input">
-                                <input type="number" value={this.state.tabSize} onChange={this.changeTabSize} />
+                                <input type="number" value={this.props.settings.tabSize} onChange={this.changeTabSize} />
                             </div>
                         </div>
                         <div className="header item">Font Size</div>
                         <div className="item">
                             <div className="ui fluid input">
-                                <input type="number"  value={this.state.fontSize} onChange={this.changeFontSize} />
+                                <input type="number"  value={this.props.settings.fontSize} onChange={this.changeFontSize} />
                             </div>
                         </div>
                     </div>
                 </div>
             
                 <Editor 
-                    mode="c_cpp"
-                    theme={this.state.theme}
+                    mode="javascript"
+                    theme={this.props.settings.theme}
                     name="editor"
                     onChange={this.changeCode}
                     value={`${this.props.file.code}`}
-                    tabSize={this.state.tabSize}
-                    fontSize={this.state.fontSize}
+                    tabSize={parseInt(this.props.settings.tabSize, 10)}
+                    fontSize={parseInt(this.props.settings.fontSize, 10)}
                     width='100%'
                     height='100%'
                     showPrintMargin={false}
@@ -247,6 +254,9 @@ const mapDispatchToProps = (dispatch) => ({
     },
     handleChangeCode: (code, fsid) => {
         dispatch(changeCode(code, fsid))
+    },
+    handleChangeSettings: (sessionid, settingName, settingValue) => {
+        dispatch(fetchChangeSettings(sessionid, settingName, settingValue))
     }
 })
 

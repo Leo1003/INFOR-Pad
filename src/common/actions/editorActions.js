@@ -1,11 +1,13 @@
-import 'whatwg-fetch'
+require('isomorphic-fetch');
+
 import {
     SAVING,
     DIDSAVE,
     EDITOR_GET_FILE,
     CHANGE_CODE,
     ISFETCHING,
-    DIDFETCH
+    DIDFETCH,
+    CHANGE_SETTINGS
 } from '../constants/actionTypes'
 
 export const fetchSaveCode = (sessionid, fsid, code) => (
@@ -59,4 +61,22 @@ export const changeCode = (code, fsid) => (
   (dispatch) => {
     dispatch({type: CHANGE_CODE, code: code, fsid: fsid})
   }
+)
+
+export const fetchChangeSettings = (sessionid, settingName, settingValue) => (
+    async (dispatch) => {
+        try {
+            let res = await fetch('/api/user', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'sessionid': `${sessionid}`
+                },
+                body: `${settingName}=${settingValue}`
+            })
+            if(res.ok) {
+              dispatch({ type: CHANGE_SETTINGS, settingName: settingName, settingValue: settingValue })
+            }
+        } catch(e) { console.log(e) }
+    }
 )

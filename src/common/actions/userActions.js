@@ -1,4 +1,5 @@
-import 'whatwg-fetch'
+require('isomorphic-fetch');
+
 import {
   ISFETCHING,
   DIDFETCH,

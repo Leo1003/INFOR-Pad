@@ -1,4 +1,5 @@
-import 'whatwg-fetch'
+require('isomorphic-fetch');
+
 import {
   SIGN_IN_SUCCESS,
   SIGN_IN_FAIL,

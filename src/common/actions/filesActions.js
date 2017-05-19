@@ -1,4 +1,5 @@
-import 'whatwg-fetch'
+require('isomorphic-fetch');
+
 import {
   GET_FOLDER,
   GET_FILE,
