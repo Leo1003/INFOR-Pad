@@ -94,3 +94,8 @@ body > .grid {
 .column {
     max-width: 450px;
 }
+
+.overflow tr td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

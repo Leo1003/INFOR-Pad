@@ -42,20 +42,34 @@ class FolderContent extends React.Component {
       <div>
         <h2>{this.props.folder.name}</h2>
         {this.props.userid === this.props.folder.owner.id ? <AddNewFilesDropdown id={this.props.folder.id} /> : null }
-        <table className="ui celled unstackable selectable table">
+        <div className="ui icon buttons">
+          <button className="tiny ui basic button" onClick={this.showAll}>
+            <i className="asterisk icon"></i>
+            All
+          </button>
+          <button className="tiny ui basic button" onClick={this.showPublic}>
+            <i className="world icon"></i>
+            Public
+          </button>
+          <button className="tiny ui basic button" onClick={this.showPrivate}>
+            <i className="lock icon"></i>
+            Private
+          </button>
+        </div>
+        <table className="ui overflow fixed single line celled unstackable selectable table">
           <thead>
             <tr>
-              <th colSpan="4">
-                  <button className="tiny ui basic button" onClick={this.showAll}>All</button>
-                  <button className="tiny ui basic button" onClick={this.showPublic}>Public</button>
-                  <button className="tiny ui basic button" onClick={this.showPrivate}>Private</button>
-              </th>
+              <th>FileName</th>
+              <th style={{width: '30%'}}>Type</th>
+              <th style={{width: '30%'}}>ModifyDate</th>
+              <th style={{width: '44px'}}></th>
             </tr>
           </thead>
           <tbody>
             {(this.props.folder.parent.id.length > 0 && this.props.folder.id !== this.props.folder.parent.id)? (
               <tr className='collapsing'>
                 <td>
+                  <i className="level up icon"></i>
                   <Link to={'/pad/folder/' + this.props.folder.parent.id}>..</Link>
                 </td>
               </tr>
@@ -69,7 +83,10 @@ class FolderContent extends React.Component {
                       <Link to={'/pad/folder/' + file.id }>{file.name}</Link>
                     </td>
                     <td>
-                      Size
+                      {file.format}
+                    </td>
+                    <td>
+                      {moment(file.modifyDate).fromNow()}
                     </td>
                     <td className="right aligned collapsing">
                       <FolderModal file={file} sessionid={this.props.sessionid} foldername={this.props.folder.name} folderid={this.props.folder.id} owner={this.props.folder.owner} />
@@ -87,7 +104,10 @@ class FolderContent extends React.Component {
                     <Link to={'/pad/file/' + file.id }><span>{file.name}</span></Link>
                   </td>
                   <td>
-                    Size
+                    {file.format}
+                  </td>
+                  <td>
+                    {moment(file.modifyDate).fromNow()}
                   </td>
                   <td className="right aligned collapsing">
                     <FolderModal file={file} sessionid={this.props.sessionid} foldername={this.props.folder.name} folderid={this.props.folder.id} owner={this.props.folder.owner} />

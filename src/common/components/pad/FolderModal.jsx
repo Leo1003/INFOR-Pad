@@ -32,8 +32,7 @@ class FolderModal extends React.Component {
   render() {
     return(
       <div>
-          <i className="archive large link icon" onClick={this.openModal}></i>
-
+        <i className="archive large link icon" onClick={this.openModal}></i>
         <div className="ui small modal" id={this.props.file.id}>
           <div className="header">
             {this.props.file.name}
