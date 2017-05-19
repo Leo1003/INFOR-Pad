@@ -61,7 +61,7 @@ class Sign_in extends React.Component {
       )
     }
     return (
-      <div className="ui middle aligned center aligned grid" style={{height: "90vh"}}>
+      <div className="ui middle aligned center aligned grid" style={{height: "90vh", margin: '0'}}>
         <div className="column">
           <h1 className="ui black header">INFOR-PAD Sign in</h1>
           {renderMessage()}
