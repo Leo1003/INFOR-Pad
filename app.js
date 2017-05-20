@@ -123,6 +123,12 @@ io.of('/lxtester').on('connection', socket => {
         let task = lxtesterServer.receiveJob(socket.id, data)
         io.of('/client').connected[task.socketid].emit('Result', task.result)
     })
+    socket.on('Suspend', data => {
+        lxtesterServer.suspend(socket.id)
+    })
+    socket.on('Resume', data => {
+        lxtesterServer.resume(socket.id)
+    })
     socket.on('disconnecting', data => {
         let uncompleted = lxtesterServer.remove(socket.id)
             /*

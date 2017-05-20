@@ -13,6 +13,7 @@ class lxtesterServer {
     push(socket) {
         let s = {
             pending: 0,
+            suspend: false,
             socket: socket,
             tasks: {}
         }
@@ -25,10 +26,8 @@ class lxtesterServer {
         console.log(this.clients)
         for (let sid in this.clients) {
             let s = this.clients[sid]
-            console.log(`s = ${s}`)
             let count = Object.size(s.tasks)
-            console.log(`count = ${count}`)
-            if (count < min) {
+            if (s.suspend == false && count < min) {
                 min = count
                 id = s.socket.id
             }
@@ -55,6 +54,12 @@ class lxtesterServer {
         this.clients[clientid].socket.emit('Job', job)
         this.clients[clientid].tasks[task.id] = task
         return task.id
+    }
+    suspend(socketid) {
+        this.clients[socketid].suspend = true
+    }
+    resume(socketid) {
+        this.clients[socketid].suspend = false
     }
     receiveJob(clientid, result) {
         let task = this.clients[clientid].tasks[result.id]
