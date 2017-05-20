@@ -7,15 +7,7 @@ const userReducers = handleActions({
     return user
   },
   GET_INITIAL_USER: (state, { payload }) => {
-    return {
-      name: payload.data.user.name,
-      level: payload.data.user.level,
-      id: payload.data.user.id,
-      createDate: payload.data.user.createDate,
-      email: payload.data.user.email,
-      lastLogin: payload.data.user.lastLogin,
-      rootfsid: payload.data.user.rootfsid
-    }
+    return Object.assign({}, state, payload.data.user)
   },
 }, user)
 

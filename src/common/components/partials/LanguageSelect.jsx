@@ -16,17 +16,10 @@ class LanguageSelect extends React.Component {
     render() {
         return (
             <div>
-                { this.props.lang == 'en' ? 
                     <select onChange={this.handleSelectChange} ref='lang'>
                         <option value='en' selected>English</option>
-                        <option value='ar'>Arabic</option>
+                        <option value='ar'>عربى</option>
                     </select>
-                    :
-                    <select onChange={this.handleSelectChange} ref='lang'>
-                        <option value='en'>الإنجليزية</option>
-                        <option value='ar' selected>عربى</option>
-                    </select>
-                }
             </div>
         )
     }

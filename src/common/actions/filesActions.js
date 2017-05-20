@@ -11,6 +11,7 @@ import {
   DIDFETCH,
   GET_SHORTID,
   INITIALREDIRECT,
+  CLEAN_SESSION
 } from '../constants/actionTypes'
 import { browserHistory } from 'react-router'
 
@@ -32,6 +33,7 @@ export const fetchGetFiles = (sessionid, fsid, format) => (
           dispatch({ type: FILE_IS_NOT_EXIST})
         }
       } else if(res.status == '401') {
+        dispatch({ type: CLEAN_SESSION })
         dispatch({ type: LOGIN_FIRST} )
       } else if(res.status == '403') {
         dispatch({ type: PERMISSION_DENIED })
@@ -58,6 +60,7 @@ export const fetchAddNewFiles = (filename, folderid, sessionid, format) => (
         let json = await res.json()
         //dispatch(fetchGetFiles(sessionid, folderid, 'Directory'))
       }  else if(res.status == '401') {
+        dispatch({ type: CLEAN_SESSION })
         dispatch({ type: LOGIN_FIRST })
       } else if(res.status === '403') {
         dispatch({ type: PERMISSION_DENIED })

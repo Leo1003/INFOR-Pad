@@ -1,6 +1,6 @@
 import React from 'react'
 import EditorContent from './EditorContent.jsx'
-import { browserHistory } from 'react-router'
+import { browserHistory, Link } from 'react-router'
 
 const Loader = () => (
   <div className="ui active inverted dimmer">
@@ -14,21 +14,40 @@ class Editor extends React.Component {
     }
     componentWillMount() {
         this.props.initialRedirect()
-        if(!this.props.isFetching) this.props.handleGetFiles(this.props.sessionid, this.props.params.fileid, 'File')
+        console.log(this.props)
+        if(!this.props.isFetching) this.props.handleEditorGetFiles(this.props.sessionid, this.props.params.fileid)
     }
     componentWillReceiveProps(nextProps) {
-        if(!nextProps.isFetching && nextProps.cur_file.id.length == 0) {
-            this.props.handleGetFiles(nextProps.sessionid, this.props.params.fileid, 'File')
-        }
-        else if(!nextProps.isFetching && (nextProps.params.fileid !== this.props.cur_file.id)) {
-            this.props.handleGetFiles(nextProps.sessionid, nextProps.params.fileid, 'File')
+        console.log(nextProps)
+        let findId = false;
+        this.props.openedFiles.map(file => {
+            if(!findId && file.id === this.props.params.fileid) findId = true;
+        })
+        if(!nextProps.isFetching && !findId) {
+            this.props.handleEditorGetFiles(nextProps.sessionid, this.props.params.fileid)
         }
         if(!nextProps.isFetching && nextProps.redirectToError) browserHistory.replace({pathname: '/error'})
     }
+    componentWillUnMount() {
+        console.log("unmount")
+    }
     render() {
+        console.log("render")
+        console.log(this.props.isFetching.toString())
+        console.log(this.props.openedFiles)
         return (
             <div>
-                {this.props.isFetching ? <Loader /> : <EditorContent sessionid={this.props.sessionid} file={this.props.cur_file} />}
+                {this.props.isFetching || !this.props.openedFiles.find(file => (file.id === this.props.params.fileid)) ? <Loader /> :
+                <div>
+                    <div className="ui top attached tabular menu">
+                        {this.props.openedFiles.map(file => {
+                            if(file.id === this.props.params.fileid) return ( <a key={file.id} className="item active">{file.name}</a> )
+                            else return ( <a key={file.id} className="item">{file.name}</a> )
+                        })}
+                    </div>
+                    <EditorContent sessionid={this.props.sessionid} file={this.props.openedFiles.find(file => (file.id === this.props.params.fileid))} />
+                </div>
+                }
             </div>
         )
     }

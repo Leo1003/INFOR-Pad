@@ -15,6 +15,7 @@ class FolderContent extends React.Component {
     this.state = {
       show: 'All'
     }
+    // console.log(this.props.lang)
   }
   componentDidMount() {
     $('.ui.dropdown').dropdown()
@@ -46,9 +47,9 @@ class FolderContent extends React.Component {
           <thead>
             <tr>
               <th colSpan="4">
-                  <button className="tiny ui basic button" onClick={this.showAll}>All</button>
-                  <button className="tiny ui basic button" onClick={this.showPublic}>Public</button>
-                  <button className="tiny ui basic button" onClick={this.showPrivate}>Private</button>
+                  <button className="tiny ui basic button" onClick={this.showAll}>{this.props.lang == 'en' ? 'All' : 'الكل'}</button>
+                  <button className="tiny ui basic button" onClick={this.showPublic}>{this.props.lang == 'en' ? 'Public' : 'عامة'}</button>
+                  <button className="tiny ui basic button" onClick={this.showPrivate}>{this.props.lang == 'en' ? 'Private' : 'نشر'}</button>
               </th>
             </tr>
           </thead>

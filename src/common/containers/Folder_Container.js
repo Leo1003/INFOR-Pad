@@ -10,7 +10,8 @@ const mapStateToProps = (state) => {
     isFetching: state.ui.isFetching,
     cur_folder: state.folder,
     userid: state.user.id,
-    redirectToError: state.ui.redirectToError
+    redirectToError: state.ui.redirectToError,
+    lang: state.ui.lang
   }
 }
 

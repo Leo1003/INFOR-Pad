@@ -11,10 +11,17 @@ const debug = require('debug')('INFOR-Pad:api')
 router.prefix('/user')
 
 router.get('/', async ctx => {
-    let user = await userCtrl.getUserByName(ctx.query.name, null)
-    let isSelf = (ctx.state.session && ctx.state.session.user._id.equals(user._id))
-    ctx.status = 200
-    ctx.body = userCtrl.extractUserData(user, isSelf)
+    if (ctx.query.name) {
+        let user = await userCtrl.getUserByName(ctx.query.name, null)
+        let isSelf = (ctx.state.session && ctx.state.session.user._id.equals(user._id))
+        ctx.status = 200
+        ctx.body = userCtrl.extractUserData(user, isSelf)
+    } else if (ctx.state.session.user) {
+        ctx.status = 200
+        ctx.body = userCtrl.extractUserData(ctx.state.session.user, true)
+    } else {
+        throw new ApiError(400, "Please enter a username")
+    }
 })
 router.get('/:uid', async ctx => {
     let isSelf = (ctx.state.session && ctx.state.session.user._id.equals(ctx.params.uid))
@@ -40,6 +47,14 @@ router.post('/', async ctx => {
     }
 
     await userCtrl.sendMail(user, ctx.header.host)
+})
+router.put('/', async ctx => {
+    if (!ctx.state.session.user) {
+        throw new ApiError(401, "Need authorized")
+    }
+    await userCtrl.updateSettinngs(ctx.state.session.user, ctx.request.body)
+    ctx.status = 200
+    ctx.body = userCtrl.extractUserData(ctx.state.session.user, true)
 })
 router.post('/mail', async ctx => {
     if (ctx.state.session) {

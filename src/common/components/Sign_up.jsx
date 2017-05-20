@@ -90,29 +90,41 @@ class Sign_up extends React.Component {
       )
     }
     return (
-      <Container>
-        <h1>{'INFOR-PAD ' + (this.props.lang == 'en' ? 'Sign up' : 'سجل')}</h1>
-        {renderMessage()}
-        <form className="ui form">
-          <div className="field">
-            <label>{this.props.lang == 'en' ? 'Username:' : 'اسم المستخدم'}</label>
-            <input type="text" name="username" ref='username' placeholder={this.props.lang == 'en' ? 'Input your Username' : 'أدخل اسم المستخدم'} />
-          </div>
-          <div className="field">
-            <label>{this.props.lang == 'en' ? 'Email:' : 'البريد الإلكتروني'}</label>
-            <input type="text" name="email" ref='email' placeholder={this.props.lang == 'en' ? 'Input your email' : 'أدخل بريدك الإلكتروني'} />
-          </div>
-          <div className="field">
-            <label>{this.props.lang == 'en' ? 'Password:' : 'كلمه السر'}</label>
-            <input type="password" name="password" ref='password' placeholder={this.props.lang == 'en' ? 'Input your Password' : 'أدخل كلمة المرور'} />
-          </div>
-          <div className="field">
-            <label>{this.props.lang == 'en' ? 'Confirm:' : 'تؤكد'}</label>
-            <input type="password" name="confirm_password" ref='confirm_password' placeholder={this.props.lang == 'en' ? 'Confirm your Password' : 'أكد رقمك السري'} />
-          </div>
-          <button className="ui button" type='submit'>{this.props.lang == 'en' ? 'Sign up' : 'سجل'}</button>
-        </form>
-      </Container>
+      <div className="ui middle aligned center aligned grid" style={{height: "90vh", margin: '0'}}>
+        <div className="column">
+          <h1 className="ui black header">{(this.props.lang == 'en' ? 'Sign up' : 'سجل')}</h1>
+          {renderMessage()}
+          <form className="ui large form">
+            <div className="ui stacked segment">
+              <div className="field">
+                <div className="ui left icon input">
+                  <i className="user icon"></i>
+                  <input type="text" name="username" ref='username' placeholder={this.props.lang == 'en' ? 'Username:' : 'اسم المستخدم'} />
+                </div>
+              </div>
+              <div className="field">
+                <div className="ui left icon input">
+                  <i className="mail icon"></i>
+                  <input type="text" name="email" ref='email' placeholder={this.props.lang == 'en' ? 'Email:' : 'البريد الإلكتروني'} />
+                </div>
+              </div>
+              <div className="field">
+                <div className="ui left icon input">
+                  <i className="privacy icon"></i>
+                  <input type="password" name="password" ref='password' placeholder={this.props.lang == 'en' ? 'Password:' : 'كلمه السر'} />
+                </div>
+              </div>
+              <div className="field">
+                <div className="ui left icon input">
+                  <i className="checkmark icon"></i>
+                  <input type="password" name="confirm_password" ref='confirm_password' placeholder={this.props.lang == 'en' ? 'Confirm:' : 'تؤكد'} />
+                </div>
+              </div>
+              <button className="ui fluid large blue submit button" type='submit'>{this.props.lang == 'en' ? 'Sign up' : 'سجل'}</button>
+            </div>
+          </form>
+        </div>
+      </div>
     )
   }
 }

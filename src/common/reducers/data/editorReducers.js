@@ -11,5 +11,23 @@ export const editorReducers = handleActions({
         return Object.assign({}, state, {
             saving: false
         })
+    },
+    EDITOR_GET_FILE: (state, { payload }) => {
+        return Object.assign({}, state, {
+            openedFiles: [
+                ...state.openedFiles,
+                payload.data
+            ]
+        })
+    },
+    CHANGE_CODE: (state, { code, fsid }) => {
+        return Object.assign({}, state, {
+            openedFiles: state.openedFiles.map(file => {
+                if(file.id !== fsid) return file
+                else return Object.assign({}, file, {
+                    code: code
+                })
+            })
+        })
     }
 }, editor)

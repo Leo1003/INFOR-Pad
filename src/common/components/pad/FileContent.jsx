@@ -21,7 +21,7 @@ class FileContent extends React.Component {
           {this.props.file.isPublic ? <p><b>Share ID:</b>&nbsp;<a href={'/' + this.props.file.shortid }>{this.props.file.shortid}</a></p> : null}
           <hr />
           <p><b>Code:</b></p>
-          { this.props.userid === this.props.file.owner.id ? <Link to={'/editor/' + this.props.file.id }>Open with Editor</Link> : null }
+          { this.props.userid === this.props.file.owner.id ? <a href={'/editor/' + this.props.file.id } target="_blank">Open with Editor</a> : null }
           {this.props.file.code.length > 0 ?
           <Highlight className='cpp'>
             {`${this.props.file.code}`}

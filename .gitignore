@@ -44,3 +44,6 @@ semantic.json
 # VSCode Folder
 .vscode/
 .chrome
+
+# Webpack files
+dist/

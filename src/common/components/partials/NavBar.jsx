@@ -14,26 +14,26 @@ class NavBar extends React.Component {
     return (
       <div>
         <Menu secondary inverted style={{background: '#1b1c1d', margin: '0'}}>
-          <Menu.Item as={Link} to='/'>
-            <h2>INFOR PAD</h2>
-          </Menu.Item>
+          <div className="item" style={{ margin: '0'}}>
+            <Link to='/'><h3>INFOR PAD</h3></Link>
+          </div>
             {
               this.props.isLogin === false ?
               (
                 <Menu.Menu position='right'>
-                  <Menu.Item>
-                    <Button inverted as={Link} to='/Sign_in'>{this.props.lang == 'en' ? 'Sign In' : 'تسجيل الدخول'}</Button>
-                  </Menu.Item>
-                  <Menu.Item>
-                    <Button inverted as={Link} to='/Sign_up'>{this.props.lang == 'en' ? 'Sign Up' : 'سجل'}</Button>
-                  </Menu.Item>
+                  <div className="item" style={{ margin: '0'}}>
+                    <Link to='/Sign_in'><div className="ui button inverted" style={{ margin: '0'}}>{this.props.lang == 'en' ? 'Sign In' : 'تسجيل الدخول'}</div></Link>
+                  </div>
+                  <div className="item" style={{ margin: '0'}}>
+                    <Link to='/Sign_up'><div className="ui button inverted" style={{ margin: '0'}}>{this.props.lang == 'en' ? 'Sign Up' : 'سجل'}</div></Link>
+                  </div>
                 </Menu.Menu>
               ):
               (
                 <Menu.Menu position='right'>
-                  <Menu.Item>
-                    <Button inverted as={Link}>{this.props.name}</Button>
-                  </Menu.Item>
+                  <div className="item" style={{ margin: '0'}}>
+                    <Link><div className="ui button inverted" style={{ margin: '0'}}>{this.props.name}</div></Link>
+                  </div>
                   <Logout_Container />
                 </Menu.Menu>
               )
@@ -45,9 +45,11 @@ class NavBar extends React.Component {
   }
 }
 
-
-export default connect(
-  (state, dispatch) => {
+const mapStateToProps = (state) => (
+  {
     lang: state.ui.lang
   }
-)(NavBar)
+)
+
+const mapDispatchToProps = (dispatch) => { {} }
+export default connect(mapStateToProps, mapDispatchToProps)(NavBar)

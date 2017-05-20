@@ -54,17 +54,17 @@ export class AddNewFileModal extends React.Component {
       <div className="ui small modal" id="addNewFileModal">
           <div className="ui icon header">
             <i className="file icon"></i>
-            Add a new File
+            { this.props.lang == 'en' ? 'Add a new File' : 'إضافة ملف جديد' }
           </div>
           <div className="content">
 
             <form className="ui form" id="addfileform">
               <div className="field">
-                <input type="text" name="filename" ref='filename' placeholder='File Name...' />
+                <input type="text" name="filename" ref='filename' placeholder={this.props.lang == 'en' ? 'File Name...' : 'اسم الملف...'}/>
               </div>
               <div className="field">
                 <select className="ui dropdown" ref="language" name="language">
-                  <option value="">Language</option>
+                  <option value="">{this.props.lang == 'en' ? 'Language' : 'لغة'}</option>
                   <option value="html">HTML</option>
                   <option value="css">CSS</option>
                   <option value="markdown">Markdown</option>
@@ -84,11 +84,11 @@ export class AddNewFileModal extends React.Component {
           <div className="actions">
             <div className="ui basic cancel button">
               <i className="remove icon"></i>
-              Cancel
+              { this.props.lang == 'en' ? 'Cancel' : 'إلغاء' }
             </div>
             <button className="ui blue button" type="submit" form='addfileform'>
               <i className="checkmark icon"></i>
-              Add
+              { this.props.lang == 'en' ? 'Add' : 'إضافة' }
             </button>
           </div>
         </div>

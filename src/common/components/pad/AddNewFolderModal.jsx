@@ -52,24 +52,24 @@ class AddNewFolderModal extends React.Component {
       <div className="ui small modal" id="addNewFolderModal">
         <div className="ui icon header">
           <i className="folder icon"></i>
-          Add a new Folder
+          { this.props.lang == 'en' ? 'Add a new Folder' : 'إضافة مجلد جديد' }
         </div>
         <div className="content">
 
           <form className="ui form" id="addfolderform">
             <div className="field">
-              <input type="text" name="foldername"  placeholder='Folder Name...' ref='foldername' />
+              <input type="text" name="foldername"  placeholder={this.props.lang == 'en' ? 'Folder Name...' : 'إسم الملف...'} ref='foldername' />
             </div>
           </form>
         </div>
         <div className="actions">
           <div className="ui basic cancel button">
             <i className="remove icon"></i>
-            Cancel
+            { this.props.lang == 'en' ? 'Cancel' : 'إلغاء' }
           </div>
           <button className="ui blue button" type="submit" form='addfolderform'>
             <i className="checkmark icon"></i>
-            Add
+            { this.props.lang == 'en' ? 'Add' : 'إضافة' }
           </button>
         </div>
       </div>
