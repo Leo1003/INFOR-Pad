@@ -106,9 +106,10 @@ exports.getAccess = function(fs, userid) {
     }
 }
 
-exports.addTempFile = async function(name, format, secret) {
+exports.addTempFile = async function(name, format, description, secret) {
     return await new FileSystem({
         name: name,
+        description: description,
         isFile: true,
         isPublic: true,
         shortid: randomstring.generate(8),

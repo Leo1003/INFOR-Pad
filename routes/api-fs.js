@@ -71,7 +71,7 @@ router.post('/', async ctx => {
     if (!data.filename || !data.format) {
         throw new ApiError(400, "Some data are missed")
     }
-    let newfile = await fsCtrl.addTempFile(data.filename, data.format, ctx.header.secret)
+    let newfile = await fsCtrl.addTempFile(data.filename, data.format, data.description, ctx.header.secret)
     ctx.status = 201
     ctx.body = await fsCtrl.extractFSData(newfile, true)
 })
@@ -84,6 +84,7 @@ router.post('/:fsid', async ctx => {
         let isfile = data.format != 'Directory'
         let newfile = new FileSystem({
             name: data.filename,
+            description: data.description,
             owner: ctx.state.session.user._id,
             isFile: isfile === true,
             files: isfile === false ? [] : undefined,
