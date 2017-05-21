@@ -122,13 +122,14 @@ class FolderModal extends React.Component {
               <div className="field">
                 <input type="text" name="rename" placeholder="Enter new name" ref="renameValue" />
               </div>
-              <button className="ui blue button" type="submit" form={this.props.file.id + '_renameForm'}>Rename</button>
+             
             </form>
           </div>
           <div className="actions">
             <div className="ui basic deny button">
               Cancel
             </div>
+            <button className="ui blue button" type="submit" form={this.props.file.id + '_renameForm'}>Rename</button>
           </div>
         </div>
       </div>
