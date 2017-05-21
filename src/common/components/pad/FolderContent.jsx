@@ -12,15 +12,32 @@ class FolderContent extends React.Component {
     this.showAll = this.showAll.bind(this)
     this.showPublic = this.showPublic.bind(this)
     this.showPrivate = this.showPrivate.bind(this)
+    this.openModal = this.openModal.bind(this)
     this.state = {
-      show: 'All'
+      show: 'All',
+      openedModal: {
+        createDate: '',
+        format: "",
+        id: "",
+        isPublic: false,
+        modifyDate: "",
+        name: "",
+        owner: "",
+        parent:""
+      }
     }
   }
   componentDidMount() {
+    console.log(this.props.folder.files)
     $('.ui.dropdown').dropdown()
   }
   componentWillReceiveProps() {
     $('.ui.dropdown').dropdown()
+  }
+  openModal(file) {
+    this.setState({
+      openedModal: file
+    }, () => $('.main.modal').modal('show'))
   }
   showAll() {
     this.setState({
@@ -88,7 +105,8 @@ class FolderContent extends React.Component {
                       {moment(file.modifyDate).fromNow()}
                     </td>
                     <td className="right aligned collapsing">
-                      <FolderModal file={file} sessionid={this.props.sessionid} foldername={this.props.folder.name} folderid={this.props.folder.id} owner={this.props.folder.owner} />
+                      {/*<FolderModal file={file} sessionid={this.props.sessionid} foldername={this.props.folder.name} folderid={this.props.folder.id} owner={this.props.folder.owner} />*/}
+                      <i className="archive large link icon" onClick={() => this.openModal(file)}></i>
                     </td>
                   </tr>
                 )
@@ -109,13 +127,15 @@ class FolderContent extends React.Component {
                     {moment(file.modifyDate).fromNow()}
                   </td>
                   <td className="right aligned collapsing">
-                    <FolderModal file={file} sessionid={this.props.sessionid} foldername={this.props.folder.name} folderid={this.props.folder.id} owner={this.props.folder.owner} />
+                    {/*<FolderModal file={file} sessionid={this.props.sessionid} foldername={this.props.folder.name} folderid={this.props.folder.id} owner={this.props.folder.owner} />*/}
+                    <i className="archive large link icon" onClick={() => this.openModal(file)} ></i>
                   </td>
                 </tr>
               )
             })}
           </tbody>
         </table>
+          <FolderModal file={this.state.openedModal} sessionid={this.props.sessionid} foldername={this.props.folder.name} folderid={this.props.folder.id} owner={this.props.folder.owner} />
       </div>
     )
   }

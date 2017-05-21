@@ -86,6 +86,11 @@ export const ui = {
   shortid: '',
   error: '',
   redirectToError: false,
+  moveContent: {
+    name: '',
+    id: '',
+    files: []
+  }
 }
 
 export const editor = {

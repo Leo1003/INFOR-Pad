@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { fetchDeleteFile, fetchCheckPermission, fetchRename } from '../../actions/filesActions'
 import { Link } from 'react-router'
 import { fetchGetUserById } from '../../actions/userActions'
+import MoveFileModal from './MoveFileModal.jsx'
 const moment = require('moment')
 
 class FolderModal extends React.Component {
@@ -17,10 +18,10 @@ class FolderModal extends React.Component {
     }
   }
   openModal() {
-    $(`#${this.props.file.id}`).modal('show')
+    $(`#${this.props.file.id}_modal`).modal('show')
   }
   deleteFile() {
-    $(`#${this.props.file.id}`).modal('hide')
+    $(`#${this.props.file.id}_modal`).modal('hide')
     this.props.handleDelete(this.props.file.id, this.props.sessionid, this.props.folderid)
   }
   handleCheckPermission = () => {
@@ -58,36 +59,57 @@ class FolderModal extends React.Component {
   }
   componentDidMount() {
     console.log("did mount")
-    $(`#${this.props.file.id}_renameModal`).modal(
-      'attach events', `#${this.props.file.id} #openRename`
-    )
+    if(this.props.file.id.length > 0) {
+      $(`#${this.props.file.id}_renameModal`).modal(
+        'attach events', `#${this.props.file.id} #openRename`
+      )
+      $(`#${this.props.file.id}_moveModal`).modal(
+        'attach events', `#${this.props.file.id} #openMove`
+      )
+    }
     this.initialForm()
      
+  }
+  componentWillReceiveProps(nextProps) {
+    console.log("receive props")
+    console.log(nextProps)
+    // $(`#${this.props.file.id}_renameModal`).remove()
+    // $(`#${this.props.file.id}_moveModal`).remove()
+    // $(`#${this.props.file.id}_modal`).remove()
   }
   componentWillUpdate(nextProps, nextState) {
     if(this.state.isChecked !== nextState.isChecked) this.props.handleCheckPermission(this.props.file.id, this.props.sessionid, nextState.isChecked.toString())
   }
-  componetDidUpdate() {
+  componentDidUpdate() {
+    if(this.props.file.id.length > 0) {
+      console.log(this.props.file)
+      $(`#${this.props.file.id}_renameModal`).modal(
+        'attach events', `#${this.props.file.id}_modal #openRename`
+      )
+      $(`#${this.props.file.id}_moveModal`).modal(
+        'attach events', `#${this.props.file.id}_modal #openMove`
+      )
+    }
      this.initialForm()
   }
   componentWillUnmount() {
+    $(`#${this.props.file.id}_renameModal`).remove()
+    $(`#${this.props.file.id}_moveModal`).remove()
+    $(`#${this.props.file.id}_modal`).remove()
     $(ReactDOM.findDOMNode(this.refs.renameForm)).remove() //remove jQuery DOM
   }
   render() {
     return(
       <div>
-        <i className="archive large link icon" onClick={this.openModal}></i>
-        <div className="ui main modal" id={this.props.file.id}>
+        <div className="ui main modal" id={this.props.file.id + '_modal'}>
           <div className="header">
             {this.props.file.name}
           </div>
           <div className="content">
-            <p><b>Name: </b>&nbsp;{this.props.file.name}&nbsp;&nbsp;&nbsp;
-              { this.props.file.owner === this.props.userid ? <button className="ui icon button" id='openRename' style={{position: 'absolute', right: '2%'}}><i className="large edit icon"></i></button> : null }
-            </p>
+            <p><b>Name: </b>&nbsp;{this.props.file.name}</p>
             <p><b>Type: </b>&nbsp;{this.props.file.format}</p>
             <p><b>Owner: </b>&nbsp;<a href={'/user/' + this.props.owner.name}>{this.props.owner.name}</a></p>
-            <p><b>Location: </b>&nbsp;{this.props.foldername}</p>
+            <p><b>Location: </b>&nbsp;{this.props.foldername}}</p>
             <p><b>CreateDate: </b>&nbsp;{moment(this.props.file.createDate).format('MMMM Do YYYY, h:mm:ss a')}</p>
             <p><b>Last Modify: </b>&nbsp;{moment(this.props.file.modifyDate).format('MMMM Do YYYY, h:mm:ss a')}</p>
             {this.props.file.isPublic ? <p><b>Share ID:</b>&nbsp;<a href={'/' + this.props.file.shortid }>{this.props.file.shortid}</a></p> : null}
@@ -100,6 +122,12 @@ class FolderModal extends React.Component {
                 </div>
                 <br />
                 <br />
+                <button className='small ui basic button' id="openRename">
+                  Rename
+                </button>
+                <button className='small ui basic button' id="openMove">
+                  Move File
+                </button>
                 <div className="small ui basic red button" onClick={this.deleteFile}>
                   <i className="trash icon"></i>
                   Delete
@@ -113,6 +141,7 @@ class FolderModal extends React.Component {
             </div>
           </div>
         </div>
+        {/*renameModal*/}
         <div className="ui small modal" id={this.props.file.id + '_renameModal'}>
           <div className="header">
             Rename
@@ -122,7 +151,6 @@ class FolderModal extends React.Component {
               <div className="field">
                 <input type="text" name="rename" placeholder="Enter new name" ref="renameValue" />
               </div>
-             
             </form>
           </div>
           <div className="actions">
@@ -132,6 +160,9 @@ class FolderModal extends React.Component {
             <button className="ui blue button" type="submit" form={this.props.file.id + '_renameForm'}>Rename</button>
           </div>
         </div>
+
+        {/*moveModal*/}
+        <MoveFileModal file={this.props.file}/>
       </div>
     )
   }
@@ -139,7 +170,7 @@ class FolderModal extends React.Component {
 
 const mapStateToProps = (state) => ({
   userid: state.user.id,
-  isFetching: state.ui.isFetching,
+  isFetching: state.ui.isFetching
 })
 const mapDispatchToProps = (dispatch) => ({
   handleDelete: (fsid, sessionid, folderid) => {

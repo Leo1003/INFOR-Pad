@@ -17,10 +17,7 @@ class Folder extends React.Component {
     if(!this.props.isFetching) this.props.handleGetFiles(this.props.sessionid, this.props.params.folderid, "Directory")
   }
   componentWillReceiveProps(nextProps) {
-    if(!nextProps.isFetching && nextProps.cur_folder.id.length == 0) {
-      this.props.handleGetFiles(nextProps.sessionid, this.props.params.folderid, "Directory")
-    }
-    else if(!nextProps.isFetching && (nextProps.params.folderid !== this.props.cur_folder.id)) {
+    if(!nextProps.isFetching && (nextProps.params.folderid !== this.props.cur_folder.id)) {
       this.props.handleGetFiles(nextProps.sessionid, nextProps.params.folderid, "Directory")
     }
     if(!nextProps.isFetching && nextProps.redirectToError) browserHistory.push({pathname: '/error'})
@@ -28,7 +25,7 @@ class Folder extends React.Component {
   render() {
     return (
       <div>
-        {this.props.isFetching ? <Loader /> :
+        {(this.props.isFetching || this.props.params.folderid !== this.props.cur_folder.id) ? <Loader /> :
         <FolderContent userid={this.props.userid} folder={this.props.cur_folder} sessionid={this.props.sessionid} />
         }
       </div>
