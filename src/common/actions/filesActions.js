@@ -60,7 +60,6 @@ export const fetchAddNewFiles = (filename, folderid, sessionid, format) => (
       })
       if(res.ok){
         let json = await res.json()
-        //dispatch(fetchGetFiles(sessionid, folderid, 'Directory'))
       }  else if(res.status == '401') {
         dispatch({ type: CLEAN_SESSION })
         dispatch({ type: LOGIN_FIRST })

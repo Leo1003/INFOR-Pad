@@ -26,18 +26,19 @@ class AddNewFolderModal extends React.Component {
       onSuccess: this.handleAddNewFolder.bind(this)
     })
   }
-
+  componentWillUnmount() {
+    $('#addNewFolderModal').remove()
+    $('#addfolderform').remove()
+  }
   handleAddNewFolder(e) {
     e.preventDefault()
-    console.log(this.refs)
     this.props.handleAddNewFiles(this.refs.foldername.value, this.props.id, this.props.sessionid, "Directory")  //(filename, folderid, sessionid) 
     this.setState({
       foldername: ''
     })
-    $('#addfolderform').form('reset')
+    $('#addfolderform').form('clear')
     $('#addNewFolderModal').modal('hide')
     this.props.handlefetchGetFiles(this.props.sessionid, this.props.id, "Directory")
-    
   }
   handleFolderInvalid(e) {
     return false

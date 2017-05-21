@@ -28,8 +28,9 @@ class Folder extends React.Component {
   render() {
     return (
       <div>
-        {this.props.isFetching ? <Loader /> : null}
+        {this.props.isFetching ? <Loader /> :
         <FolderContent userid={this.props.userid} folder={this.props.cur_folder} sessionid={this.props.sessionid} />
+        }
       </div>
     )
   }

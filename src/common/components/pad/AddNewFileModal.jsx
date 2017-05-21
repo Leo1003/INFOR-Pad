@@ -39,10 +39,14 @@ export class AddNewFileModal extends React.Component {
       onSuccess: this.handleAddNewFile.bind(this)
     })
   }
+  componentWillUnmount() {
+    $('#addNewFileModal').remove()
+    $('#addfileform').remove()
+  }
   handleAddNewFile(e) {
     e.preventDefault()
     this.props.handleAddNewFiles(this.refs.filename.value, this.props.id, this.props.sessionid, this.refs.language.value)
-    $('#addfileform').form('reset')
+    $('#addfileform').form('clear')
     $('#addNewFileModal').modal('hide')
     this.props.handlefetchGetFiles(this.props.sessionid, this.props.id, 'Directory')
   }
