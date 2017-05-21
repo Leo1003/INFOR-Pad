@@ -12,7 +12,8 @@ import {
   DIDFETCH,
   GET_SHORTID,
   INITIALREDIRECT,
-  CLEAN_SESSION
+  CLEAN_SESSION,
+  FILE_RENAME
 } from '../constants/actionTypes'
 import { browserHistory } from 'react-router'
 
@@ -132,11 +133,21 @@ export const initialRedirect = () => (
   }
 )
 
-export const fetchFileModify = (sessionid, fsid, modifyType, modifyValue) => (
+export const fetchRename = (sessionid, fsid, newName) => (
   async (dispatch) => {
     try {
-      //dispatch({ type: Modify })
-      //todo rename move 
+      let res = await fetch(`/api/fs/${fsid}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'sessionid': `${sessionid}`
+        },
+        body: `filename=${newName}`
+      })
+      if(res.ok) {
+        dispatch({ type: FILE_RENAME, newName: newName, fsid: fsid})
+      }
+      //todo: res not ok
     } catch(e) { console.log(e) }
   }
 )

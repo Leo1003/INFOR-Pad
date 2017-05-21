@@ -1,6 +1,7 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
-import { fetchDeleteFile, fetchCheckPermission } from '../../actions/filesActions'
+import { fetchDeleteFile, fetchCheckPermission, fetchRename } from '../../actions/filesActions'
 import { Link } from 'react-router'
 import { fetchGetUserById } from '../../actions/userActions'
 const moment = require('moment')
@@ -10,6 +11,7 @@ class FolderModal extends React.Component {
     super(props)
     this.openModal = this.openModal.bind(this)
     this.deleteFile = this.deleteFile.bind(this)
+    this.initialForm = this.initialForm.bind(this)
     this.state = {
       isChecked: this.props.file.isPublic,
     }
@@ -26,19 +28,63 @@ class FolderModal extends React.Component {
       isChecked: !this.state.isChecked
     })
   }
+  handleRenameFile(e) {
+    e.preventDefault()
+    console.log(this.refs.renameValue.value)
+    this.props.handleRename(this.props.sessionid, this.props.file.id, this.refs.renameValue.value)
+    $(ReactDOM.findDOMNode(this.refs.renameForm)).form('clear')
+    $(`#${this.props.file.id}_renameModal`).modal('hide')
+  }
+  handleInvalid() {
+    return false
+  }
+  initialForm() {
+    $(ReactDOM.findDOMNode(this.refs.renameForm)).form({
+      fields: {
+        rename: {
+          identifier: 'rename',
+          rules: [
+            {
+              type: 'empty',
+              prompt: 'Please enter a File Name'
+            }
+          ]
+        }
+      },
+      inline: true,
+      onFailure: this.handleInvalid.bind(this),
+      onSuccess: this.handleRenameFile.bind(this)
+    })
+  }
+  componentDidMount() {
+    console.log("did mount")
+    $(`#${this.props.file.id}_renameModal`).modal(
+      'attach events', `#${this.props.file.id} #openRename`
+    )
+    this.initialForm()
+     
+  }
   componentWillUpdate(nextProps, nextState) {
     if(this.state.isChecked !== nextState.isChecked) this.props.handleCheckPermission(this.props.file.id, this.props.sessionid, nextState.isChecked.toString())
+  }
+  componetDidUpdate() {
+     this.initialForm()
+  }
+  componentWillUnmount() {
+    $(ReactDOM.findDOMNode(this.refs.renameForm)).remove() //remove jQuery DOM
   }
   render() {
     return(
       <div>
         <i className="archive large link icon" onClick={this.openModal}></i>
-        <div className="ui small modal" id={this.props.file.id}>
+        <div className="ui main modal" id={this.props.file.id}>
           <div className="header">
             {this.props.file.name}
           </div>
           <div className="content">
-            <p><b>Name: </b>&nbsp;{this.props.file.name}</p>
+            <p><b>Name: </b>&nbsp;{this.props.file.name}&nbsp;&nbsp;&nbsp;
+              { this.props.file.owner === this.props.userid ? <button className="ui icon button" id='openRename' style={{position: 'absolute', right: '2%'}}><i className="large edit icon"></i></button> : null }
+            </p>
             <p><b>Type: </b>&nbsp;{this.props.file.format}</p>
             <p><b>Owner: </b>&nbsp;<a href={'/user/' + this.props.owner.name}>{this.props.owner.name}</a></p>
             <p><b>Location: </b>&nbsp;{this.props.foldername}</p>
@@ -67,6 +113,24 @@ class FolderModal extends React.Component {
             </div>
           </div>
         </div>
+        <div className="ui small modal" id={this.props.file.id + '_renameModal'}>
+          <div className="header">
+            Rename
+          </div>
+          <div className="content">
+            <form className="ui form" id={this.props.file.id + '_renameForm'} ref="renameForm">
+              <div className="field">
+                <input type="text" name="rename" placeholder="Enter new name" ref="renameValue" />
+              </div>
+              <button className="ui blue button" type="submit" form={this.props.file.id + '_renameForm'}>Rename</button>
+            </form>
+          </div>
+          <div className="actions">
+            <div className="ui basic deny button">
+              Cancel
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
@@ -82,6 +146,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   handleCheckPermission: (fsid, sessionid, check) => {
     dispatch(fetchCheckPermission(fsid, sessionid, check))
+  },
+  handleRename: (sessionid, fsid, newName) => {
+    dispatch(fetchRename(sessionid, fsid, newName))
   }
 })
 

@@ -15,11 +15,13 @@ export const GET_INITIAL_SESSION = 'GET_INITIAL_SESSION'
 export const GET_INITIAL_USER = 'GET_INITIAL_USER'
 export const GET_USER_BY_ID = 'GET_USER_BY_ID'
 
+//folder
 export const GET_FOLDER = 'GET_FOLDER'
 export const GET_FILE = 'GET_FILE'
 export const ADD_NEW_FOLDER = 'ADD_NEW_FOLDER'
 export const ADD_NEW_FILE = 'ADD_NEW_FILE'
 export const DELETE_FILE = 'DELETE_FILE'
+export const FILE_RENAME = 'FILE_RENAME'
 
 export const INITIALREDIRECT = 'INITIALREDIRECT'
 export const LOGIN_FIRST = 'LOGIN_FIRST'

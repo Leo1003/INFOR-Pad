@@ -17,6 +17,14 @@ export const folderReducers = handleActions({
       })
     })
   },
+  FILE_RENAME: (state, { newName, fsid }) => {
+    return Object.assign({}, state, {
+      files: state.files.map(file => {
+        if(file.id === fsid) return Object.assign({}, file, { name: newName })
+        else return file
+      })
+    })
+  }
 }, folder)
 
 export const fileReducers = handleActions({
