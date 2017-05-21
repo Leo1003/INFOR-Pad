@@ -12,6 +12,7 @@ exports.extractFSData = async function(fs, complete, extend) {
     let ret = {
         id: fs._id,
         name: fs.name,
+        description: fs.description,
         parent: fs.parent,
         owner: fs.owner,
         createDate: fs.createDate,
@@ -143,6 +144,7 @@ exports.updateFS = async function(fs, data, limit) {
         fs.name = chkValue(data.filename, fs.name)
     }
     fs.isPublic = chkValue(data.isPublic, fs.isPublic)
+    fs.description = chkValue(data.description, fs.description, 1024)
     if (fs.isFile === true) {
         fs.code = chkValue(data.code, fs.code, limit)
         fs.stdin = chkValue(data.stdin, fs.stdin, limit)

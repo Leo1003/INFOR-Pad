@@ -9,16 +9,16 @@ router.prefix('/fs')
 
 router.param('fsid', async(fsid, ctx, next) => {
     let fs = await fsCtrl.findFS(fsid)
+    if (!fs) {
+        throw new ApiError(404, "File not found")
+    }
     let access = undefined
     if (fsCtrl.isTempFile(fs) == true) {
         access = fsCtrl.getAccess(fs, (ctx.header.secret ? ctx.header.secret : undefined))
     } else {
         access = fsCtrl.getAccess(fs, (ctx.state.session ? ctx.state.session.user._id : undefined))
     }
-    if (access === undefined) {
-        throw new ApiError(404, "File not found")
-    }
-    if (access == 0) {
+    if (!access || access == 0) {
         if (!ctx.state.session) {
             throw new ApiError(401, "Need authorized")
         } else {
