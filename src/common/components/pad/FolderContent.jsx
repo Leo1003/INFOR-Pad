@@ -69,8 +69,7 @@ class FolderContent extends React.Component {
             {(this.props.folder.parent.id.length > 0 && this.props.folder.id !== this.props.folder.parent.id)? (
               <tr className='collapsing'>
                 <td>
-                  <i className="level up icon"></i>
-                  <Link to={'/pad/folder/' + this.props.folder.parent.id}>..</Link>
+                  <Link to={'/pad/folder/' + this.props.folder.parent.id}><i className="large level up icon"></i></Link>
                 </td>
               </tr>
             ) : null}

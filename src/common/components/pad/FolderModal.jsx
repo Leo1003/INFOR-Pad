@@ -42,8 +42,8 @@ class FolderModal extends React.Component {
             <p><b>Type: </b>&nbsp;{this.props.file.format}</p>
             <p><b>Owner: </b>&nbsp;<a href={'/user/' + this.props.owner.name}>{this.props.owner.name}</a></p>
             <p><b>Location: </b>&nbsp;{this.props.foldername}</p>
-            <p><b>CreateDate: </b>&nbsp;{moment(this.props.file.createDate).subtract(10, 'days').calendar()}</p>
-            <p><b>Last Modify: </b>&nbsp;{moment(this.props.file.modifyDate).subtract(10, 'days').calendar()}</p>
+            <p><b>CreateDate: </b>&nbsp;{moment(this.props.file.createDate).format('MMMM Do YYYY, h:mm:ss a')}</p>
+            <p><b>Last Modify: </b>&nbsp;{moment(this.props.file.modifyDate).format('MMMM Do YYYY, h:mm:ss a')}</p>
             {this.props.file.isPublic ? <p><b>Share ID:</b>&nbsp;<a href={'/' + this.props.file.shortid }>{this.props.file.shortid}</a></p> : null}
             { this.props.file.owner === this.props.userid ?
               <div>

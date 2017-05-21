@@ -15,9 +15,9 @@ class FileContent extends React.Component {
         <div className="content">
           <p><b>Type: </b>&nbsp;{this.props.file.format}</p>
           <p><b>Owner: </b>&nbsp;<a href={'/user/' + this.props.file.owner.name}>{this.props.file.owner.name}</a></p>
-          <p><b>Location: </b>&nbsp;{this.props.file.parent.name}</p>
-          <p><b>CreateDate: </b>&nbsp;{moment(this.props.file.createDate).subtract(10, 'days').calendar()}</p>
-          <p><b>Last Modify: </b>&nbsp;{moment(this.props.file.modifyDate).subtract(10, 'days').calendar()}</p>
+          <p><b>Location: </b>&nbsp;<Link to={'/pad/folder/' + this.props.file.parent.id}>{this.props.file.parent.name}</Link></p>
+          <p><b>CreateDate: </b>&nbsp;{moment(this.props.file.createDate).format('MMMM Do YYYY, h:mm:ss a')}</p>
+          <p><b>Last Modify: </b>&nbsp;{moment(this.props.file.modifyDate).format('MMMM Do YYYY, h:mm:ss a')}</p>
           {this.props.file.isPublic ? <p><b>Share ID:</b>&nbsp;<a href={'/' + this.props.file.shortid }>{this.props.file.shortid}</a></p> : null}
           <hr />
           <p><b>Code:</b></p>
