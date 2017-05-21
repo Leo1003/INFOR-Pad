@@ -132,10 +132,7 @@ router.put('/:fsid/:tgfsid', async ctx => {
         fs = await fsCtrl.unlink(fs, pfs)
         fs = await fsCtrl.link(fs, ctx.params.tgfsid)
         ctx.status = 200
-        ctx.body = {
-            fsid: fs._id,
-            newParent: ctx.params.tgfsid
-        }
+        ctx.body = await fsCtrl.extractFSData(fs, true)
     } else {
         throw new ApiError(403, "Permission denied")
     }

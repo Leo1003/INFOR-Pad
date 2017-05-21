@@ -117,6 +117,21 @@ This document contains how to use the REST api
 
 ***
 #### File System
+ * FileSystem Object
+     * id: File's ID
+     * name: File name
+     * description: A short text about the file
+     * parent: Parent directory object
+     * owner: The user of the file's owner
+     * createDate: CreateDate
+     * modifyDate: LastModifyDate
+     * isPublic: If the file can be viewed by anyone
+     * shortid: A shorted ID can be used to create short url
+     * format: The file's format or 'Directory'
+     * code: The code of the file **(File Only)**
+     * stdin: The stdin data **(File Only)**
+     * files[]: The list of the files contained **(Directory Only)**
+
 ~~~http
  GET /api/fs/?shortid=
 ~~~
@@ -128,13 +143,7 @@ This document contains how to use the REST api
          * 404: The file isn't exist
          * 500: Server Error
      * Respond Body
-         * name: File name
-         * parent: Parent Directory
-         * owner: The user id of the file's owner
-         * createDate: CreateDate
-         * modifyDate: LastModifyDate
-         * isPublic: If the file can be viewed by anyone
-         * format: The file's format or 'Directory'
+         A FileSystem Object without content
 
 ~~~http
  GET /api/fs/:fsid
@@ -147,16 +156,7 @@ This document contains how to use the REST api
          * 404: The file isn't exist
          * 500: Server Error
      * Respond Body
-         * name: File name
-         * parent: Parent Directory
-         * owner: The user id of the file's owner
-         * createDate: CreateDate
-         * modifyDate: LastModifyDate
-         * isPublic: If the file can be viewed by anyone
-         * format: The file's format or 'Directory'
-         * code: The code of the file **(File Only)**
-         * stdin: The stdin data **(File Only)**
-         * files[]: The list of the files contained **(Directory Only)**
+        * A FileSystem Object
 
 ~~~http
  POST /api/fs/:fsid
@@ -175,7 +175,7 @@ This document contains how to use the REST api
          * 404: The directory isn't exist
          * 500: Server Error
      * Respond Body
-         * id: The id of the new file
+         * A FileSystem Object
 
 ~~~http
  PUT /api/fs/:fsid
@@ -196,7 +196,7 @@ This document contains how to use the REST api
          * 404: The directory isn't exist
          * 500: Server Error
      * Respond Body
-         * id: The file id be updated
+         * A FileSystem Object
 
 ~~~http
  PUT /api/fs/:fsid/:tgfsid
@@ -214,8 +214,7 @@ This document contains how to use the REST api
          * 404: Not Found
          * 500: Server Error
      * Respond Body
-         * fsid: The file's id
-         * newParent: The file's new parent id
+         * A FileSystem Object
 
 ~~~http
  DELETE /api/fs/:fsid
