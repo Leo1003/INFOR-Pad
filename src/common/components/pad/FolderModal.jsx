@@ -22,7 +22,7 @@ class FolderModal extends React.Component {
   }
   deleteFile() {
     $(`#${this.props.file.id}_modal`).modal('hide')
-    this.props.handleDelete(this.props.file.id, this.props.sessionid, this.props.folderid)
+    this.props.handleDelete(this.props.file.id, this.props.sessionid, this.props.folder.id)
   }
   handleCheckPermission = () => {
     this.setState({
@@ -58,7 +58,6 @@ class FolderModal extends React.Component {
     })
   }
   componentDidMount() {
-    console.log("did mount")
     if(this.props.file.id.length > 0) {
       $(`#${this.props.file.id}_renameModal`).modal(
         'attach events', `#${this.props.file.id} #openRename`
@@ -70,19 +69,11 @@ class FolderModal extends React.Component {
     this.initialForm()
      
   }
-  componentWillReceiveProps(nextProps) {
-    console.log("receive props")
-    console.log(nextProps)
-    // $(`#${this.props.file.id}_renameModal`).remove()
-    // $(`#${this.props.file.id}_moveModal`).remove()
-    // $(`#${this.props.file.id}_modal`).remove()
-  }
   componentWillUpdate(nextProps, nextState) {
     if(this.state.isChecked !== nextState.isChecked) this.props.handleCheckPermission(this.props.file.id, this.props.sessionid, nextState.isChecked.toString())
   }
   componentDidUpdate() {
     if(this.props.file.id.length > 0) {
-      console.log(this.props.file)
       $(`#${this.props.file.id}_renameModal`).modal(
         'attach events', `#${this.props.file.id}_modal #openRename`
       )
@@ -109,7 +100,7 @@ class FolderModal extends React.Component {
             <p><b>Name: </b>&nbsp;{this.props.file.name}</p>
             <p><b>Type: </b>&nbsp;{this.props.file.format}</p>
             <p><b>Owner: </b>&nbsp;<a href={'/user/' + this.props.owner.name}>{this.props.owner.name}</a></p>
-            <p><b>Location: </b>&nbsp;{this.props.foldername}}</p>
+            <p><b>Location: </b>&nbsp;{this.props.folder.name}</p>
             <p><b>CreateDate: </b>&nbsp;{moment(this.props.file.createDate).format('MMMM Do YYYY, h:mm:ss a')}</p>
             <p><b>Last Modify: </b>&nbsp;{moment(this.props.file.modifyDate).format('MMMM Do YYYY, h:mm:ss a')}</p>
             {this.props.file.isPublic ? <p><b>Share ID:</b>&nbsp;<a href={'/' + this.props.file.shortid }>{this.props.file.shortid}</a></p> : null}
@@ -162,7 +153,7 @@ class FolderModal extends React.Component {
         </div>
 
         {/*moveModal*/}
-        <MoveFileModal file={this.props.file}/>
+        <MoveFileModal folder={this.props.folder} file={this.props.file} />
       </div>
     )
   }

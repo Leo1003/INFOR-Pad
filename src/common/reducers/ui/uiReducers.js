@@ -35,6 +35,16 @@ const uiReducers = handleActions({
       error: 'File is not exist!',
       redirectToError: true
     })
+  },
+  CHANGE_MOVE_CONTENT: (state, { payload }) => {
+    return Object.assign({}, state, {
+      moveContent: {
+        name: payload.data.name,
+        id: payload.data.id,
+        files: payload.data.files,
+        parentId: payload.data.parent.id
+      }
+    })
   }
 }, ui)
 

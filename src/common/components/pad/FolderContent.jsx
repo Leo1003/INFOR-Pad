@@ -28,7 +28,6 @@ class FolderContent extends React.Component {
     }
   }
   componentDidMount() {
-    console.log(this.props.folder.files)
     $('.ui.dropdown').dropdown()
   }
   componentWillReceiveProps() {
@@ -135,7 +134,7 @@ class FolderContent extends React.Component {
             })}
           </tbody>
         </table>
-          <FolderModal file={this.state.openedModal} sessionid={this.props.sessionid} foldername={this.props.folder.name} folderid={this.props.folder.id} owner={this.props.folder.owner} />
+          <FolderModal file={this.state.openedModal} sessionid={this.props.sessionid} folder={this.props.folder} owner={this.props.folder.owner} />
       </div>
     )
   }

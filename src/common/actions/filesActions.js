@@ -13,7 +13,8 @@ import {
   GET_SHORTID,
   INITIALREDIRECT,
   CLEAN_SESSION,
-  FILE_RENAME
+  FILE_RENAME,
+  CHANGE_MOVE_CONTENT
 } from '../constants/actionTypes'
 import { browserHistory } from 'react-router'
 
@@ -147,6 +148,44 @@ export const fetchRename = (sessionid, fsid, newName) => (
         dispatch({ type: FILE_RENAME, newName: newName, fsid: fsid})
       }
       //todo: res not ok
+    } catch(e) { console.log(e) }
+  }
+)
+
+export const fetchMoveContent = (sessionid, fsid) => (
+    async (dispatch) => {
+        try {
+            let res = await fetch(`/api/fs/${fsid}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'sessionid': `${sessionid}`
+                }
+            })
+            if(res.ok) {
+                let json = await res.json()
+                dispatch({ type: CHANGE_MOVE_CONTENT, payload: { data:json } })
+            }
+            //todo res error
+        } catch(e) { console.log(e) }
+    }
+)
+
+export const fetchMoveFile = (sessionid, fsid, tfsid, folderid) => (
+  async (dispatch) => {
+    try {
+      let res = await fetch(`/api/fs/${fsid}/${tfsid}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'sessionid': `${sessionid}`
+        }
+      })
+      if(res.ok) {
+        //todo
+        dispatch(fetchGetFiles(sessionid, folderid, 'Directory'))
+      }
+      //todo res error
     } catch(e) { console.log(e) }
   }
 )

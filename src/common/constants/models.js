@@ -89,6 +89,7 @@ export const ui = {
   moveContent: {
     name: '',
     id: '',
+    parentId: '',
     files: []
   }
 }
