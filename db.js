@@ -35,6 +35,7 @@ var Session = new Schema({
 
 var FileSystem = new Schema({
     name: { type: String, required: true },
+    description: { type: String, default: '' },
     parent: { type: Schema.Types.ObjectId, ref: 'FileSystem' },
     owner: { type: Schema.Types.ObjectId, ref: 'User'},
     createDate: { type: Date, default: new Date() },

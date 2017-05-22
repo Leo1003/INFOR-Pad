@@ -9,16 +9,16 @@ router.prefix('/fs')
 
 router.param('fsid', async(fsid, ctx, next) => {
     let fs = await fsCtrl.findFS(fsid)
+    if (!fs) {
+        throw new ApiError(404, "File not found")
+    }
     let access = undefined
     if (fsCtrl.isTempFile(fs) == true) {
         access = fsCtrl.getAccess(fs, (ctx.header.secret ? ctx.header.secret : undefined))
     } else {
         access = fsCtrl.getAccess(fs, (ctx.state.session ? ctx.state.session.user._id : undefined))
     }
-    if (access === undefined) {
-        throw new ApiError(404, "File not found")
-    }
-    if (access == 0) {
+    if (!access || access == 0) {
         if (!ctx.state.session) {
             throw new ApiError(401, "Need authorized")
         } else {
@@ -71,7 +71,7 @@ router.post('/', async ctx => {
     if (!data.filename || !data.format) {
         throw new ApiError(400, "Some data are missed")
     }
-    let newfile = await fsCtrl.addTempFile(data.filename, data.format, ctx.header.secret)
+    let newfile = await fsCtrl.addTempFile(data.filename, data.format, data.description, ctx.header.secret)
     ctx.status = 201
     ctx.body = await fsCtrl.extractFSData(newfile, true)
 })
@@ -84,6 +84,7 @@ router.post('/:fsid', async ctx => {
         let isfile = data.format != 'Directory'
         let newfile = new FileSystem({
             name: data.filename,
+            description: data.description,
             owner: ctx.state.session.user._id,
             isFile: isfile === true,
             files: isfile === false ? [] : undefined,
@@ -131,10 +132,7 @@ router.put('/:fsid/:tgfsid', async ctx => {
         fs = await fsCtrl.unlink(fs, pfs)
         fs = await fsCtrl.link(fs, ctx.params.tgfsid)
         ctx.status = 200
-        ctx.body = {
-            fsid: fs._id,
-            newParent: ctx.params.tgfsid
-        }
+        ctx.body = await fsCtrl.extractFSData(fs, true)
     } else {
         throw new ApiError(403, "Permission denied")
     }

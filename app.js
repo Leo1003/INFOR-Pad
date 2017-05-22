@@ -15,7 +15,8 @@ const io = require('socket.io')();
 const password = require('./password.json')
 const lxtesterServer = new(require('./lxtester').lxtesterServer)()
 
-const api = require('./routes/api');
+const api = require('./routes/api')
+const vaildation = require('./routes/mail-vaildation')
 
 //react
 const serve = require('koa-static')
@@ -45,14 +46,15 @@ app.use(async(ctx, next) => {
 mailCtrl.verifyConfig().then(verified => {
     if (verified == false) {
         console.error('Mail config verify failed!')
-        console.error('Mail verify will not work!')
+        console.error('Mail verify will not work!') 
     } else {
         console.error('Mail verify successfully!')
     }
 })
 
 // routes
-app.use(api.routes(), api.allowedMethods());
+app.use(api.routes(), api.allowedMethods())
+app.use(vaildation.routes(), vaildation.allowedMethods())
 // react routes
 app.use(serve(__dirname + '/dist'))
 app.use(serve(__dirname + '/semantic/dist'))
@@ -128,6 +130,12 @@ io.of('/lxtester').on('connection', socket => {
     socket.on('Result', data => {
         let task = lxtesterServer.receiveJob(socket.id, data)
         io.of('/client').connected[task.socketid].emit('Result', task.result)
+    })
+    socket.on('Suspend', data => {
+        lxtesterServer.suspend(socket.id)
+    })
+    socket.on('Resume', data => {
+        lxtesterServer.resume(socket.id)
     })
     socket.on('disconnecting', data => {
         let uncompleted = lxtesterServer.remove(socket.id)

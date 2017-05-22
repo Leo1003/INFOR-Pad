@@ -12,7 +12,8 @@ exports.extractFSData = async function(fs, complete, extend) {
     let ret = {
         id: fs._id,
         name: fs.name,
-        parent: fs.parent,
+        description: fs.description,
+        parent: fs.parent || "",
         owner: fs.owner,
         createDate: fs.createDate,
         modifyDate: fs.modifyDate,
@@ -24,6 +25,8 @@ exports.extractFSData = async function(fs, complete, extend) {
         if (fs.parent) {
             await fs.populate('parent').execPopulate()
             ret.parent = await exports.extractFSData(fs.parent, false)
+        } else {
+            ret.parent = {}
         }
         if (fs.owner) {
             await fs.populate('owner').execPopulate()
@@ -105,9 +108,10 @@ exports.getAccess = function(fs, userid) {
     }
 }
 
-exports.addTempFile = async function(name, format, secret) {
+exports.addTempFile = async function(name, format, description, secret) {
     return await new FileSystem({
         name: name,
+        description: description,
         isFile: true,
         isPublic: true,
         shortid: randomstring.generate(8),
@@ -143,6 +147,7 @@ exports.updateFS = async function(fs, data, limit) {
         fs.name = chkValue(data.filename, fs.name)
     }
     fs.isPublic = chkValue(data.isPublic, fs.isPublic)
+    fs.description = chkValue(data.description, fs.description, 1024)
     if (fs.isFile === true) {
         fs.code = chkValue(data.code, fs.code, limit)
         fs.stdin = chkValue(data.stdin, fs.stdin, limit)
