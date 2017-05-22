@@ -21,6 +21,10 @@ exports.extractFSData = async function(fs, complete, extend) {
         shortid: (fs.shortid ? fs.shortid : ''),
         format: fs.isFile === true ? fs.format : 'Directory'
     }
+    if (fs.isFile === true) {
+        //Assume one char is 2 bytes
+        ret.size = fs.code.length * 2 + fs.stdin.length * 2 + fs.description * 2
+    }
     if (extend == true) {
         if (fs.parent) {
             await fs.populate('parent').execPopulate()
