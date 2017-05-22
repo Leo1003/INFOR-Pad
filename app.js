@@ -111,6 +111,9 @@ io.of('/client').on('connection', socket => {
             })
         })
     })
+    socket.on('Cancel', data => {
+        io.of('/lxtester').emit('data', { id: data.id })
+    })
 })
 io.of('/lxtester').use((socket, next) => {
     if (socket.request.headers.passtoken === password.lxtester) return next()
