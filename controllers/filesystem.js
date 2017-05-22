@@ -13,7 +13,7 @@ exports.extractFSData = async function(fs, complete, extend) {
         id: fs._id,
         name: fs.name,
         description: fs.description,
-        parent: fs.parent,
+        parent: fs.parent || "",
         owner: fs.owner,
         createDate: fs.createDate,
         modifyDate: fs.modifyDate,
@@ -25,6 +25,8 @@ exports.extractFSData = async function(fs, complete, extend) {
         if (fs.parent) {
             await fs.populate('parent').execPopulate()
             ret.parent = await exports.extractFSData(fs.parent, false)
+        } else {
+            ret.parent = {}
         }
         if (fs.owner) {
             await fs.populate('owner').execPopulate()
