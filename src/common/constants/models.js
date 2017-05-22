@@ -91,6 +91,16 @@ export const ui = {
     id: '',
     parentId: '',
     files: []
+  },
+  openedModal: {
+    createDate: '',
+    format: "",
+    id: "",
+    isPublic: false,
+    modifyDate: "",
+    name: "",
+    owner: "",
+    parent:""
   }
 }
 

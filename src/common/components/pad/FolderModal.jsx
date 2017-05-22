@@ -24,10 +24,9 @@ class FolderModal extends React.Component {
     $(`#${this.props.file.id}_modal`).modal('hide')
     this.props.handleDelete(this.props.file.id, this.props.sessionid, this.props.folder.id)
   }
-  handleCheckPermission = () => {
-    this.setState({
-      isChecked: !this.state.isChecked
-    })
+  handleCheckPermission = (fsid, isPublic) => {
+    console.log(!isPublic)
+    this.props.handleCheckPermission(fsid, this.props.sessionid, !isPublic)
   }
   handleRenameFile(e) {
     e.preventDefault()
@@ -69,8 +68,13 @@ class FolderModal extends React.Component {
     this.initialForm()
      
   }
+  componentWillReceiveProps(nextProps) {
+    console.log("folder modal receive props")
+    // console.log(this.props)
+    // console.log(nextProps)
+  }
   componentWillUpdate(nextProps, nextState) {
-    if(this.state.isChecked !== nextState.isChecked) this.props.handleCheckPermission(this.props.file.id, this.props.sessionid, nextState.isChecked.toString())
+   // if(this.state.isChecked !== nextState.isChecked) this.props.handleCheckPermission(this.props.file.id, this.props.sessionid, nextState.isChecked.toString())
   }
   componentDidUpdate() {
     if(this.props.file.id.length > 0) {
@@ -108,7 +112,7 @@ class FolderModal extends React.Component {
               <div>
                 <div className="ui divider"></div>
                 <div className="ui toggle checkbox">
-                  <input type="checkbox" name="isPublic" onChange={this.handleCheckPermission} checked={this.state.isChecked} />
+                  <input type="checkbox" name="isPublic" onChange={() => this.handleCheckPermission(this.props.file.id, this.props.file.isPublic)} checked={this.props.file.isPublic} />
                   <label><b>Public</b></label>
                 </div>
                 <br />

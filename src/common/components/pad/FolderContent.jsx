@@ -3,6 +3,8 @@ import AddNewFilesDropdown from './AddNewFilesDropdown.jsx'
 import FolderModal from './FolderModal.jsx'
 import { List, Dropdown } from 'semantic-ui-react'
 import { browserHistory, Link } from 'react-router'
+import { connect } from 'react-redux'
+import { changeFolderModal } from '../../actions/filesActions'
 
 const moment = require('moment')
 
@@ -15,16 +17,6 @@ class FolderContent extends React.Component {
     this.openModal = this.openModal.bind(this)
     this.state = {
       show: 'All',
-      openedModal: {
-        createDate: '',
-        format: "",
-        id: "",
-        isPublic: false,
-        modifyDate: "",
-        name: "",
-        owner: "",
-        parent:""
-      }
     }
   }
   componentDidMount() {
@@ -34,9 +26,8 @@ class FolderContent extends React.Component {
     $('.ui.dropdown').dropdown()
   }
   openModal(file) {
-    this.setState({
-      openedModal: file
-    }, () => $('.main.modal').modal('show'))
+    this.props.handleChangeFolderModal(file)
+    $('.main.modal').modal('show')
   }
   showAll() {
     this.setState({
@@ -52,6 +43,11 @@ class FolderContent extends React.Component {
     this.setState({
       show: 'Private'
     })
+  }
+  componentWillReceiveProps(nextProps) {
+    console.log("folder content receive")
+    // console.log(this.props)
+    // console.log(nextProps)
   }
   render() {
     return (
@@ -82,7 +78,7 @@ class FolderContent extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {(this.props.folder.parent.id.length > 0 && this.props.folder.id !== this.props.folder.parent.id)? (
+            {this.props.folder.parent.id ? (
               <tr className='collapsing'>
                 <td>
                   <Link to={'/pad/folder/' + this.props.folder.parent.id}><i className="large level up icon"></i></Link>
@@ -134,10 +130,21 @@ class FolderContent extends React.Component {
             })}
           </tbody>
         </table>
-          <FolderModal file={this.state.openedModal} sessionid={this.props.sessionid} folder={this.props.folder} owner={this.props.folder.owner} />
+          <FolderModal file={this.props.openedModal} sessionid={this.props.sessionid} folder={this.props.folder} owner={this.props.folder.owner} />
       </div>
     )
   }
 }
 
-export default FolderContent
+const mapStateToProps = (state) => ({
+  openedModal: state.ui.openedModal
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  handleChangeFolderModal: (file) => {
+    dispatch(changeFolderModal(file))
+  }
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(FolderContent)
+

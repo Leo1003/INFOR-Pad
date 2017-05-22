@@ -42,9 +42,9 @@ class MoveFileModal extends React.Component {
                 </div>
                 <div className="content" style={{height: "44vh", overflow: 'auto'}}>
                     <div className="ui selection list">
-                        <div className="item" onClick={() => this.handleChangeContent(this.props.moveContent.parentId)}>
+                        {this.props.moveContent.parentId ? <div className="item" onClick={() => this.handleChangeContent(this.props.moveContent.parentId)}>
                             <i className="level up large icon"></i>
-                        </div>
+                        </div> : null}
                         {this.props.moveContent.files.map(file => {
                             if(file.format === "Directory" && file.id !== this.props.file.id) {
                                 return (

@@ -45,7 +45,12 @@ const uiReducers = handleActions({
         parentId: payload.data.parent.id
       }
     })
-  }
+  },
+  CHANGE_FOLDER_MODAL: (state, { file }) => (
+    Object.assign({}, state, {
+      openedModal: file
+    })
+  ) 
 }, ui)
 
 export default uiReducers

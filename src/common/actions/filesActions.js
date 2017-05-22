@@ -14,7 +14,8 @@ import {
   INITIALREDIRECT,
   CLEAN_SESSION,
   FILE_RENAME,
-  CHANGE_MOVE_CONTENT
+  CHANGE_MOVE_CONTENT,
+  CHANGE_FOLDER_MODAL
 } from '../constants/actionTypes'
 import { browserHistory } from 'react-router'
 
@@ -94,6 +95,8 @@ export const fetchDeleteFile = (fsid, sessionid, folderid) => (
 export const fetchCheckPermission = (fsid, sessionid, check) => (
   async (dispatch) => {
     try {
+      console.log(check)
+      
       let res = await fetch(`/api/fs/${fsid}`, {
         method: 'PUT',
         headers: {
@@ -105,6 +108,7 @@ export const fetchCheckPermission = (fsid, sessionid, check) => (
       if(res.ok) {
         let json = await res.json()
         dispatch({ type: GET_SHORTID, payload:{ data: json } })
+        dispatch({ type: CHANGE_FOLDER_MODAL, file: json })
       }
     } catch(e) { console.log(e) }
   }
@@ -187,5 +191,11 @@ export const fetchMoveFile = (sessionid, fsid, tfsid, folderid) => (
       }
       //todo res error
     } catch(e) { console.log(e) }
+  }
+)
+
+export const changeFolderModal = (file) => (
+  (dispatch) => {
+    dispatch({ type: CHANGE_FOLDER_MODAL , file: file })
   }
 )
