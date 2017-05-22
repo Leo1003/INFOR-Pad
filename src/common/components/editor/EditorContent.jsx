@@ -83,11 +83,15 @@ class EditorContent extends React.Component {
             fontSize: 14,
             tabSize: 4,
             changedCode: false,
+            //time: 0
         }
     }
     componentDidMount() {
         $('.ui.dropdown').dropdown()
         $('#select').dropdown()
+        setInterval(() => {
+            this.saveCode()
+        }, 3000)
     }
     clickSetting() {
         this.setState({
@@ -113,8 +117,11 @@ class EditorContent extends React.Component {
         this.props.handleChangeSettings(this.props.sessionid, 'tabSize', e.target.value)
     }
     saveCode(e) {
-        e.preventDefault()
-        if(this.state.changedCode === true) this.props.handlefetchSaveCode(this.props.sessionid, this.props.file.id, this.props.file.code)
+        //e.preventDefault()
+        if(this.state.changedCode === true) {
+            console.log("auto save code")
+            this.props.handlefetchSaveCode(this.props.sessionid, this.props.file.id, this.props.file.code)
+        }
         this.setState({
             changedCode: false
         })
@@ -188,7 +195,7 @@ class EditorContent extends React.Component {
                         <option value="Bash">Bash</option>
                         <option value="Plain_Text">Plain_Text</option>
                     </select>
-                    
+                    { this.state.time }
                     <div className="ui icon button" style={{
                         float: 'right',
                         position: 'relative',
