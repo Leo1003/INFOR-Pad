@@ -3,6 +3,30 @@ import React from 'react'
 export class AddNewFileModal extends React.Component {
   constructor(props) {
     super(props)
+    this.handleFilenameChange = this.handleFilenameChange.bind(this)
+    this.checkSubfilename = this.checkSubfilename.bind(this)
+    this.mapLanguageToCompiler = {
+      "cpp": "CPP14",
+      "py": "Python3",
+      "java": "Java",
+      "jsx": "JSX",
+      "html": "HTML",
+      "xml": "XML",
+      "css": "CSS",
+      "styl": "Stylus",
+      "scss": "Scss",
+      "less": "Less",
+      "js": "Javascript",
+      "json": "JSON",
+      "swift": "Swift",
+      "m": "ObjectiveC",
+      "php": "PHP",
+      "hs": "Haskell",
+      "md": "Markdown",
+      "sh": "Bash",
+      "txt": "Plain_Text"
+    }
+    this.state = {language: "Language"}
   }
   componentDidMount() {
     this.formValidation()
@@ -53,6 +77,24 @@ export class AddNewFileModal extends React.Component {
   handleFileInvalid(e) {
     return false
   }
+  handleFilenameChange(e) {
+    e.preventDefault()
+    let filename = this.refs.filename.value
+    let subfilename = this.checkSubfilename(filename)
+    this.setState({language: subfilename})
+  }
+  checkSubfilename(filename) {
+    let dot = -1
+    for (let i = 0; i < filename.length; i++) if (filename[i] == '.') {
+      dot = i;
+      break
+    }
+    if (dot == -1) return ""
+    let subfilename = filename.substring(dot + 1, filename.length)
+    // for (let i of Object.keys(this.mapLanguageToCompiler)) console.log(i)
+    if (Object.keys(this.mapLanguageToCompiler).indexOf(subfilename) != -1) return this.mapLanguageToCompiler[subfilename]
+    return ""
+  }
   render() {
     return (
       <div className="ui small modal" id="addNewFileModal">
@@ -64,7 +106,7 @@ export class AddNewFileModal extends React.Component {
 
             <form className="ui form" id="addfileform">
               <div className="field">
-                <input type="text" name="filename" ref='filename' placeholder='File Name...' />
+                <input type="text" name="filename" ref='filename' placeholder='File Name...' onChange={this.handleFilenameChange}/>
               </div>
               <div className="field">
                 <select className="ui search dropdown" ref="language" name="language">
