@@ -5,6 +5,7 @@ export class AddNewFileModal extends React.Component {
     super(props)
     this.handleFilenameChange = this.handleFilenameChange.bind(this)
     this.checkSubfilename = this.checkSubfilename.bind(this)
+    this.handleFiletypeChange = this.handleFiletypeChange.bind(this)
     this.mapLanguageToCompiler = {
       "cpp": "CPP14",
       "py": "Python3",
@@ -26,7 +27,7 @@ export class AddNewFileModal extends React.Component {
       "sh": "Bash",
       "txt": "Plain_Text"
     }
-    this.state = {language: "Language"}
+    this.state = {language: ""}
   }
   componentDidMount() {
     this.formValidation()
@@ -69,13 +70,19 @@ export class AddNewFileModal extends React.Component {
   }
   handleAddNewFile(e) {
     e.preventDefault()
-    this.props.handleAddNewFiles(this.refs.filename.value, this.props.id, this.props.sessionid, this.refs.language.value)
+    this.props.handleAddNewFiles(this.refs.filename.value, this.props.id, this.props.sessionid, this.state.language)
     $('#addfileform').form('clear')
     $('#addNewFileModal').modal('hide')
     this.props.handlefetchGetFiles(this.props.sessionid, this.props.id, 'Directory')
   }
   handleFileInvalid(e) {
     return false
+  }
+  handleFiletypeChange(e) {
+    e.preventDefault()
+    this.setState({
+      language: e.target.value
+    })
   }
   handleFilenameChange(e) {
     e.preventDefault()
@@ -109,7 +116,7 @@ export class AddNewFileModal extends React.Component {
                 <input type="text" name="filename" ref='filename' placeholder='File Name...' onChange={this.handleFilenameChange}/>
               </div>
               <div className="field">
-                <select className="ui search dropdown" ref="language" name="language">
+                <select className="ui search dropdown" value={this.state.language} onChange={this.handleFiletypeChange}>
                       <option value="">Language</option>
                       <option value="C">C</option>
                       <option value="CPP">CPP</option>

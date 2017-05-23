@@ -1,6 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { fetchSaveCode, changeCode, fetchChangeSettings,fetchEditorModify } from '../../actions/editorActions'
+
+const io = require('socket.io-client')  
+let socket = io()  
 // import ToolBar from './ToolBar.jsx'
 
 const Editor = (props) => {
@@ -81,20 +84,80 @@ class EditorContent extends React.Component {
         this.openRightBar = this.openRightBar.bind(this)
         this.changeStdin = this.changeStdin.bind(this)
         this.runCode = this.runCode.bind(this)
+        this.connect = this.connect.bind(this)
+        this.onResult = this.onResult.bind(this)
+        this.getResult = this.getResult.bind(this)
+        this.submit = this.submit.bind(this)
         this.state = {
             showSetting: false,
             fontSize: 14,
             tabSize: 4,
             changedCode: false,
-            stdin: props.file.stdin
+            stdin: props.file.stdin,
+            result: {}
         }
     }
     componentDidMount() {
         $('.ui.dropdown').dropdown()
         $('#select').dropdown()
+        this.connect(this.props.sessionid, (err) => {
+            if(err) {
+                console.log(err)
+            } else {
+                this.onResult(this.getResult)
+                console.log("Connect")
+            }
+        })
+
         setInterval(() => {
             this.saveCode()
         }, 3000)
+    }
+    connect(sessionid, callback) {
+        socket = io('/client', {query: `sessionid=${sessionid}`});
+        socket.on('connect', () => {
+            console.log("Connected to server!");
+            callback();
+        });
+        socket.on('error', error => {
+            console.error(error)
+            callback(error);
+        });
+    }
+    onResult(callback) {
+        socket.on('Result', data => {
+            let result = {};
+            result.id = data.id;
+            if (data.type == 2) {
+                result.status = 'Error';
+            } else if (data.type == 1) {
+                result.status = 'ComplieError';
+            } else if (data.type == 0) {
+                result.status = 'Success';
+            }
+            result.time = data.time != -1 ? data.time : undefined;
+            result.memory = data.memory != -1 ? data.memory : undefined;
+            result.exitcode = data.exitcode;
+            result.signal = data.signal;
+            result.killed = data.killed;
+            result.stdout = data.output;
+            result.stderr = data.error;
+            return callback(result);
+        });
+    }
+    getResult(result) {
+        console.log(result)
+        this.setState({
+            result: result
+        })
+    }
+    submit(fileid, language) {
+        console.log(fileid)
+        console.log(language)
+        socket.emit('Submit', {
+            fileid: fileid,
+            language: language
+        });
     }
     clickSetting() {
         this.setState({
@@ -157,6 +220,7 @@ class EditorContent extends React.Component {
         //save stdin
         this.props.handleEditorModify(this.props.sessionid, this.props.file.id, 'stdin', this.refs.stdin.value)
         // socket 
+        this.submit(this.props.file.id, this.props.file.format)
     }
     render() {
         let mode = {
@@ -200,6 +264,7 @@ class EditorContent extends React.Component {
                     </div>
                     <div className="item">
                         <label>Ouput</label>
+                        {this.state.result}
                     </div>
                 </div>
                 <div className="pusher">
