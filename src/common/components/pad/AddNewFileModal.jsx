@@ -70,7 +70,7 @@ export class AddNewFileModal extends React.Component {
   }
   handleAddNewFile(e) {
     e.preventDefault()
-    this.props.handleAddNewFiles(this.refs.filename.value, this.props.id, this.props.sessionid, this.state.language)
+    this.props.handleAddNewFiles(this.refs.filename.value, this.props.id, this.props.sessionid, this.state.language, this.refs.description.value)
     $('#addfileform').form('clear')
     $('#addNewFileModal').modal('hide')
     this.props.handlefetchGetFiles(this.props.sessionid, this.props.id, 'Directory')
@@ -143,6 +143,9 @@ export class AddNewFileModal extends React.Component {
                       <option value="Bash">Bash</option>
                       <option value="Plain_Text">Plain_Text</option>
                   </select>
+              </div>
+              <div className="field">
+                <textarea rows="2" ref="description" placeholder="Write some description..."></textarea>
               </div>
             </form>
 

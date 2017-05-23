@@ -73,6 +73,7 @@ class FileContent extends React.Component {
           <p><b>Location: </b>&nbsp;<Link to={'/pad/folder/' + this.props.file.parent.id}>{this.props.file.parent.name}</Link></p>
           <p><b>CreateDate: </b>&nbsp;{moment(this.props.file.createDate).format('MMMM Do YYYY, h:mm:ss a')}</p>
           <p><b>Last Modify: </b>&nbsp;{moment(this.props.file.modifyDate).format('MMMM Do YYYY, h:mm:ss a')}</p>
+          <p style={{wordBreak: "break-all"}}><b>Description: </b>&nbsp;{this.props.file.description}</p>
           {this.props.file.isPublic ? <p><b>Share ID:</b>&nbsp;<a href={'/' + this.props.file.shortid }>{this.props.file.shortid}</a></p> : null}
           <hr />
           <p><b>Code:</b></p>

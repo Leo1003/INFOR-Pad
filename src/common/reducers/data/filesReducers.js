@@ -25,7 +25,14 @@ export const folderReducers = handleActions({
       })
     })
   },
-
+  FILE_UPDATE_DES: (state, { newDes, fsid }) => {
+    return Object.assign({}, state, {
+      files: state.files.map(file => {
+        if(file.id === fsid) return Object.assign({}, file, { description: newDes })
+        else return file
+      })
+    })
+  }
 }, folder)
 
 export const fileReducers = handleActions({

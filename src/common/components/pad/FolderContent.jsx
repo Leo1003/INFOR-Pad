@@ -68,12 +68,12 @@ class FolderContent extends React.Component {
             Private
           </button>
         </div>
-        <table className="ui overflow fixed single line celled unstackable selectable table">
+        <table className="ui overflow fixed single line celled selectable table">
           <thead>
             <tr>
               <th>FileName</th>
-              <th style={{width: '31%'}}>Type</th>
-              <th style={{width: '31%'}}>ModifyDate</th>
+              <th style={{width: '24%'}}>Type</th>
+              <th style={{width: '40%'}}>Description</th>
               <th style={{width: '44px'}}></th>
             </tr>
           </thead>
@@ -97,7 +97,7 @@ class FolderContent extends React.Component {
                       {file.format}
                     </td>
                     <td>
-                      {moment(file.modifyDate).fromNow()}
+                      {file.description}
                     </td>
                     <td className="right aligned collapsing">
                       {/*<FolderModal file={file} sessionid={this.props.sessionid} foldername={this.props.folder.name} folderid={this.props.folder.id} owner={this.props.folder.owner} />*/}
@@ -119,7 +119,7 @@ class FolderContent extends React.Component {
                     {file.format}
                   </td>
                   <td>
-                    {moment(file.modifyDate).fromNow()}
+                    {file.description}
                   </td>
                   <td className="right aligned collapsing">
                     {/*<FolderModal file={file} sessionid={this.props.sessionid} foldername={this.props.folder.name} folderid={this.props.folder.id} owner={this.props.folder.owner} />*/}

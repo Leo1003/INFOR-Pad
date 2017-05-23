@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
-import { fetchDeleteFile, fetchCheckPermission, fetchRename } from '../../actions/filesActions'
+import { fetchDeleteFile, fetchCheckPermission, fetchRename, fetchUpdateDescription } from '../../actions/filesActions'
 import { Link } from 'react-router'
 import { fetchGetUserById } from '../../actions/userActions'
 import MoveFileModal from './MoveFileModal.jsx'
@@ -13,6 +13,7 @@ class FolderModal extends React.Component {
     this.openModal = this.openModal.bind(this)
     this.deleteFile = this.deleteFile.bind(this)
     this.initialForm = this.initialForm.bind(this)
+    this.handleDes = this.handleDes.bind(this)
     this.state = {
       isChecked: this.props.file.isPublic,
     }
@@ -34,6 +35,12 @@ class FolderModal extends React.Component {
     this.props.handleRename(this.props.sessionid, this.props.file.id, this.refs.renameValue.value)
     $(ReactDOM.findDOMNode(this.refs.renameForm)).form('clear')
     $(`#${this.props.file.id}_renameModal`).modal('hide')
+  }
+  handleDes(e) {
+    e.preventDefault()
+    this.props.handleUpdateDes(this.props.sessionid, this.props.file.id, this.refs.descriptionValue.value)
+    $(ReactDOM.findDOMNode(this.refs.descriptionForm)).form('clear')
+    $(`#${this.props.file.id}_descriptionModal`).modal('hide')
   }
   handleInvalid() {
     return false
@@ -64,6 +71,9 @@ class FolderModal extends React.Component {
       $(`#${this.props.file.id}_moveModal`).modal(
         'attach events', `#${this.props.file.id} #openMove`
       )
+      $(`#${this.props.file.id}_descriptionModal`).modal(
+        'attach events', `#${this.props.file.id}_modal #openDescription`
+      )
     }
     this.initialForm()
      
@@ -83,6 +93,9 @@ class FolderModal extends React.Component {
       )
       $(`#${this.props.file.id}_moveModal`).modal(
         'attach events', `#${this.props.file.id}_modal #openMove`
+      )
+      $(`#${this.props.file.id}_descriptionModal`).modal(
+        'attach events', `#${this.props.file.id}_modal #openDescription`
       )
     }
      this.initialForm()
@@ -107,6 +120,7 @@ class FolderModal extends React.Component {
             <p><b>Location: </b>&nbsp;{this.props.folder.name}</p>
             <p><b>CreateDate: </b>&nbsp;{moment(this.props.file.createDate).format('MMMM Do YYYY, h:mm:ss a')}</p>
             <p><b>Last Modify: </b>&nbsp;{moment(this.props.file.modifyDate).format('MMMM Do YYYY, h:mm:ss a')}</p>
+            <p style={{wordBreak: "break-all"}}><b>Description: </b>&nbsp;{this.props.file.description}</p>
             {this.props.file.isPublic ? <p><b>Share ID:</b>&nbsp;<a href={'/' + this.props.file.shortid }>{this.props.file.shortid}</a></p> : null}
             { this.props.file.owner === this.props.userid ?
               <div>
@@ -119,6 +133,9 @@ class FolderModal extends React.Component {
                 <br />
                 <button className='small ui basic button' id="openRename">
                   Rename
+                </button>
+                <button className='small ui basic button' id="openDescription">
+                  Update Description
                 </button>
                 <button className='small ui basic button' id="openMove">
                   Move File
@@ -156,6 +173,25 @@ class FolderModal extends React.Component {
           </div>
         </div>
 
+        {/*updateDescriptionModal*/}
+        <div className="ui small modal" id={this.props.file.id + '_descriptionModal'}>
+          <div className="header">
+            Rename
+          </div>
+          <div className="content">
+            <form className="ui form" id={this.props.file.id + '_descriptionForm'} ref="descriptionForm" onSubmit={this.handleDes}>
+              <div className="field">
+                <input type="text" name="description" placeholder="Write new description" ref="descriptionValue" />
+              </div>
+            </form>
+          </div>
+          <div className="actions">
+            <div className="ui basic deny button">
+              Cancel
+            </div>
+            <button className="ui blue button" type="submit" form={this.props.file.id + '_descriptionForm'}>Update</button>
+          </div>
+        </div>
         {/*moveModal*/}
         <MoveFileModal folder={this.props.folder} file={this.props.file} />
       </div>
@@ -176,6 +212,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   handleRename: (sessionid, fsid, newName) => {
     dispatch(fetchRename(sessionid, fsid, newName))
+  },
+  handleUpdateDes: (sessionid, fsid, newDes) => {
+    dispatch(fetchUpdateDescription(sessionid, fsid, newDes))
   }
 })
 

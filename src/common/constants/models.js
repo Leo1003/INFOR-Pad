@@ -27,6 +27,7 @@ export const user = {
 
 export const folder = {
   name: '',               //File name
+  description:'',
   parent: {
     id: '',
     name: '',
@@ -54,6 +55,7 @@ export const folder = {
 
 export const file = {
   name: '',               //File name
+  description: '',
   parent: {
     id: '',
     name: '',
@@ -100,7 +102,8 @@ export const ui = {
     modifyDate: "",
     name: "",
     owner: "",
-    parent:""
+    parent:"",
+    description: '',
   }
 }
 

@@ -50,8 +50,8 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  handleAddNewFiles: (filename, folderid, sessionid, format) => {
-    dispatch(fetchAddNewFiles(filename, folderid, sessionid, format))
+  handleAddNewFiles: (filename, folderid, sessionid, format, description) => {
+    dispatch(fetchAddNewFiles(filename, folderid, sessionid, format, description))
   },
   handlefetchGetFiles: (sessionid, fsid, format) => {
     dispatch(fetchGetFiles(sessionid, fsid, format))

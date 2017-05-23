@@ -32,7 +32,7 @@ class AddNewFolderModal extends React.Component {
   }
   handleAddNewFolder(e) {
     e.preventDefault()
-    this.props.handleAddNewFiles(this.refs.foldername.value, this.props.id, this.props.sessionid, "Directory")  //(filename, folderid, sessionid) 
+    this.props.handleAddNewFiles(this.refs.foldername.value, this.props.id, this.props.sessionid, "Directory", this.refs.description.value)  //(filename, folderid, sessionid) 
     this.setState({
       foldername: ''
     })
@@ -60,6 +60,9 @@ class AddNewFolderModal extends React.Component {
           <form className="ui form" id="addfolderform">
             <div className="field">
               <input type="text" name="foldername"  placeholder='Folder Name...' ref='foldername' />
+            </div>
+            <div className="field">
+              <textarea rows="2" placeholder="Write some description" ref="description"></textarea>
             </div>
           </form>
         </div>

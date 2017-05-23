@@ -14,6 +14,7 @@ import {
   INITIALREDIRECT,
   CLEAN_SESSION,
   FILE_RENAME,
+  FILE_UPDATE_DES,
   CHANGE_MOVE_CONTENT,
   CHANGE_FOLDER_MODAL
 } from '../constants/actionTypes'
@@ -49,7 +50,7 @@ export const fetchGetFiles = (sessionid, fsid, format) => (
   }
 )
 
-export const fetchAddNewFiles = (filename, folderid, sessionid, format) => (
+export const fetchAddNewFiles = (filename, folderid, sessionid, format, description) => (
   async (dispatch) => {
     try {
       let res = await fetch(`/api/fs/${folderid}`, {
@@ -58,7 +59,7 @@ export const fetchAddNewFiles = (filename, folderid, sessionid, format) => (
           'Content-Type': 'application/x-www-form-urlencoded',
           'sessionid': `${sessionid}`
         },
-        body: `filename=${filename}&format=${format}`
+        body: `filename=${filename}&format=${format}&description=${description}`
       })
       if(res.ok){
         let json = await res.json()
@@ -150,6 +151,25 @@ export const fetchRename = (sessionid, fsid, newName) => (
       })
       if(res.ok) {
         dispatch({ type: FILE_RENAME, newName: newName, fsid: fsid})
+      }
+      //todo: res not ok
+    } catch(e) { console.log(e) }
+  }
+)
+
+export const fetchUpdateDescription = (sessionid, fsid, newDes) => (
+  async (dispatch) => {
+    try {
+      let res = await fetch(`/api/fs/${fsid}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'sessionid': `${sessionid}`
+        },
+        body: `description=${newDes}`
+      })
+      if(res.ok) {
+        dispatch({ type: FILE_UPDATE_DES, newDes: newDes, fsid: fsid})
       }
       //todo: res not ok
     } catch(e) { console.log(e) }
