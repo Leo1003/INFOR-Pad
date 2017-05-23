@@ -25,11 +25,7 @@ export const folderReducers = handleActions({
       })
     })
   },
-  CHANGE_FOLDER_MODAL: (state, { file }) => (
-    Object.assign({}, state, {
-      openedModal: file
-    })
-  ) 
+
 }, folder)
 
 export const fileReducers = handleActions({

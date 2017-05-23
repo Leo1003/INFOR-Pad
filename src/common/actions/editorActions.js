@@ -8,7 +8,8 @@ import {
     ISFETCHING,
     DIDFETCH,
     CHANGE_SETTINGS,
-    EDITOR_FILE_MODIFY
+    EDITOR_FILE_MODIFY,
+    SAVE_STDIN
 } from '../constants/actionTypes'
 
 export const fetchSaveCode = (sessionid, fsid, code) => (
@@ -84,7 +85,7 @@ export const fetchChangeSettings = (sessionid, settingName, settingValue) => (
 export const fetchEditorModify = (sessionid, fsid, modifyType, modifyValue) => (
   async (dispatch) => {
     try {
-      console.log("in action")
+      // console.log("in action")
       let res = await fetch(`/api/fs/${fsid}`, {
           method: 'PUT',
           headers: {
