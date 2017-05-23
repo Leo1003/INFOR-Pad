@@ -97,6 +97,9 @@ io.of('/client').on('connection', socket => {
                 throw new Error('File not found')
             }
             if (fsCtrl.getAccess(fs, socket.sessionData.userid) > 0) {
+                if (data.stdin) {
+                    fs.stdin = data.stdin
+                }
                 lxtesterServer.sendJob({
                     socketid: sid,
                     language: data.language,

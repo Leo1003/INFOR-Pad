@@ -31,11 +31,10 @@ function onResult(callback) {
         return callback(result);
     });
 }
-function submit(fileid, language) {
-    console.log(fileid)
-    console.log(language)
+function submit(fileid, language, stdin) {
     socket.emit('Submit', {
         fileid: fileid,
-        language: language
+        language: language,
+        stdin: stdin
     });
 }
