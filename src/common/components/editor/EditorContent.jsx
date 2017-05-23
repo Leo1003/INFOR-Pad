@@ -1,7 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { fetchSaveCode, changeCode, fetchChangeSettings,fetchEditorModify } from '../../actions/editorActions'
-// import ToolBar from './ToolBar.jsx'
+
+import io from 'socket.io-client'
+let socket = undefined
 
 const Editor = (props) => {
   if (typeof window !== 'undefined') {
@@ -81,12 +83,18 @@ class EditorContent extends React.Component {
         this.openRightBar = this.openRightBar.bind(this)
         this.changeStdin = this.changeStdin.bind(this)
         this.runCode = this.runCode.bind(this)
+
+        this.socketCallback = this.socketCallback.bind(this)
+        this.submit = this.submit.bind(this)
+        this.onResult = this.onResult.bind(this)
         this.state = {
             showSetting: false,
             fontSize: 14,
             tabSize: 4,
             changedCode: false,
-            stdin: props.file.stdin
+            stdin: props.file.stdin,
+            result: {},
+            compiling: false,
         }
     }
     componentDidMount() {
@@ -95,6 +103,58 @@ class EditorContent extends React.Component {
         setInterval(() => {
             this.saveCode()
         }, 3000)
+        socket = io('/client', {query: `sessionid=${this.props.sessionid}`});
+        socket.on('connect', () => {
+            console.log("Connected to server!");
+            this.socketCallback();
+        });
+        socket.on('error', error => {
+            console.error(error)
+            this.socketCallback(error);
+        });
+    }
+    socketCallback(err) {
+        if (err) {
+            this.setState({
+                result: err
+            })
+        } else {
+            this.onResult(result => {
+                this.setState({
+                    result: result,
+                    compiling: false
+                }, () => console.log(this.state.result))
+            });
+            console.log("callback: connect!")
+        }
+    }
+    onResult(callback) {
+        socket.on('Result', data => {
+            let result = {};
+            result.id = data.id;
+            if (data.type == 2) {
+                result.status = 'Error';
+            } else if (data.type == 1) {
+                result.status = 'ComplieError';
+            } else if (data.type == 0) {
+                result.status = 'Success';
+            }
+            result.time = data.time != -1 ? data.time : undefined;
+            result.memory = data.memory != -1 ? data.memory : undefined;
+            result.exitcode = data.exitcode;
+            result.signal = data.signal;
+            result.killed = data.killed;
+            result.stdout = data.output;
+            result.stderr = data.error;
+            return callback(result);
+        });
+    }
+    submit(fileid, language, stdin) {
+        socket.emit('Submit', {
+            fileid: fileid,
+            language: language,
+            stdin: stdin
+        });
     }
     clickSetting() {
         this.setState({
@@ -157,6 +217,8 @@ class EditorContent extends React.Component {
         //save stdin
         this.props.handleEditorModify(this.props.sessionid, this.props.file.id, 'stdin', this.refs.stdin.value)
         // socket 
+        this.setState({ compiling: true }, this.submit(this.props.file.id, this.props.file.format, this.refs.stdin.value))
+
     }
     render() {
         let mode = {
@@ -188,19 +250,34 @@ class EditorContent extends React.Component {
         return(
             <div>
                 <div className="ui right wide lxtester sidebar vertical inverted menu">
-                    <div className="header item">TEST</div>
+                    <div className="header item">Input</div>
                     <div className="item">
                         <div className="ui inverted stdin form">
                             <div className="field">
-                                <label>Input</label>
                                 <textarea onChange={this.changeStdin} ref="stdin" value={this.state.stdin} ></textarea>
                             </div>
-                            <button className="ui inverted button" onClick={this.runCode}>Compile & Run</button>
+                            <button className="ui inverted button" onClick={this.runCode}>{this.state.compiling ? "Compiling..." : "Compile & Run"}</button>
                         </div>
                     </div>
                     <div className="item">
                         <label>Ouput</label>
                     </div>
+                    <div className="item">
+                        <div className="ui inverted stdin form">
+                            <div className="field">
+                                <textarea value={this.state.compiling ? "" : this.state.result.stdout} readOnly></textarea>
+                            </div>
+                        </div>
+                    { this.state.compiling ? null : 
+                    <div>
+                        { this.state.result.stderr === undefined ? null : <p>Stderr: {this.state.result.stderr} </p>}
+                        { this.state.result.status === undefined ? null : <p>Status: {this.state.result.status}</p>}
+                        { this.state.result.exitcode === undefined ? null : <p>Process exited with status: {this.state.result.signal ? this.state.result.signal : this.state.result.exitcode}</p>}
+                        { this.state.result.time === undefined ? null : <p>Execution time: {this.state.result.time / 1000}s</p>}
+                        { this.state.result.memory === undefined ? null : <p>Memory usage: {this.state.result.memory}KB</p>}
+                    </div>
+                    }
+                    </div> 
                 </div>
                 <div className="pusher">
                     <div className="ui bottom attached segment" style={{

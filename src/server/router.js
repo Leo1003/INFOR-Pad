@@ -47,7 +47,6 @@ function renderPage(appHtml, preloadedState) {
         crossorigin="anonymous"></script>
       <script src="/semantic.min.js"></script>
       <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/tomorrow-night.min.css">
-      <script src="/socket.io/socket.io.js"></script>
     </head>
     <body>
       <div id="app">${appHtml}</div>
