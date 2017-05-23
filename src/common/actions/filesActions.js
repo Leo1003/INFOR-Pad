@@ -16,7 +16,9 @@ import {
   FILE_RENAME,
   FILE_UPDATE_DES,
   CHANGE_MOVE_CONTENT,
-  CHANGE_FOLDER_MODAL
+  CHANGE_FOLDER_MODAL,
+  FILE_UPDATE_LAN,
+  MODIFY_FILE
 } from '../constants/actionTypes'
 import { browserHistory } from 'react-router'
 
@@ -138,7 +140,7 @@ export const initialRedirect = () => (
   }
 )
 
-export const fetchRename = (sessionid, fsid, newName) => (
+export const fetchModifyFile = (sessionid, fsid, newType, newVal) => (
   async (dispatch) => {
     try {
       let res = await fetch(`/api/fs/${fsid}`, {
@@ -147,29 +149,10 @@ export const fetchRename = (sessionid, fsid, newName) => (
           'Content-Type': 'application/x-www-form-urlencoded',
           'sessionid': `${sessionid}`
         },
-        body: `filename=${newName}`
+        body: `${newType}=${newVal}`
       })
       if(res.ok) {
-        dispatch({ type: FILE_RENAME, newName: newName, fsid: fsid})
-      }
-      //todo: res not ok
-    } catch(e) { console.log(e) }
-  }
-)
-
-export const fetchUpdateDescription = (sessionid, fsid, newDes) => (
-  async (dispatch) => {
-    try {
-      let res = await fetch(`/api/fs/${fsid}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'sessionid': `${sessionid}`
-        },
-        body: `description=${newDes}`
-      })
-      if(res.ok) {
-        dispatch({ type: FILE_UPDATE_DES, newDes: newDes, fsid: fsid})
+        dispatch({ type: MODIFY_FILE, fsid: fsid, newType: newType, newVal: newVal})
       }
       //todo: res not ok
     } catch(e) { console.log(e) }

@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
-import { fetchDeleteFile, fetchCheckPermission, fetchRename, fetchUpdateDescription } from '../../actions/filesActions'
+import { fetchDeleteFile, fetchCheckPermission, fetchModifyFile } from '../../actions/filesActions'
 import { Link } from 'react-router'
 import { fetchGetUserById } from '../../actions/userActions'
 import MoveFileModal from './MoveFileModal.jsx'
@@ -14,6 +14,7 @@ class FolderModal extends React.Component {
     this.deleteFile = this.deleteFile.bind(this)
     this.initialForm = this.initialForm.bind(this)
     this.handleDes = this.handleDes.bind(this)
+    this.handleLan = this.handleLan.bind(this)
     this.state = {
       isChecked: this.props.file.isPublic,
     }
@@ -31,16 +32,21 @@ class FolderModal extends React.Component {
   }
   handleRenameFile(e) {
     e.preventDefault()
-    console.log(this.refs.renameValue.value)
-    this.props.handleRename(this.props.sessionid, this.props.file.id, this.refs.renameValue.value)
+    this.props.handleModifyFile(this.props.sessionid, this.props.file.id, 'filename', this.refs.renameValue.value)
     $(ReactDOM.findDOMNode(this.refs.renameForm)).form('clear')
     $(`#${this.props.file.id}_renameModal`).modal('hide')
   }
   handleDes(e) {
     e.preventDefault()
-    this.props.handleUpdateDes(this.props.sessionid, this.props.file.id, this.refs.descriptionValue.value)
+    this.props.handleModifyFile(this.props.sessionid, this.props.file.id, 'description', this.refs.descriptionValue.value)
     $(ReactDOM.findDOMNode(this.refs.descriptionForm)).form('clear')
     $(`#${this.props.file.id}_descriptionModal`).modal('hide')
+  }
+  handleLan(e) {
+    e.preventDefault()
+    this.props.handleModifyFile(this.props.sessionid, this.props.file.id, 'format', this.refs.lanValue.value)
+    $(ReactDOM.findDOMNode(this.refs.lanForm)).form('clear')
+    $(`#${this.props.file.id}_lanModal`).modal('hide')
   }
   handleInvalid() {
     return false
@@ -74,6 +80,11 @@ class FolderModal extends React.Component {
       $(`#${this.props.file.id}_descriptionModal`).modal(
         'attach events', `#${this.props.file.id}_modal #openDescription`
       )
+      if(this.props.file.format !== 'Directory') {
+        $(`#${this.props.file.id}_lanModal`).modal(
+          'attach events', `#${this.props.file.id}_modal #openLan`
+        )
+      }
     }
     this.initialForm()
      
@@ -97,12 +108,19 @@ class FolderModal extends React.Component {
       $(`#${this.props.file.id}_descriptionModal`).modal(
         'attach events', `#${this.props.file.id}_modal #openDescription`
       )
+      if(this.props.file.format !== 'Directory') {
+        $(`#${this.props.file.id}_lanModal`).modal(
+        'attach events', `#${this.props.file.id}_modal #openLan`
+        )
+      }
     }
      this.initialForm()
   }
   componentWillUnmount() {
     $(`#${this.props.file.id}_renameModal`).remove()
     $(`#${this.props.file.id}_moveModal`).remove()
+    $(`#${this.props.file.id}_descriptionModal`).remove()
+    $(`#${this.props.file.id}_lanModal`).remove()
     $(`#${this.props.file.id}_modal`).remove()
     $(ReactDOM.findDOMNode(this.refs.renameForm)).remove() //remove jQuery DOM
   }
@@ -137,6 +155,9 @@ class FolderModal extends React.Component {
                 <button className='small ui basic button' id="openDescription">
                   Update Description
                 </button>
+                {this.props.file.format !== 'Directory' ? <button className='small ui basic button' id="openLan">
+                  Change Language
+                </button> : null}
                 <button className='small ui basic button' id="openMove">
                   Move File
                 </button>
@@ -176,7 +197,7 @@ class FolderModal extends React.Component {
         {/*updateDescriptionModal*/}
         <div className="ui small modal" id={this.props.file.id + '_descriptionModal'}>
           <div className="header">
-            Rename
+            Update Description
           </div>
           <div className="content">
             <form className="ui form" id={this.props.file.id + '_descriptionForm'} ref="descriptionForm" onSubmit={this.handleDes}>
@@ -190,6 +211,50 @@ class FolderModal extends React.Component {
               Cancel
             </div>
             <button className="ui blue button" type="submit" form={this.props.file.id + '_descriptionForm'}>Update</button>
+          </div>
+        </div>
+        {/*changeLanguageModal*/}
+        <div className="ui small modal" id={this.props.file.id + '_lanModal'}>
+          <div className="header">
+            Change Language
+          </div>
+          <div className="content">
+            <form className="ui form" id={this.props.file.id + '_lanForm'} ref="lanForm" onSubmit={this.handleLan}>
+              <div className="field">
+                <select className="ui search dropdown" ref='lanValue'>
+                      <option value="C">C</option>
+                      <option value="CPP">CPP</option>
+                      <option value="CPP11">CPP11</option>
+                      <option value="CPP14">CPP14</option>
+                      <option value="CSharp">CSharp</option>
+                      <option value="Python2">Python2</option>
+                      <option value="Python3">Python3</option>
+                      <option value="Java">Java</option>
+                      <option value="JSX">JSX</option>
+                      <option value="HTML">HTML</option>
+                      <option value="XML">XML</option>
+                      <option value="CSS">CSS</option>
+                      <option value="Stylus">Stylus</option>
+                      <option value="Scss">Scss</option>
+                      <option value="Less">Less</option>
+                      <option value="Javascript">Javascript</option>
+                      <option value="JSON">JSON</option>
+                      <option value="Swift">Swift</option>
+                      <option value="ObjectiveC">ObjectiveC</option>
+                      <option value="PHP">PHP</option>
+                      <option value="Haskell">Haskell</option>
+                      <option value="Markdown">Markdown</option>
+                      <option value="Bash">Bash</option>
+                      <option value="Plain_Text">Plain_Text</option>
+                  </select>
+              </div>
+            </form>
+          </div>
+          <div className="actions">
+            <div className="ui basic deny button">
+              Cancel
+            </div>
+            <button className="ui blue button" type="submit" form={this.props.file.id + '_lanForm'}>Update</button>
           </div>
         </div>
         {/*moveModal*/}
@@ -210,11 +275,8 @@ const mapDispatchToProps = (dispatch) => ({
   handleCheckPermission: (fsid, sessionid, check) => {
     dispatch(fetchCheckPermission(fsid, sessionid, check))
   },
-  handleRename: (sessionid, fsid, newName) => {
-    dispatch(fetchRename(sessionid, fsid, newName))
-  },
-  handleUpdateDes: (sessionid, fsid, newDes) => {
-    dispatch(fetchUpdateDescription(sessionid, fsid, newDes))
+  handleModifyFile: (sessionid, fsid, newType, newVal) => {
+    dispatch(fetchModifyFile(sessionid, fsid, newType, newVal))
   }
 })
 

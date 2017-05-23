@@ -17,18 +17,13 @@ export const folderReducers = handleActions({
       })
     })
   },
-  FILE_RENAME: (state, { newName, fsid }) => {
+  MODIFY_FILE: (state, { fsid, newType, newVal }) => {
+    let tmp = {}
+    if(newType === 'filename') tmp['name'] = newVal
+    else tmp[newType] = newVal
     return Object.assign({}, state, {
       files: state.files.map(file => {
-        if(file.id === fsid) return Object.assign({}, file, { name: newName })
-        else return file
-      })
-    })
-  },
-  FILE_UPDATE_DES: (state, { newDes, fsid }) => {
-    return Object.assign({}, state, {
-      files: state.files.map(file => {
-        if(file.id === fsid) return Object.assign({}, file, { description: newDes })
+        if(file.id === fsid) return Object.assign({}, file, tmp)
         else return file
       })
     })
