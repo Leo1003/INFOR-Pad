@@ -91,7 +91,7 @@ body > .grid {
 .image {
     margin-top: -100px;
 }
-.column {
+.login.column {
     max-width: 450px;
 }
 

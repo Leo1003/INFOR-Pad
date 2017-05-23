@@ -62,7 +62,7 @@ class Sign_in extends React.Component {
     }
     return (
       <div className="ui middle aligned center aligned grid" style={{height: "90vh", margin: '0'}}>
-        <div className="column">
+        <div className="login column">
           <h1 className="ui black header">Sign in</h1>
           {renderMessage()}
           <form className="ui large form">
