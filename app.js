@@ -145,21 +145,6 @@ io.of('/lxtester').on('connection', socket => {
     })
     socket.on('disconnecting', data => {
         let uncompleted = lxtesterServer.remove(socket.id)
-            /*
-                    for (let task in uncompleted) {
-                        io.of('/client').connected[task.socketid].emit('Result', {
-                            id: task.id,
-                            type: 2,
-                            time: -1,
-                            memory: -1,
-                            exitcode: 0,
-                            signal: 0,
-                            killed: true,
-                            output: '',
-                            error: 'Server Stopped.'
-                        })
-                    }
-            */
     })
 })
 
