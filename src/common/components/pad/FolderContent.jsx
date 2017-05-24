@@ -1,6 +1,7 @@
 import React from 'react'
 import AddNewFilesDropdown from './AddNewFilesDropdown.jsx'
 import FolderModal from './FolderModal.jsx'
+// import UpLoadFiles from './UpLoadFiles.jsx'
 import { List, Dropdown } from 'semantic-ui-react'
 import { browserHistory, Link } from 'react-router'
 import { connect } from 'react-redux'
@@ -54,6 +55,7 @@ class FolderContent extends React.Component {
       <div>
         <h2>{this.props.folder.name}</h2>
         {this.props.userid === this.props.folder.owner.id ? <AddNewFilesDropdown id={this.props.folder.id} /> : null }
+        {/*<UpLoadFiles id={this.props.folder.id} />*/}
         <div className="ui icon buttons">
           <button className="tiny ui basic button" onClick={this.showAll}>
             <i className="asterisk icon"></i>

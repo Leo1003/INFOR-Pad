@@ -73,7 +73,6 @@ export class AddNewFileModal extends React.Component {
     this.props.handleAddNewFiles(this.refs.filename.value, this.props.id, this.props.sessionid, this.state.language, this.refs.description.value)
     $('#addfileform').form('clear')
     $('#addNewFileModal').modal('hide')
-    this.props.handlefetchGetFiles(this.props.sessionid, this.props.id, 'Directory')
   }
   handleFileInvalid(e) {
     return false

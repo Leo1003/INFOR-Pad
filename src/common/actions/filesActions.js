@@ -6,7 +6,6 @@ import {
   LOGIN_FIRST,
   PERMISSION_DENIED,
   FILE_IS_NOT_EXIST,
-  ADD_NEW_FOLDER,
   DELETE_FILE,
   ISFETCHING,
   DIDFETCH,
@@ -18,7 +17,8 @@ import {
   CHANGE_MOVE_CONTENT,
   CHANGE_FOLDER_MODAL,
   FILE_UPDATE_LAN,
-  MODIFY_FILE
+  MODIFY_FILE,
+  ADD_NEW_FILE
 } from '../constants/actionTypes'
 import { browserHistory } from 'react-router'
 
@@ -65,6 +65,33 @@ export const fetchAddNewFiles = (filename, folderid, sessionid, format, descript
       })
       if(res.ok){
         let json = await res.json()
+        dispatch({ type: ADD_NEW_FILE, payload: { data: json } })
+      }  else if(res.status == '401') {
+        dispatch({ type: CLEAN_SESSION })
+        dispatch({ type: LOGIN_FIRST })
+      } else if(res.status === '403') {
+        dispatch({ type: PERMISSION_DENIED })
+      } else if(res.status == '404') {
+        dispatch({ type: FILE_IS_NOT_EXIST })
+      }
+    } catch(e) { console.log(e) }
+  }
+)
+
+export const fetchUpLoadFiles = (filename, folderid, sessionid, format, description, code) => (
+  async (dispatch) => {
+    try {
+      let res = await fetch(`/api/fs/${folderid}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'sessionid': `${sessionid}`
+        },
+        body: `filename=${filename}&format=${format}&description=${description}&code=${encodeURIComponent(code)}`
+      })
+      if(res.ok){
+        let json = await res.json()
+        dispatch({ type: ADD_NEW_FILE, payload: { data: json } })
       }  else if(res.status == '401') {
         dispatch({ type: CLEAN_SESSION })
         dispatch({ type: LOGIN_FIRST })

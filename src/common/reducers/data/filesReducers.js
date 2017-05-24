@@ -27,6 +27,14 @@ export const folderReducers = handleActions({
         else return file
       })
     })
+  },
+  ADD_NEW_FILE: (state, { payload }) => {
+    return Object.assign({}, state, {
+      files: [
+        ...state.files,
+        payload.data
+      ]
+    })
   }
 }, folder)
 

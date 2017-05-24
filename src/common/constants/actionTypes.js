@@ -18,7 +18,6 @@ export const GET_USER_BY_ID = 'GET_USER_BY_ID'
 //folder
 export const GET_FOLDER = 'GET_FOLDER'
 export const GET_FILE = 'GET_FILE'
-export const ADD_NEW_FOLDER = 'ADD_NEW_FOLDER'
 export const ADD_NEW_FILE = 'ADD_NEW_FILE'
 export const DELETE_FILE = 'DELETE_FILE'
 export const CHANGE_MOVE_CONTENT = 'CHANGE_MOVE_CONTENT'

@@ -38,7 +38,6 @@ class AddNewFolderModal extends React.Component {
     })
     $('#addfolderform').form('clear')
     $('#addNewFolderModal').modal('hide')
-    this.props.handlefetchGetFiles(this.props.sessionid, this.props.id, "Directory")
   }
   handleFolderInvalid(e) {
     return false
