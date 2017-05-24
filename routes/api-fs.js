@@ -92,6 +92,7 @@ router.post('/:fsid', async ctx => {
             code: isfile === true ? "" : undefined,
             stdin: isfile === true ? "" : undefined
         })
+        newfile = fsCtrl.updateFS(newfile, data, 1024 * 128)
         newfile = await fsCtrl.link(newfile, ctx.params.fsid)
         ctx.status = 201
         ctx.body = await fsCtrl.extractFSData(newfile, true)
@@ -102,7 +103,8 @@ router.post('/:fsid', async ctx => {
 router.put('/:fsid', async ctx => {
     if (ctx.state.access >= 2) {
         let fs = await fsCtrl.findFS(ctx.params.fsid)
-        fs = await fsCtrl.updateFS(fs, ctx.request.body, 1024 * 128)
+        fs = fsCtrl.updateFS(fs, ctx.request.body, 1024 * 128)
+        await fs.save()
         ctx.status = 200
         ctx.body = await fsCtrl.extractFSData(fs, true)
     } else {

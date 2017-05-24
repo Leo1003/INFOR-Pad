@@ -146,7 +146,7 @@ function chkValue(value, def, limit) {
     }
     return (value != undefined ? value : def)
 }
-exports.updateFS = async function(fs, data, limit) {
+exports.updateFS = function(fs, data, limit) {
     if (exports.isRootDir(fs) == false) {
         fs.name = chkValue(data.filename, fs.name)
     }
@@ -164,7 +164,6 @@ exports.updateFS = async function(fs, data, limit) {
         fs.shortid = randomstring.generate(8)
     }
     fs.modifyDate = new Date()
-    fs = await fs.save()
     return fs
 }
 
