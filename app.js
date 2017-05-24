@@ -18,6 +18,10 @@ const lxtesterServer = new(require('./lxtester').lxtesterServer)()
 const api = require('./routes/api')
 const vaildation = require('./routes/mail-vaildation')
 
+//react
+const serve = require('koa-static')
+const router = require('./src/server/router.js')
+
 // error handler
 onerror(app);
 
@@ -51,6 +55,10 @@ mailCtrl.verifyConfig().then(verified => {
 // routes
 app.use(api.routes(), api.allowedMethods())
 app.use(vaildation.routes(), vaildation.allowedMethods())
+// react routes
+app.use(serve(__dirname + '/dist'))
+app.use(serve(__dirname + '/semantic/dist'))
+app.use(router.routes())
 
 app.io = io
 io.of('/client').use((socket, next) => {
@@ -89,6 +97,9 @@ io.of('/client').on('connection', socket => {
                 throw new Error('File not found')
             }
             if (fsCtrl.getAccess(fs, socket.sessionData.userid) > 0) {
+                if (data.stdin) {
+                    fs.stdin = data.stdin
+                }
                 lxtesterServer.sendJob({
                     socketid: sid,
                     language: data.language,

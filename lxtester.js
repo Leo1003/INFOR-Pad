@@ -45,7 +45,7 @@ class lxtesterServer {
             id: task.id,
             language: task.language,
             exefile: task.file.name,
-            srcfile: `${task.file.name}.${task.file.format}`,
+            srcfile: task.file.name,
             stdin: task.file.stdin,
             code: task.file.code
         }
