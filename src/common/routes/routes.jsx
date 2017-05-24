@@ -6,6 +6,7 @@ import HomePage from '../components/HomePage.jsx'
 import errorPage from '../components/errorPage.jsx'
 import sharePage from '../components/sharePage.jsx'
 import CheckAuth from '../components/CheckAuth.jsx'
+import FastSubmit from '../components/FastSubmit.jsx'
 
 import Pad from '../components/pad/Pad.jsx'
 
@@ -30,6 +31,7 @@ module.exports = (
       <Route path="folder/:folderid" component={Folder_Container} />
       <Route path="file/:fileid" component={File_Container}/>
     </Route>
+    <Route path="fastSubmit" component={FastSubmit} />
     <Route path="editor/:fileid" component={Editor_Container} />
     <Route path="user/:user" component={UserPage_Container} />
     <Route path="error" component={errorPage} />

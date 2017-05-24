@@ -104,6 +104,33 @@ export const fetchUpLoadFiles = (filename, folderid, sessionid, format, descript
   }
 )
 
+export const fetchFastSubmit = (filename, format, description, code) => (
+  async (dispatch) => {
+    try {
+      console.log(code)
+      let res = await fetch(`/api/fs/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `filename=${filename}&format=${format}&description=${description}&code=${encodeURIComponent(code)}`
+      })
+      if(res.ok){
+        let json = await res.json()
+        console.log(json)
+        browserHistory.push(`/pad/file/${json.id}`)
+      } else if(res.status == '401') {
+        dispatch({ type: CLEAN_SESSION })
+        dispatch({ type: LOGIN_FIRST })
+      } else if(res.status === '403') {
+        dispatch({ type: PERMISSION_DENIED })
+      } else if(res.status == '404') {
+        dispatch({ type: FILE_IS_NOT_EXIST })
+      }
+    } catch(e) { console.log(e) }
+  }
+)
+
 export const fetchDeleteFile = (fsid, sessionid, folderid) => (
   async (dispatch) => {
     try {

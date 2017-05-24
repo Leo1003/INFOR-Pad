@@ -87,7 +87,7 @@ export class AddNewFileModal extends React.Component {
     e.preventDefault()
     let filename = this.refs.filename.value
     let subfilename = this.checkSubfilename(filename)
-    this.setState({language: subfilename})
+    this.setState({language: subfilename || this.state.language})
   }
   checkSubfilename(filename) {
     let dot = -1
@@ -95,11 +95,12 @@ export class AddNewFileModal extends React.Component {
       dot = i;
       break
     }
-    if (dot == -1) return ""
-    let subfilename = filename.substring(dot + 1, filename.length)
-    // for (let i of Object.keys(this.mapLanguageToCompiler)) console.log(i)
-    if (Object.keys(this.mapLanguageToCompiler).indexOf(subfilename) != -1) return this.mapLanguageToCompiler[subfilename]
-    return ""
+    if (dot !== -1) {
+      let subfilename = filename.substring(dot + 1, filename.length)
+      // for (let i of Object.keys(this.mapLanguageToCompiler)) console.log(i)
+      if (Object.keys(this.mapLanguageToCompiler).indexOf(subfilename) != -1) return this.mapLanguageToCompiler[subfilename]
+    }
+    //return ""
   }
   render() {
     return (
@@ -115,7 +116,7 @@ export class AddNewFileModal extends React.Component {
                 <input type="text" name="filename" ref='filename' placeholder='File Name...' onChange={this.handleFilenameChange}/>
               </div>
               <div className="field">
-                <select className="ui search dropdown" value={this.state.language} onChange={this.handleFiletypeChange}>
+                <select className="ui search dropdown" name="language" value={this.state.language} onChange={this.handleFiletypeChange}>
                       <option value="">Language</option>
                       <option value="C">C</option>
                       <option value="CPP">CPP</option>

@@ -11,7 +11,7 @@ class NavBar extends React.Component {
   render() {
     return (
       <div>
-        <Menu secondary inverted style={{background: '#1b1c1d', margin: '0'}}>
+        <Menu secondary inverted style={{background: '#24292e', margin: '0'}}>
           <div className="item" style={{ margin: '0'}}>
             <Link to='/'><h3>INFOR PAD</h3></Link>
           </div>
