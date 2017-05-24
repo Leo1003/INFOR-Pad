@@ -18,12 +18,10 @@ class lxtesterServer {
             tasks: {}
         }
         this.clients[socket.id] = s
-        console.log(this.clients[socket.id])
     }
     findIdlest() {
         let min = Infinity
         let id = ''
-        console.log(this.clients)
         for (let sid in this.clients) {
             let s = this.clients[sid]
             let count = Object.size(s.tasks)

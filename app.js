@@ -52,6 +52,7 @@ mailCtrl.verifyConfig().then(verified => {
     }
 })
 
+app.lxtesterServer = lxtesterServer
 // routes
 app.use(api.routes(), api.allowedMethods())
 app.use(vaildation.routes(), vaildation.allowedMethods())

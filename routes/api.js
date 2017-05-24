@@ -56,6 +56,27 @@ router.use(async (ctx, next) => {
     throw new ApiError(401, "Session invalid or expired!")
 })
 
+router.get('/lxtester', async ctx => {
+    if (ctx.state.session && ctx.state.session.user.level >= 3) {
+        let ret = []
+        for (let id in ctx.app.lxtesterServer.clients) {
+            let lx = ctx.app.lxtesterServer.clients[id]
+            ret.push({
+                id: id,
+                pending: lx.pending,
+                suspend: lx.suspend
+            })
+        }
+        ctx.status = 200
+        ctx.body = ret
+    } else {
+        ctx.status = 403
+        ctx.body = {
+            error: "Permission denied."
+        }
+    }
+})
+
 router.use(session.routes(), session.allowedMethods())
 router.use(user.routes(), user.allowedMethods())
 router.use(fs.routes(), fs.allowedMethods())
