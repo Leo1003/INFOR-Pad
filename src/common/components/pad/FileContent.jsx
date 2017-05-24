@@ -69,6 +69,7 @@ class FileContent extends React.Component {
         <h1>{this.props.file.name}</h1>
         <div className="content">
           <p><b>Type: </b>&nbsp;{this.props.file.format}</p>
+          <p><b>Size: </b>&nbsp;{this.props.file.size > 1024 ? `${(this.props.file.size / 1024).toFixed(2)} KB` : `${this.props.file.size} Byte`}</p>
           <p><b>Owner: </b>&nbsp;<a href={'/user/' + this.props.file.owner.name}>{this.props.file.owner.name}</a></p>
           <p><b>Location: </b>&nbsp;<Link to={'/pad/folder/' + this.props.file.parent.id}>{this.props.file.parent.name}</Link></p>
           <p><b>CreateDate: </b>&nbsp;{moment(this.props.file.createDate).format('MMMM Do YYYY, h:mm:ss a')}</p>

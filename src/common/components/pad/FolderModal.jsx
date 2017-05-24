@@ -134,6 +134,7 @@ class FolderModal extends React.Component {
           <div className="content">
             <p><b>Name: </b>&nbsp;{this.props.file.name}</p>
             <p><b>Type: </b>&nbsp;{this.props.file.format}</p>
+            { this.props.file.format !== 'Directory' ? <p><b>Size: </b>&nbsp;{this.props.file.size > 1024 ? `${(this.props.file.size / 1024).toFixed(2)} KB` : `${this.props.file.size} Byte`}</p> : null}
             <p><b>Owner: </b>&nbsp;<a href={'/user/' + this.props.owner.name}>{this.props.owner.name}</a></p>
             <p><b>Location: </b>&nbsp;{this.props.folder.name}</p>
             <p><b>CreateDate: </b>&nbsp;{moment(this.props.file.createDate).format('MMMM Do YYYY, h:mm:ss a')}</p>

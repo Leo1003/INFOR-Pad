@@ -64,7 +64,8 @@ export const file = {
     modifyDate: new Date(),
     isPublic: false,
     shortid: '',
-    format: ''
+    format: '',
+    size: 0
   },             //Parent Directory
   owner: {
     id: '',
