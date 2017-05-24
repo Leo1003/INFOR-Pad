@@ -72,10 +72,10 @@ class FolderModal extends React.Component {
   componentDidMount() {
     if(this.props.file.id.length > 0) {
       $(`#${this.props.file.id}_renameModal`).modal(
-        'attach events', `#${this.props.file.id} #openRename`
+        'attach events', `#${this.props.file.id}_modal #openRename`
       )
       $(`#${this.props.file.id}_moveModal`).modal(
-        'attach events', `#${this.props.file.id} #openMove`
+        'attach events', `#${this.props.file.id}_modal #openMove`
       )
       $(`#${this.props.file.id}_descriptionModal`).modal(
         'attach events', `#${this.props.file.id}_modal #openDescription`
