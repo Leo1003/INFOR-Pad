@@ -72,7 +72,7 @@ const HomePage = () => (
             <div className="ui container text">
                 <h1 className="ui inverted header">INFOR-Pad</h1>
                 <h2 className="inverted">A Conveniece Online Coding and Sharing Tool</h2>
-                <button className="ui huge primary button" onClick={() => browserHistory.push('/fastSubmit')}>Go On a Fast Submit</button>
+                <button className="ui huge primary button" onClick={() => browserHistory.push('/fastSubmit')}>Go On A Fast Submit</button>
             </div>
         </div>
         <div className="ui container" style={{marginTop: '20px'}}>
@@ -99,60 +99,8 @@ const HomePage = () => (
                 </div>
             </div>
         </div>
-        {/*<div className="ui segment">
-            <Editor 
-                mode='c_cpp'
-                theme='tomorrow'
-                name="editor"
-                tabSize='4'
-                fontSize='14'
-                width='100%'
-                
-                showPrintMargin={false}
-                showGutter={true}
-                highlightActiveLine={true}
-            />
-        </div>*/}
     </div>
 )
 
 export default HomePage
-        // {/*<div className="ui vertical stripe segment" style={{overflowY: 'auto'}}>
-        //     <div className="ui middle aligned stackable grid container">
-        //         <div className="row">
-        //             <div className="three wide column">
-        //                 <i className="circular inverted huge edit icon"></i>
-        //             </div>
-        //             <div className="thirteen wide column">
-        //                 <h3 className="ui header">Impeccable online development environment</h3>
-        //                 <p>................................................................................................................................</p>
-        //             </div>
-        //         </div>
-        //     </div>
-        // </div>
-        // <div className="ui vertical stripe segment" style={{overflowY: 'auto'}}>
-        //     <div className="ui middle aligned stackable grid container">
-        //         <div className="row">
-        //             <div className="thirteen wide column">
-        //                 <h3 className="ui header">Execute your code instantly</h3>
-        //                 <p>...</p>
-        //             </div>
-        //             <div className="three wide column">
-        //                 <i className="circular inverted huge terminal icon"></i>
-        //             </div>
-        //         </div>
-        //     </div>
-        // </div>
-        // <div className="ui vertical stripe segment" style={{overflowY: 'auto'}}>
-        //     <div className="ui middle aligned stackable grid container">
-        //         <div className="row">
-        //             <div className="three wide column">
-        //                 <i className="circular inverted huge share alternate icon"></i>
-        //             </div>
-        //             <div className="thirteen wide column">
-        //                 <h3 className="ui header">Share your code</h3>
-        //                 <p>...</p>
-        //             </div>
-        //         </div>
-        //     </div>
-        // </div>*/}
+

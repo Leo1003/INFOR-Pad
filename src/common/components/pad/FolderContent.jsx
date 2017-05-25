@@ -70,7 +70,7 @@ class FolderContent extends React.Component {
             Private
           </button>
         </div>
-        <table className="ui overflow fixed single line celled selectable table">
+        <table className="ui overflow fixed single line selectable table">
           <thead>
             <tr>
               <th>FileName</th>

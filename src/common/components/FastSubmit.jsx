@@ -175,61 +175,63 @@ class FastSubmit extends React.Component {
     render() {
         return (
             <div className="ui container">
+                <div className="ui segment" style={{margin: '20px 0'}}>
                 <h1>Fast Submit Your Code</h1>
-                <form className="ui form" id="fastSubmitform">
-                    <div className="field">
-                        <input type="text" name="filename" ref='filename' placeholder='Enter your filename' onChange={this.handleFilenameChange} />
+                    <form className="ui form" id="fastSubmitform">
+                        <div className="field">
+                            <input type="text" name="filename" ref='filename' placeholder='Enter your filename' onChange={this.handleFilenameChange} />
+                        </div>
+                        <div className="field">
+                            <select className="ui search dropdown" name="language" value={this.state.language} onChange={this.handleFiletypeChange}>
+                                <option value="">Language</option>
+                                <option value="C">C</option>
+                                <option value="CPP">CPP</option>
+                                <option value="CPP11">CPP11</option>
+                                <option value="CPP14">CPP14</option>
+                                <option value="CSharp">CSharp</option>
+                                <option value="Python2">Python2</option>
+                                <option value="Python3">Python3</option>
+                                <option value="Java">Java</option>
+                                <option value="JSX">JSX</option>
+                                <option value="HTML">HTML</option>
+                                <option value="XML">XML</option>
+                                <option value="CSS">CSS</option>
+                                <option value="Stylus">Stylus</option>
+                                <option value="Scss">Scss</option>
+                                <option value="Less">Less</option>
+                                <option value="Javascript">Javascript</option>
+                                <option value="JSON">JSON</option>
+                                <option value="Swift">Swift</option>
+                                <option value="ObjectiveC">ObjectiveC</option>
+                                <option value="PHP">PHP</option>
+                                <option value="Haskell">Haskell</option>
+                                <option value="Markdown">Markdown</option>
+                                <option value="Bash">Bash</option>
+                                <option value="Plain_Text">Plain_Text</option>
+                            </select>
+                        </div>
+                        <div className="field">
+                            <textarea rows="2" ref="description" placeholder="Write some description..."></textarea>
+                        </div>
+                    </form>
+                    <div className="ui segment" style={{height: '500px', padding: '0px'}}>
+                        <Editor 
+                                mode={this.mapCompilerToAce[this.state.language] || 'c_cpp'}
+                                theme='tomorrow' 
+                                name="editor"
+                                tabSize={4}
+                                fontSize={12}
+                                onChange={this.changeCode}
+                                value={`${this.state.changedCode}`}
+                                width='100%'
+                                height='100%'
+                                showPrintMargin={false}
+                                showGutter={true}
+                                highlightActiveLine={true}
+                            />
                     </div>
-                    <div className="field">
-                        <select className="ui search dropdown" name="language" value={this.state.language} onChange={this.handleFiletypeChange}>
-                            <option value="">Language</option>
-                            <option value="C">C</option>
-                            <option value="CPP">CPP</option>
-                            <option value="CPP11">CPP11</option>
-                            <option value="CPP14">CPP14</option>
-                            <option value="CSharp">CSharp</option>
-                            <option value="Python2">Python2</option>
-                            <option value="Python3">Python3</option>
-                            <option value="Java">Java</option>
-                            <option value="JSX">JSX</option>
-                            <option value="HTML">HTML</option>
-                            <option value="XML">XML</option>
-                            <option value="CSS">CSS</option>
-                            <option value="Stylus">Stylus</option>
-                            <option value="Scss">Scss</option>
-                            <option value="Less">Less</option>
-                            <option value="Javascript">Javascript</option>
-                            <option value="JSON">JSON</option>
-                            <option value="Swift">Swift</option>
-                            <option value="ObjectiveC">ObjectiveC</option>
-                            <option value="PHP">PHP</option>
-                            <option value="Haskell">Haskell</option>
-                            <option value="Markdown">Markdown</option>
-                            <option value="Bash">Bash</option>
-                            <option value="Plain_Text">Plain_Text</option>
-                        </select>
-                    </div>
-                    <div className="field">
-                        <textarea rows="2" ref="description" placeholder="Write some description..."></textarea>
-                    </div>
-                </form>
-                <div className="ui segment" style={{height: '500px', padding: '0px'}}>
-                    <Editor 
-                            mode={this.mapCompilerToAce[this.state.language] || 'c_cpp'}
-                            theme='tomorrow' 
-                            name="editor"
-                            tabSize={4}
-                            fontSize={12}
-                            onChange={this.changeCode}
-                            value={`${this.state.changedCode}`}
-                            width='100%'
-                            height='100%'
-                            showPrintMargin={false}
-                            showGutter={true}
-                            highlightActiveLine={true}
-                        />
+                    <button className="ui primary button" type="submit" form='fastSubmitform'>Submit</button>
                 </div>
-                <button className="ui primary button" type="submit" form='fastSubmitform'>Submit</button>
             </div>
         )
     }

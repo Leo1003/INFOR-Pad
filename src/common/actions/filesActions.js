@@ -61,7 +61,7 @@ export const fetchAddNewFiles = (filename, folderid, sessionid, format, descript
           'Content-Type': 'application/x-www-form-urlencoded',
           'sessionid': `${sessionid}`
         },
-        body: `filename=${filename}&format=${format}&description=${description}`
+        body: `filename=${encodeURIComponent(filename)}&format=${format}&description=${encodeURIComponent(description)}`
       })
       if(res.ok){
         let json = await res.json()
@@ -87,7 +87,7 @@ export const fetchUpLoadFiles = (filename, folderid, sessionid, format, descript
           'Content-Type': 'application/x-www-form-urlencoded',
           'sessionid': `${sessionid}`
         },
-        body: `filename=${filename}&format=${format}&description=${description}&code=${encodeURIComponent(code)}`
+        body: `filename=${encodeURIComponent(filename)}&format=${format}&description=${encodeURIComponent(description)}&code=${encodeURIComponent(code)}`
       })
       if(res.ok){
         let json = await res.json()
@@ -113,7 +113,7 @@ export const fetchFastSubmit = (filename, format, description, code) => (
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: `filename=${filename}&format=${format}&description=${description}&code=${encodeURIComponent(code)}`
+        body: `filename=${encodeURIComponent(filename)}&format=${format}&description=${encodeURIComponent(description)}&code=${encodeURIComponent(code)}`
       })
       if(res.ok){
         let json = await res.json()

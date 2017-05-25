@@ -9,7 +9,7 @@ const mapStateToProps = (state) => {
     sessionid: state.session.sessionid,
     isFetching: state.ui.isFetching,
     cur_file: state.file,
-    userid: state.user.id,
+    user: state.user,
     redirectToError: state.ui.redirectToError
   }
 }

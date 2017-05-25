@@ -65,7 +65,6 @@ export const file = {
     isPublic: false,
     shortid: '',
     format: '',
-    size: 0
   },             //Parent Directory
   owner: {
     id: '',
@@ -81,6 +80,7 @@ export const file = {
   format: '',             //The file's format or 'Directory'
   code: '',               //The code of the file (File Only)
   stdin: '',              //The stdin data (File Only)
+  size: 0
 }
 
 export const ui = {

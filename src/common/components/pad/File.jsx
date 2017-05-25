@@ -30,7 +30,7 @@ class File extends React.Component {
         console.log(this.props)
         return (
         <div>
-          <FileContent userid={this.props.userid} file={this.props.cur_file} sessionid={this.props.sessionid} />
+          <FileContent userid={this.props.user.id} userSettings={this.props.user.settings} file={this.props.cur_file} sessionid={this.props.sessionid} />
         </div>
       )}
     }
