@@ -23,7 +23,7 @@ exports.extractFSData = async function(fs, complete, extend) {
     }
     if (fs.isFile === true) {
         //Assume one char is 2 bytes
-        ret.size = fs.code.length * 2 + fs.stdin.length * 2 + fs.description * 2
+        ret.size = (fs.code.length * 2 + fs.stdin.length * 2 + fs.description * 2) || 0
     }
     if (extend == true) {
         if (fs.parent) {
@@ -112,10 +112,12 @@ exports.getAccess = function(fs, userid) {
     }
 }
 
-exports.addTempFile = async function(name, format, description, secret) {
+exports.addTempFile = async function(name, format, secret) {
+    if (format == 'Directory') {
+        throw new ApiError(400, "Can't create directory as temporary")
+    }
     return await new FileSystem({
         name: name,
-        description: description,
         isFile: true,
         isPublic: true,
         shortid: randomstring.generate(8),

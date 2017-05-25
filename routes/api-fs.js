@@ -71,7 +71,9 @@ router.post('/', async ctx => {
     if (!data.filename || !data.format) {
         throw new ApiError(400, "Some data are missed")
     }
-    let newfile = await fsCtrl.addTempFile(data.filename, data.format, data.description, ctx.header.secret)
+    let newfile = await fsCtrl.addTempFile(data.filename, data.format, ctx.header.secret)
+    newfile = fsCtrl.updateFS(newfile, data, 1024 * 128)
+    await newfile.save()
     ctx.status = 201
     ctx.body = await fsCtrl.extractFSData(newfile, true)
 })
