@@ -10,8 +10,8 @@ function connect(sessionid, callback) {
         callback(error);
     });
 }
-function cancel(submissionid) {
-    socket.emit('Cancel', { id: submissionid });
+function cancel() {
+    socket.emit('Cancel');
 }
 function onResult(callback) {
     socket.on('Result', data => {

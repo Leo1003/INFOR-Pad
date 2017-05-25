@@ -65,6 +65,7 @@ app.io = io
 io.of('/client').use((socket, next) => {
     debug("Client connecting...")
     socket.sessionData = {}
+    socket.submission = {}
     if (socket.handshake.query.sessionid) {
         sessionCtrl.getSessionById(socket.handshake.query.sessionid).then((sess => {
                 if (sess && sess.expireAt > new Date()) {
@@ -97,11 +98,14 @@ io.of('/client').on('connection', socket => {
             if (!fs) {
                 throw new Error('File not found')
             }
+            if (socket.submission.id != undefined) {
+                throw new Error('Has already had one task')
+            }
             if (fsCtrl.getAccess(fs, socket.sessionData.userid) > 0) {
                 if (data.stdin) {
                     fs.stdin = data.stdin
                 }
-                lxtesterServer.sendJob({
+                socket.submission.id = lxtesterServer.sendJob({
                     socketid: sid,
                     language: data.language,
                     file: fs
@@ -124,7 +128,7 @@ io.of('/client').on('connection', socket => {
         })
     })
     socket.on('Cancel', data => {
-        io.of('/lxtester').emit('data', { id: data.id })
+        io.of('/lxtester').emit('data', { id: socket.submission.id })
     })
 })
 io.of('/lxtester').use((socket, next) => {
@@ -136,7 +140,9 @@ io.of('/lxtester').on('connection', socket => {
     lxtesterServer.push(socket)
     socket.on('Result', data => {
         let task = lxtesterServer.receiveJob(socket.id, data)
-        io.of('/client').connected[task.socketid].emit('Result', task.result)
+        let clientsocket = io.of('/client').connected[task.socketid]
+        clientsocket.emit('Result', task.result)
+        clientsocket.submission.id = undefined
     })
     socket.on('Suspend', data => {
         lxtesterServer.suspend(socket.id)
