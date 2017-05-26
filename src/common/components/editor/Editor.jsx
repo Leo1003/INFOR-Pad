@@ -2,9 +2,6 @@ import React from 'react'
 import EditorContent from './EditorContent.jsx'
 import { browserHistory, Link } from 'react-router'
 
-// import io from 'socket.io-client'
-// let socket = undefined
-
 const Loader = () => (
   <div className="ui active inverted dimmer">
       <div className="ui text loader">Loading</div>
@@ -15,44 +12,10 @@ class Editor extends React.Component {
     constructor(props) {
         super(props)
     }
-    // onResult(callback) {
-    //     socket.on('Result', data => {
-    //         let result = {};
-    //         result.id = data.id;
-    //         if (data.type == 2) {
-    //             result.status = 'Error';
-    //         } else if (data.type == 1) {
-    //             result.status = 'ComplieError';
-    //         } else if (data.type == 0) {
-    //             result.status = 'Success';
-    //         }
-    //         result.time = data.time != -1 ? data.time : undefined;
-    //         result.memory = data.memory != -1 ? data.memory : undefined;
-    //         result.exitcode = data.exitcode;
-    //         result.signal = data.signal;
-    //         result.killed = data.killed;
-    //         result.stdout = data.output;
-    //         result.stderr = data.error;
-    //         return callback(result);
-    //     });
-    // }
     componentWillMount() {
         this.props.initialRedirect()
         //console.log(this.props)
         if(!this.props.isFetching) this.props.handleEditorGetFiles(this.props.sessionid, this.props.params.fileid)
-    }
-    componentDidMount() {
-        // socket = io('/client', {query: `sessionid=${this.props.sessionid}`})
-        // socket.on('connect', () => {
-
-        //     console.log("Connected to server!")
-        //     //callback()
-        // })
-        // socket.on('error', error => {
-        //     console.error(error)
-        //     //callback(error)
-        // })
-        // console.log(socket)
     }
     componentWillReceiveProps(nextProps) {
         console.log(nextProps)

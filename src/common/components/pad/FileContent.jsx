@@ -81,6 +81,7 @@ class FileContent extends React.Component {
     this.socketCallback = this.socketCallback.bind(this)
     this.onResult = this.onResult.bind(this)
     this.submit = this.submit.bind(this)
+    this.downloadFile = this.downloadFile.bind(this)
     this.state = {
       stdin: props.file.stdin,
       result: {},
@@ -165,6 +166,48 @@ class FileContent extends React.Component {
         stdin: this.refs.stdin.value
     })
   }
+  downloadFile() {
+      let mimeType = {
+      "C":"c",
+      "CPP": "cpp",
+      "CPP11": "cpp",
+      "CPP14": "cpp",
+      "Python2": "py",
+      "Python3": "py",
+      "Java": "java",
+      "JSX": "jsx",
+      "HTML": "html",
+      "XML": "xml",
+      "CSS": "css",
+      "Stylus": "styl",
+      "Scss": "scss",
+      "Less": "less",
+      "CSharp": "cs",
+      "Javascript": "js",
+      "JSON": "json",
+      "Swift": "swift",
+      "ObjectiveC": "m",
+      "PHP": "php",
+      "Haskell": "hs",
+      "Markdown": "md",
+      "Bash": "sh",
+      "Plain_Text": "txt"
+    }
+      let filename = 'download'
+      let blob = new Blob([this.props.file.code], {type: 'text/plain'});
+      if(window.navigator.msSaveOrOpenBlob) {
+          window.navigator.msSaveBlob(blob, filename);
+      }
+      else{
+          let elem = window.document.createElement('a');
+          elem.href = window.URL.createObjectURL(blob);
+          elem.download = filename + `.${mimeType[this.props.file.format]}`;        
+          document.body.appendChild(elem);
+          elem.click();        
+          document.body.removeChild(elem);
+      }
+  }
+  
   componentWillUnmount() {
     console.log("file content unmount")
     $('.lxtester.sidebar').remove()
@@ -243,6 +286,9 @@ class FileContent extends React.Component {
               <p><b>Code:</b></p>
               <div className="ui basic button" style={{marginBottom: '10px'}} onClick={this.openRightBar}>
                   Open Compiler
+              </div>
+              <div className="ui basic button" style={{marginBottom: '10px'}} onClick={this.downloadFile}>
+                Download File
               </div>
               { this.props.userid === this.props.file.owner.id && this.props.userid.length > 0 ? <a href={'/editor/' + this.props.file.id } target="_blank">Open with Editor</a> : null }
               {this.props.file.code.length > 0 ?

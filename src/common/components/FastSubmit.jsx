@@ -41,6 +41,7 @@ class FastSubmit extends React.Component {
         this.handleFiletypeChange = this.handleFiletypeChange.bind(this)
         this.changeCode = this.changeCode.bind(this)
         this.mapLanguageToCompiler = {
+            "c": "C",
             "cpp": "CPP14",
             "py": "Python3",
             "java": "Java",
@@ -48,6 +49,7 @@ class FastSubmit extends React.Component {
             "html": "HTML",
             "xml": "XML",
             "css": "CSS",
+            "cs": "CSharp",
             "styl": "Stylus",
             "scss": "Scss",
             "less": "Less",

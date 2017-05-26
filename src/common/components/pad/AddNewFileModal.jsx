@@ -7,6 +7,7 @@ export class AddNewFileModal extends React.Component {
     this.checkSubfilename = this.checkSubfilename.bind(this)
     this.handleFiletypeChange = this.handleFiletypeChange.bind(this)
     this.mapLanguageToCompiler = {
+      "c": "C",
       "cpp": "CPP14",
       "py": "Python3",
       "java": "Java",
@@ -20,6 +21,7 @@ export class AddNewFileModal extends React.Component {
       "js": "Javascript",
       "json": "JSON",
       "swift": "Swift",
+      "cs":"CSharp",
       "m": "ObjectiveC",
       "php": "PHP",
       "hs": "Haskell",
