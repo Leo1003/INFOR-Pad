@@ -23,7 +23,7 @@ exports.extractFSData = async function(fs, complete, extend) {
     }
     if (fs.isFile === true) {
         //Assume one char is 2 bytes
-        ret.size = (fs.code.length * 2 + fs.stdin.length * 2 + fs.description * 2) || 0
+        ret.size = (fs.code.length * 2 + fs.stdin.length * 2 + fs.description.length * 2)
     }
     if (extend == true) {
         if (fs.parent) {
