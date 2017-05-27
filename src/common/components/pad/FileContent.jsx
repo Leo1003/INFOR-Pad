@@ -98,6 +98,8 @@ class FileContent extends React.Component {
           console.error(error)
           this.socketCallback(error);
       });
+      //clipboard
+      let clipboard = new Clipboard('#shareLink');
   }
   socketCallback(err) {
       if (err) {
@@ -285,7 +287,11 @@ class FileContent extends React.Component {
               <p><b>CreateDate: </b>&nbsp;{moment(this.props.file.createDate).format('MMMM Do YYYY, h:mm:ss a')}</p>
               <p><b>Last Modify: </b>&nbsp;{moment(this.props.file.modifyDate).format('MMMM Do YYYY, h:mm:ss a')}</p>
               <p style={{wordBreak: "break-all"}}><b>Description: </b>&nbsp;{this.props.file.description}</p>
-              {this.props.file.isPublic ? <p><b>Share ID:</b>&nbsp;<a href={'/' + this.props.file.shortid }>{this.props.file.shortid}</a></p> : null}
+              {this.props.file.isPublic ?
+                <p> 
+                  <b>Share Link:</b>&nbsp;<a id="shareLink" data-clipboard-target="#shareLink" value={'https://pad.infor.org/' + this.props.file.shordid}>https://pad.infor.org/{this.props.file.shortid}</a>
+                </p>
+               : null}
               <p><b>Code:</b></p>
               <div className="ui basic button" style={{marginBottom: '10px'}} onClick={this.openRightBar}>
                   Execute

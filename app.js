@@ -72,7 +72,7 @@ io.of('/client').use((socket, next) => {
                     return sess.populate('user').execPopulate()
                 }
                 debug("Client Failed")
-                throw new Error('Session invaild or expired!')
+                throw new Error('Session invalid or expired!')
             }))
             .then(sess => {
                 if (sess.user._id) {
@@ -80,7 +80,7 @@ io.of('/client').use((socket, next) => {
                     return next()
                 }
                 debug("Client Failed")
-                throw new Error('Invaild user!')
+                throw new Error('Invalid user!')
             })
             .catch(err => {
                 debug(err)

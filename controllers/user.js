@@ -107,7 +107,7 @@ exports.updateSettinngs = async function (user, settings) {
         await user.save()
     } catch (err) {
         if (err.name == 'ValidationError') {
-            throw new ApiError(400, "Invaild settings")
+            throw new ApiError(400, "Invalid settings")
         }
         throw err
     }
