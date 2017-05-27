@@ -215,7 +215,7 @@ class EditorContent extends React.Component {
         console.log("submit")
         console.log(this.refs.stdin.value)
         //save stdin
-        this.props.handleEditorModify(this.props.sessionid, this.props.file.id, 'stdin', this.refs.stdin.value)
+        if(!this.state.compiling)this.props.handleEditorModify(this.props.sessionid, this.props.file.id, 'stdin', this.refs.stdin.value)
         // socket 
         if(this.state.compiling) {
             console.log("cancel")
@@ -259,7 +259,8 @@ class EditorContent extends React.Component {
                             <div className="field">
                                 <textarea onChange={this.changeStdin} ref="stdin" value={this.state.stdin} ></textarea>
                             </div>
-                            <button className="ui inverted button" onClick={this.runCode}>{this.state.compiling ? "Compiling..." : "Compile & Run"}</button>
+                            <button className="ui inverted button" onClick={this.runCode} disabled={this.state.compiling}>{this.state.compiling ? "Running..." : "Execute"}</button>
+                            { this.state.compiling ? <button className="ui inverted button" onClick={this.runCode}>Cancel</button> : null}
                         </div>
                     </div>
                     <div className="item">
