@@ -87,6 +87,7 @@ class EditorContent extends React.Component {
         this.socketCallback = this.socketCallback.bind(this)
         this.submit = this.submit.bind(this)
         this.onResult = this.onResult.bind(this)
+        this.handleKeyDown = this.handleKeyDown.bind(this)
         this.state = {
             showSetting: false,
             fontSize: 14,
@@ -226,6 +227,20 @@ class EditorContent extends React.Component {
         }
         else this.setState({ compiling: true }, this.submit(this.props.file.id, this.props.file.format, this.refs.stdin.value))
     }
+    handleKeyDown(event) {
+        let charCode = String.fromCharCode(event.which).toLowerCase()
+        if(event.ctrlKey && charCode === 's') {
+            event.preventDefault()
+            // console.log("Ctrl + S pressed")
+            this.saveCode()
+        }
+        // For MAC we can use metaKey to detect cmd key
+        if(event.metaKey && charCode === 's') {
+            event.preventDefault()
+            // console.log("Cmd + S pressed")
+            this.saveCode()
+        }
+    }
     render() {
         let mode = {
             C: 'c_cpp',
@@ -254,7 +269,7 @@ class EditorContent extends React.Component {
             Bash: 'sh'
         }
         return(
-            <div>
+            <div >
                 <div className="ui right wide lxtester sidebar vertical inverted menu">
                     <div className="header item">Input</div>
                     <div className="item">
@@ -286,7 +301,7 @@ class EditorContent extends React.Component {
                     }
                     </div> 
                 </div>
-                <div className="pusher">
+                <div className="pusher" onKeyDown={this.handleKeyDown}>
                     <div className="ui bottom attached segment" style={{
                         height: '80vh',
                         padding: '0em'
@@ -422,6 +437,7 @@ class EditorContent extends React.Component {
                             showPrintMargin={false}
                             showGutter={true}
                             highlightActiveLine={true}
+                            
                             />
                     </div>
                 </div>
