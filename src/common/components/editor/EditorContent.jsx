@@ -96,9 +96,13 @@ class EditorContent extends React.Component {
             stdin: props.file.stdin,
             result: {},
             compiling: false,
+            mounted: false,
         }
     }
     componentDidMount() {
+        this.setState({
+            mounted: true
+        })
         $('.ui.dropdown').dropdown()
         $('#select').dropdown()
         setInterval(() => {
@@ -115,18 +119,20 @@ class EditorContent extends React.Component {
         });
     }
     socketCallback(err) {
-        if (err) {
-            this.setState({
-                result: err
-            })
-        } else {
-            this.onResult(result => {
+        if(this.state.mounted) {
+            if (err) {
                 this.setState({
-                    result: result,
-                    compiling: false
+                    result: err
                 })
-            });
-            // console.log("callback: connect!")
+            } else {
+                this.onResult(result => {
+                    this.setState({
+                        result: result,
+                        compiling: false
+                    })
+                });
+                // console.log("callback: connect!")
+            }
         }
     }
     onResult(callback) {
@@ -205,6 +211,9 @@ class EditorContent extends React.Component {
             .sidebar('toggle')
     }
     componentWillUnmount() {
+        this.setState({
+            mounted: false
+        })
         $('.lxtester.sidebar').remove()
     }
     changeStdin(e) {

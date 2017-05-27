@@ -86,9 +86,13 @@ class FileContent extends React.Component {
       stdin: props.file.stdin,
       result: {},
       compiling: false,
+      mounted: false,
     }
   }
   componentDidMount() {
+      this.setState({
+          mounted: true,
+      })
       socket = io('/client', {query: `sessionid=${this.props.sessionid}`});
       socket.on('connect', () => {
         //   console.log("Connected to server!");
@@ -102,18 +106,20 @@ class FileContent extends React.Component {
       let clipboard = new Clipboard('#shareLink');
   }
   socketCallback(err) {
-      if (err) {
-          this.setState({
-              result: err
-          })
-      } else {
-          this.onResult(result => {
-              this.setState({
-                  result: result,
-                  compiling: false
-              })
-          });
-        //   console.log("callback: connect!")
+      if(this.state.mounted) {     
+        if (err) {
+            this.setState({
+                result: err
+            })
+        } else {
+            this.onResult(result => {
+                this.setState({
+                    result: result,
+                    compiling: false
+                })
+            });
+            //   console.log("callback: connect!")
+        }
       }
   }
   onResult(callback) {
@@ -214,6 +220,9 @@ class FileContent extends React.Component {
   
   componentWillUnmount() {
     // console.log("file content unmount")
+    this.setState({
+        mounted: false
+    })
     $('.lxtester.sidebar').remove()
   }
   render() {

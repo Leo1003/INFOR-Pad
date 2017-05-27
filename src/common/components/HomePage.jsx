@@ -42,7 +42,7 @@ const HomePage = () => (
             <div className="ui container" style={{
                 textAlign: 'center'
             }}>
-                <span>Produce by INFOR29th</span>
+                <a href="https://infor.org">Produce by INFOR29th</a>
             </div>
         </div>
     </div>
