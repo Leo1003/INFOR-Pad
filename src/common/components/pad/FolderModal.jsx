@@ -27,7 +27,7 @@ class FolderModal extends React.Component {
     this.props.handleDelete(this.props.file.id, this.props.sessionid, this.props.folder.id)
   }
   handleCheckPermission = (fsid, isPublic) => {
-    console.log(!isPublic)
+    // console.log(!isPublic)
     this.props.handleCheckPermission(fsid, this.props.sessionid, !isPublic)
   }
   handleRenameFile(e) {
@@ -91,7 +91,7 @@ class FolderModal extends React.Component {
      
   }
   componentWillReceiveProps(nextProps) {
-    console.log("folder modal receive props")
+    // console.log("folder modal receive props")
     // console.log(this.props)
     // console.log(nextProps)
   }

@@ -40,7 +40,7 @@ class Sign_in extends React.Component {
 
   handleValid(e) {
     e.preventDefault();
-    console.log(this.refs.autologin.checked)
+    // console.log(this.refs.autologin.checked)
     this.handleSignin()
   }
   handleSignin() {
@@ -48,7 +48,7 @@ class Sign_in extends React.Component {
     for(const field in this.refs) {
       formData[field] = this.refs[field].value
     }
-    console.log(formData)
+    // console.log(formData)
     this.props.handleSignIn(formData, this.refs.autologin.checked.toString())
   }
   render() {

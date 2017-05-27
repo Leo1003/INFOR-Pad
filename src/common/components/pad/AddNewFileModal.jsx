@@ -102,7 +102,6 @@ export class AddNewFileModal extends React.Component {
       // for (let i of Object.keys(this.mapLanguageToCompiler)) console.log(i)
       if (Object.keys(this.mapLanguageToCompiler).indexOf(subfilename) != -1) return this.mapLanguageToCompiler[subfilename]
     }
-    //return ""
   }
   render() {
     return (

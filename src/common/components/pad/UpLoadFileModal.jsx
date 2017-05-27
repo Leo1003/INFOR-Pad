@@ -45,7 +45,7 @@ class UpLoadFileModal extends React.Component {
     }
     handleUploadfile(e) {
         e.preventDefault()
-        console.log(this.refs.uploadfile.files[0])
+        // console.log(this.refs.uploadfile.files[0])
         let fr = new FileReader()
         if(this.refs.uploadfile.files[0] == undefined) {
             this.setState({ error: 'Please Choose a File'})
@@ -56,8 +56,8 @@ class UpLoadFileModal extends React.Component {
             fr.readAsText(this.refs.uploadfile.files[0])
         }
         fr.onload = event => {
-            console.log("load finished")
-            console.log(event.target.result)
+            // console.log("load finished")
+            // console.log(event.target.result)
             this.props.handleUpLoadFiles(this.refs.uploadfile.files[0].name, this.props.id, this.props.sessionid, this.checkSubfilename(this.refs.uploadfile.files[0].name), this.refs.description.value ,event.target.result)
             $('#uploadform').form('clear')
             $('#uploadFileModal').modal('hide')

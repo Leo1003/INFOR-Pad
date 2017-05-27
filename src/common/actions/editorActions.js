@@ -40,7 +40,7 @@ export const fetchSaveCode = (sessionid, fsid, code) => (
             // 413: Your data is too big to save
             // 404: The directory isn't exist
             if(res.ok) {
-              console.log("saved")
+              // console.log("saved")
             }
             else if(res.status == '401') {
               dispatch({ type: CLEAN_SESSION })

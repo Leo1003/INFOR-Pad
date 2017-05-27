@@ -18,7 +18,7 @@ class Editor extends React.Component {
         if(!this.props.isFetching) this.props.handleEditorGetFiles(this.props.sessionid, this.props.params.fileid)
     }
     componentWillReceiveProps(nextProps) {
-        console.log(nextProps)
+        // console.log(nextProps)
         let findId = false;
         this.props.openedFiles.map(file => {
             if(!findId && file.id === this.props.params.fileid) findId = true;
@@ -29,12 +29,9 @@ class Editor extends React.Component {
         if(!nextProps.isFetching && nextProps.redirectToError) browserHistory.replace({pathname: '/error'})
     }
     componentWillUnMount() {
-        console.log("unmount")
+        // console.log("unmount")
     }
     render() {
-        console.log("render")
-        console.log(this.props.isFetching.toString())
-        console.log(this.props.openedFiles)
         return (
             <div>
                 {this.props.isFetching || !this.props.openedFiles.find(file => (file.id === this.props.params.fileid)) ? <Loader /> :

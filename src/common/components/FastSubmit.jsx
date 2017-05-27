@@ -134,10 +134,10 @@ class FastSubmit extends React.Component {
     }
     handleFastSubmit(e) {
         e.preventDefault()
-        console.log(this.refs.filename.value)
-        console.log(this.state.language)
-        console.log(this.refs.description.value)
-        console.log(this.state.changedCode)
+        // console.log(this.refs.filename.value)
+        // console.log(this.state.language)
+        // console.log(this.refs.description.value)
+        // console.log(this.state.changedCode)
         this.props.handleFastSubmit(this.refs.filename.value, this.state.language, this.refs.description.value, this.state.changedCode)
         $('#fastSubmitform').form('clear')
     }

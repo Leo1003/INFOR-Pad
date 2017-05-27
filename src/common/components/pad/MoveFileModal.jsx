@@ -9,27 +9,27 @@ class MoveFileModal extends React.Component {
         this.handleMoveFile = this.handleMoveFile.bind(this)
     }
     handleChangeContent(fsid) {
-        console.log(fsid)
+        // console.log(fsid)
         this.props.handleMoveContent(this.props.sessionid, fsid)
     }
     handleMoveFile() {
-        console.log("handle move file")
-        console.log(this.props.file.id)
-        console.log(this.props.moveContent.id)
+        // console.log("handle move file")
+        // console.log(this.props.file.id)
+        // console.log(this.props.moveContent.id)
         $(`#${this.props.file.id}_moveModal`).modal('hide', this.props.handleMoveFile(this.props.sessionid, this.props.file.id, this.props.moveContent.id, this.props.folder.id))
 
     }
     componentWillMount() {
-        console.log("willmount")
+        // console.log("willmount")
     }
     componentDidMount() {
-        console.log("did mount")
-        console.log(this.props)
+        // console.log("did mount")
+        // console.log(this.props)
     }
     componentWillReceiveProps(nextProps) {
-        console.log("receive props")
-        console.log(this.props)
-        console.log(nextProps)
+        // console.log("receive props")
+        // console.log(this.props)
+        // console.log(nextProps)
         if(this.props.file.id !== nextProps.file.id) {
             this.props.handleMoveContent(this.props.sessionid, nextProps.folder.id)
         }

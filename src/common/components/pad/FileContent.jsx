@@ -91,7 +91,7 @@ class FileContent extends React.Component {
   componentDidMount() {
       socket = io('/client', {query: `sessionid=${this.props.sessionid}`});
       socket.on('connect', () => {
-          console.log("Connected to server!");
+        //   console.log("Connected to server!");
           this.socketCallback();
       });
       socket.on('error', error => {
@@ -111,9 +111,9 @@ class FileContent extends React.Component {
               this.setState({
                   result: result,
                   compiling: false
-              }, () => console.log(this.state.result))
+              })
           });
-          console.log("callback: connect!")
+        //   console.log("callback: connect!")
       }
   }
   onResult(callback) {
@@ -146,7 +146,7 @@ class FileContent extends React.Component {
   }
   openRightBar(e) {
       e.preventDefault()
-      console.log("open side bar")
+    //   console.log("open side bar")
       $('.lxtester.sidebar')
           .sidebar('setting', 'dimPage', false)
           .sidebar('setting', 'mobileTransition', 'overlay')
@@ -155,11 +155,11 @@ class FileContent extends React.Component {
   }
   runCode(e) {
       e.preventDefault()
-      console.log("submit")
-      console.log(this.refs.stdin.value)
+    //   console.log("submit")
+    //   console.log(this.refs.stdin.value)
       
       if(this.state.compiling) {
-            console.log("cancel")
+            // console.log("cancel")
             socket.emit('Cancel')
         }
       else this.setState({ compiling: true }, this.submit(this.props.file.id, this.props.file.format, this.refs.stdin.value))
@@ -213,7 +213,7 @@ class FileContent extends React.Component {
   }
   
   componentWillUnmount() {
-    console.log("file content unmount")
+    // console.log("file content unmount")
     $('.lxtester.sidebar').remove()
   }
   render() {

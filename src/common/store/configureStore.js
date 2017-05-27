@@ -20,7 +20,7 @@ export default function configureStore(preloadedState = initialState) {
     preloadedState,
     applyMiddleware(
       reduxThunk,
-      createLogger()
+      // createLogger()
     )
   )
   return store

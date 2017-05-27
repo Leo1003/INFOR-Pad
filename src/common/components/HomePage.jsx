@@ -35,6 +35,16 @@ const HomePage = () => (
                 </div>
             </div>
         </div>
+        <div className="ui vertical footer" style={{
+            marginBottom: '20px',
+            marginTop: '30px'
+        }}>
+            <div className="ui container" style={{
+                textAlign: 'center'
+            }}>
+                <span>Produce by INFOR29th</span>
+            </div>
+        </div>
     </div>
 )
 

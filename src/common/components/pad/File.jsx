@@ -27,7 +27,7 @@ class File extends React.Component {
         </div>
       )
       else {
-        console.log(this.props)
+        // console.log(this.props)
         return (
         <div>
           <FileContent userid={this.props.user.id} userSettings={this.props.user.settings} file={this.props.cur_file} sessionid={this.props.sessionid} />

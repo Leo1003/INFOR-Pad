@@ -105,7 +105,7 @@ export const fetchUpLoadFiles = (filename, folderid, sessionid, format, descript
 export const fetchFastSubmit = (filename, format, description, code) => (
   async (dispatch) => {
     try {
-      console.log(code)
+      // console.log(code)
       let res = await fetch(`/api/fs/`, {
         method: 'POST',
         headers: {
@@ -115,7 +115,7 @@ export const fetchFastSubmit = (filename, format, description, code) => (
       })
       if(res.ok){
         let json = await res.json()
-        console.log(json)
+        // console.log(json)
         browserHistory.push(`/pad/file/${json.id}`)
       } else if(res.status == '401') {
         dispatch({ type: CLEAN_SESSION })
@@ -155,7 +155,7 @@ export const fetchDeleteFile = (fsid, sessionid, folderid) => (
 export const fetchCheckPermission = (fsid, sessionid, check) => (
   async (dispatch) => {
     try {
-      console.log(check)
+      // console.log(check)
       
       let res = await fetch(`/api/fs/${fsid}`, {
         method: 'PUT',

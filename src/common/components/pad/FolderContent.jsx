@@ -46,7 +46,7 @@ class FolderContent extends React.Component {
     })
   }
   componentWillReceiveProps(nextProps) {
-    console.log("folder content receive")
+    // console.log("folder content receive")
     // console.log(this.props)
     // console.log(nextProps)
   }

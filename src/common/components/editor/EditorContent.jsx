@@ -105,11 +105,11 @@ class EditorContent extends React.Component {
         }, 3000)
         socket = io('/client', {query: `sessionid=${this.props.sessionid}`});
         socket.on('connect', () => {
-            console.log("Connected to server!");
+            // console.log("Connected to server!");
             this.socketCallback();
         });
         socket.on('error', error => {
-            console.error(error)
+            // console.error(error)
             this.socketCallback(error);
         });
     }
@@ -123,9 +123,9 @@ class EditorContent extends React.Component {
                 this.setState({
                     result: result,
                     compiling: false
-                }, () => console.log(this.state.result))
+                })
             });
-            console.log("callback: connect!")
+            // console.log("callback: connect!")
         }
     }
     onResult(callback) {
@@ -196,12 +196,15 @@ class EditorContent extends React.Component {
     }
     openRightBar(e) {
         e.preventDefault()
-        console.log("open side bar")
+        // console.log("open side bar")
         $('.lxtester.sidebar')
             .sidebar('setting', 'dimPage', false)
             .sidebar('setting', 'mobileTransition', 'overlay')
             .sidebar('setting', 'transition', 'overlay')
             .sidebar('toggle')
+    }
+    componentWillUnmount() {
+        $('.lxtester.sidebar').remove()
     }
     changeStdin(e) {
         e.preventDefault()
@@ -212,13 +215,13 @@ class EditorContent extends React.Component {
     }
     runCode(e) {
         e.preventDefault()
-        console.log("submit")
+        // console.log("submit")
         console.log(this.refs.stdin.value)
         //save stdin
         if(!this.state.compiling)this.props.handleEditorModify(this.props.sessionid, this.props.file.id, 'stdin', this.refs.stdin.value)
         // socket 
         if(this.state.compiling) {
-            console.log("cancel")
+            // console.log("cancel")
             socket.emit('Cancel')
         }
         else this.setState({ compiling: true }, this.submit(this.props.file.id, this.props.file.format, this.refs.stdin.value))
