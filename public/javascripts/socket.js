@@ -17,12 +17,12 @@ function onResult(callback) {
     socket.on('Result', data => {
         let result = {};
         result.id = data.id;
-        if (data.type == 2) {
-            result.status = 'Error';
+        if (data.type == 0) {
+            result.status = 'Success';
         } else if (data.type == 1) {
             result.status = 'ComplieError';
-        } else if (data.type == 0) {
-            result.status = 'Success';
+        } else {
+            result.status = 'Error';
         }
         result.time = data.time != -1 ? data.time : undefined;
         result.memory = data.memory != -1 ? data.memory : undefined;
