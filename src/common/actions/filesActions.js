@@ -18,7 +18,8 @@ import {
   CHANGE_FOLDER_MODAL,
   FILE_UPDATE_LAN,
   MODIFY_FILE,
-  ADD_NEW_FILE
+  ADD_NEW_FILE,
+  REDIRECT_ERROR
 } from '../constants/actionTypes'
 import { browserHistory } from 'react-router'
 
@@ -42,10 +43,9 @@ export const fetchGetFiles = (sessionid, fsid, format) => (
       } else if(res.status == '401') {
         dispatch({ type: CLEAN_SESSION })
         dispatch({ type: LOGIN_FIRST} )
-      } else if(res.status == '403') {
-        dispatch({ type: PERMISSION_DENIED })
-      } else if(res.status == '404') {
-        dispatch({ type: FILE_IS_NOT_EXIST })
+      } else {
+        let json = await res.json()
+        dispatch({ type: REDIRECT_ERROR, error: json.error })
       }
       dispatch({ type: DIDFETCH })
     } catch(e) { console.log(e) }
@@ -69,10 +69,9 @@ export const fetchAddNewFiles = (filename, folderid, sessionid, format, descript
       }  else if(res.status == '401') {
         dispatch({ type: CLEAN_SESSION })
         dispatch({ type: LOGIN_FIRST })
-      } else if(res.status === '403') {
-        dispatch({ type: PERMISSION_DENIED })
-      } else if(res.status == '404') {
-        dispatch({ type: FILE_IS_NOT_EXIST })
+      } else {
+        let json = await res.json()
+        dispatch({ type: REDIRECT_ERROR, error: json.error })
       }
     } catch(e) { console.log(e) }
   }
@@ -95,10 +94,9 @@ export const fetchUpLoadFiles = (filename, folderid, sessionid, format, descript
       }  else if(res.status == '401') {
         dispatch({ type: CLEAN_SESSION })
         dispatch({ type: LOGIN_FIRST })
-      } else if(res.status === '403') {
-        dispatch({ type: PERMISSION_DENIED })
-      } else if(res.status == '404') {
-        dispatch({ type: FILE_IS_NOT_EXIST })
+      } else {
+        let json = await res.json()
+        dispatch({ type: REDIRECT_ERROR, error: json.error })
       }
     } catch(e) { console.log(e) }
   }
@@ -122,10 +120,9 @@ export const fetchFastSubmit = (filename, format, description, code) => (
       } else if(res.status == '401') {
         dispatch({ type: CLEAN_SESSION })
         dispatch({ type: LOGIN_FIRST })
-      } else if(res.status === '403') {
-        dispatch({ type: PERMISSION_DENIED })
-      } else if(res.status == '404') {
-        dispatch({ type: FILE_IS_NOT_EXIST })
+      } else {
+        let json = await res.json()
+        dispatch({ type: REDIRECT_ERROR, error: json.error })
       }
     } catch(e) { console.log(e) }
   }
@@ -144,6 +141,12 @@ export const fetchDeleteFile = (fsid, sessionid, folderid) => (
       if(res.ok) {
         let json = await res.json()
         dispatch(fetchGetFiles(sessionid, folderid, 'Directory'))
+      } else if(res.status == '401') {
+        dispatch({ type: CLEAN_SESSION })
+        dispatch({ type: LOGIN_FIRST })
+      } else {
+        let json = await res.json()
+        dispatch({ type: REDIRECT_ERROR, error: json.error })
       }
     } catch(e) { console.log(e) }
   }
@@ -166,6 +169,12 @@ export const fetchCheckPermission = (fsid, sessionid, check) => (
         let json = await res.json()
         dispatch({ type: GET_SHORTID, payload:{ data: json } })
         dispatch({ type: CHANGE_FOLDER_MODAL, file: json })
+      } else if(res.status == '401') {
+        dispatch({ type: CLEAN_SESSION })
+        dispatch({ type: LOGIN_FIRST })
+      } else {
+        let json = await res.json()
+        dispatch({ type: REDIRECT_ERROR, error: json.error })
       }
     } catch(e) { console.log(e) }
   }
@@ -182,6 +191,9 @@ export const fetchTransferShortID = (shortid) => (
         let json = await res.json()
         if(json.format === 'Directory') browserHistory.replace(`/pad/folder/${json.id}`)
         else browserHistory.replace(`/pad/file/${json.id}`)
+      } else {
+        let json = await res.json()
+        dispatch({ type: REDIRECT_ERROR, error: json.error })
       }
       dispatch({ type: DIDFETCH })
     } catch(e) { console.log(e) }
@@ -209,6 +221,13 @@ export const fetchModifyFile = (sessionid, fsid, newType, newVal) => (
         dispatch({ type: MODIFY_FILE, fsid: fsid, newType: newType, newVal: newVal})
       }
       //todo: res not ok
+      else if(res.status == '401') {
+        dispatch({ type: CLEAN_SESSION })
+        dispatch({ type: LOGIN_FIRST })
+      } else {
+        let json = await res.json()
+        dispatch({ type: REDIRECT_ERROR, error: json.error })
+      }
     } catch(e) { console.log(e) }
   }
 )
@@ -228,6 +247,13 @@ export const fetchMoveContent = (sessionid, fsid) => (
                 dispatch({ type: CHANGE_MOVE_CONTENT, payload: { data:json } })
             }
             //todo res error
+            else if(res.status == '401') {
+              dispatch({ type: CLEAN_SESSION })
+              dispatch({ type: LOGIN_FIRST })
+            } else {
+              let json = await res.json()
+              dispatch({ type: REDIRECT_ERROR, error: json.error })
+            }
         } catch(e) { console.log(e) }
     }
 )
@@ -247,6 +273,13 @@ export const fetchMoveFile = (sessionid, fsid, tfsid, folderid) => (
         dispatch(fetchGetFiles(sessionid, folderid, 'Directory'))
       }
       //todo res error
+      else if(res.status == '401') {
+        dispatch({ type: CLEAN_SESSION })
+        dispatch({ type: LOGIN_FIRST })
+      } else {
+        let json = await res.json()
+        dispatch({ type: REDIRECT_ERROR, error: json.error })
+      }
     } catch(e) { console.log(e) }
   }
 )

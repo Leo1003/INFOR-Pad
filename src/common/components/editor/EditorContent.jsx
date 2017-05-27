@@ -217,8 +217,11 @@ class EditorContent extends React.Component {
         //save stdin
         this.props.handleEditorModify(this.props.sessionid, this.props.file.id, 'stdin', this.refs.stdin.value)
         // socket 
-        this.setState({ compiling: true }, this.submit(this.props.file.id, this.props.file.format, this.refs.stdin.value))
-
+        if(this.state.compiling) {
+            console.log("cancel")
+            socket.emit('Cancel')
+        }
+        else this.setState({ compiling: true }, this.submit(this.props.file.id, this.props.file.format, this.refs.stdin.value))
     }
     render() {
         let mode = {

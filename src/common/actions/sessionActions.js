@@ -1,4 +1,5 @@
 require('isomorphic-fetch');
+import cookie from 'react-cookie'
 
 import {
   SIGN_IN_SUCCESS,
@@ -12,10 +13,12 @@ import {
   CLEAN_FOLDER,
   ISFETCHING,
   DIDFETCH,
+  GET_INITIAL_USER,
+  LOGIN_FIRST
 
 } from '../constants/actionTypes'
 import { browserHistory } from 'react-router'
-import { fetchGetInitialUser } from './userActions'
+// import { fetchGetInitialUser } from './userActions'
 
 export const fetchSignIn = (formData, autologin) => (
   async (dispatch) => {
@@ -23,13 +26,14 @@ export const fetchSignIn = (formData, autologin) => (
       let res = await fetch('/api/session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `username=${formData.username}&password=${formData.password}&autologin=${autologin}`,
+        body: `username=${formData.username}&password=${formData.password}&autoLogin=${autologin}`,
         credentials: 'include'
       })
       if(res.ok) {
         let json = await res.json()
         dispatch({ type: SIGN_IN_SUCCESS, payload: { data: json } })
-        dispatch(fetchGetInitialUser(json.sessionid))
+        //dispatch(fetchGetInitialUser(json.sessionid))
+        dispatch(GetInitialSession())
       }
       else if(res.status == 403) {
         dispatch({ type: SIGN_IN_FAIL })
@@ -81,9 +85,29 @@ export const fetchSignUp = (formData) => (
 )
 
 export const GetInitialSession = () => (
-  (dispatch) => {
+  async (dispatch) => {
     dispatch({ type: ISFETCHING })
-    dispatch({ type: GET_INITIAL_SESSION })
+    // dispatch({ type: GET_INITIAL_SESSION })
+     const sessionid = cookie.load('sessionid')
+     if(sessionid) {
+       let res = await fetch('/api/session', {
+         method: "GET",
+         headers: {
+           'Content-Type': 'application/x-www-form-urlencoded',
+           'sessionid': `${sessionid}`
+         }
+       })
+       if(res.ok) {
+         let json = await res.json()
+         dispatch({ type: GET_INITIAL_SESSION })
+         dispatch({ type: GET_INITIAL_USER, payload: { data: json } })
+       } else if(res.status == 401) dispatch({ type: LOGIN_FIRST })
+     } else {
+       dispatch({ type: CLEAN_SESSION })
+       dispatch({ type: CLEAN_USER })
+       dispatch({ type: CLEAN_FILE })
+       dispatch({ type: CLEAN_FOLDER })
+     }
     dispatch({ type: DIDFETCH })
   }
 )

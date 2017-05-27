@@ -10,6 +10,9 @@ class sharePage extends React.Component {
   componentWillMount() {
     this.props.handleTransferShortID(this.props.params.shortid)
   }
+  componentWillReceiveProps(nextProps) {
+    if(!nextProps.isFetching && nextProps.redirectToError) browserHistory.replace({pathname: '/error'})
+  }
   render() {
     return (
       <div></div>
@@ -17,7 +20,10 @@ class sharePage extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({})
+const mapStateToProps = (state) => ({
+  isFetching: state.ui.isFetching,
+  redirectToError: state.ui.redirectToError
+})
 const mapDispatchToProps = (dispatch) => ({
   handleTransferShortID(shortid) {
     dispatch(fetchTransferShortID(shortid))

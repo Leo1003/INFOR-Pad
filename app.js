@@ -128,7 +128,7 @@ io.of('/client').on('connection', socket => {
         })
     })
     socket.on('Cancel', data => {
-        io.of('/lxtester').emit('data', { id: socket.submission.id })
+        io.of('/lxtester').emit('Cancel', { id: socket.submission.id })
     })
 })
 io.of('/lxtester').use((socket, next) => {

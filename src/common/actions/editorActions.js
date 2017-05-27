@@ -9,7 +9,17 @@ import {
     DIDFETCH,
     CHANGE_SETTINGS,
     EDITOR_FILE_MODIFY,
-    SAVE_STDIN
+    SAVE_STDIN,
+    CLEAN_FILE,
+    CLEAN_FOLDER,
+    CLEAN_SESSION,
+    CLEAN_USER,
+    PERMISSION_DENIED,
+    LOGIN_FIRST,
+    FILE_IS_NOT_EXIST,
+    DATA_IS_TOO_BIG,
+    REDIRECT_ERROR
+    
 } from '../constants/actionTypes'
 
 export const fetchSaveCode = (sessionid, fsid, code) => (
@@ -25,6 +35,20 @@ export const fetchSaveCode = (sessionid, fsid, code) => (
                 body: `code=${encodeURIComponent(code)}`
             })
             //todo status error 
+            // 401: Login first!
+            // 403: You don't have enough permission
+            // 413: Your data is too big to save
+            // 404: The directory isn't exist
+            if(res.ok) {
+              console.log("saved")
+            }
+            else if(res.status == '401') {
+              dispatch({ type: CLEAN_SESSION })
+              dispatch({ type: LOGIN_FIRST })
+            } else {
+              let json = await res.json()
+              dispatch({ type: REDIRECT_ERROR, error: json.error })
+            }
             dispatch({ type: DIDSAVE })
         } catch(e) { console.log(e) }
     }
@@ -49,10 +73,9 @@ export const fetchEditorGetFiles = (sessionid, fsid) => (
       } else if(res.status == '401') {
         dispatch({ type: CLEAN_SESSION })
         dispatch({ type: LOGIN_FIRST} )
-      } else if(res.status == '403') {
-        dispatch({ type: PERMISSION_DENIED })
-      } else if(res.status == '404') {
-        dispatch({ type: FILE_IS_NOT_EXIST })
+      } else {
+        let json = await res.json()
+        dispatch({ type: REDIRECT_ERROR, error: json.error })
       }
       dispatch({ type: DIDFETCH })
     } catch(e) { console.log(e) }
@@ -78,6 +101,12 @@ export const fetchChangeSettings = (sessionid, settingName, settingValue) => (
             })
             if(res.ok) {
               dispatch({ type: CHANGE_SETTINGS, settingName: settingName, settingValue: settingValue })
+            } else if(res.status == '401') {
+              dispatch({ type: CLEAN_SESSION })
+              dispatch({ type: LOGIN_FIRST })
+            } else {
+              let json = await res.json()
+              dispatch({ type: REDIRECT_ERROR, error: json.error })
             }
         } catch(e) { console.log(e) }
     }
@@ -96,6 +125,13 @@ export const fetchEditorModify = (sessionid, fsid, modifyType, modifyValue) => (
       })
       if(res.ok) dispatch({ type: EDITOR_FILE_MODIFY,  modifyType: modifyType, modifyValue: modifyValue, fsid: fsid})
       //todo status error 
+      else if(res.status == '401') {
+        dispatch({ type: CLEAN_SESSION })
+        dispatch({ type: LOGIN_FIRST })
+      } else {
+        let json = await res.json()
+        dispatch({ type: REDIRECT_ERROR, error: json.error })
+      }
     } catch(e) { console.log(e) }
   }
 )

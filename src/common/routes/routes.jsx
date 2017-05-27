@@ -32,7 +32,7 @@ module.exports = (
       <Route path="file/:fileid" component={File_Container}/>
     </Route>
     <Route path="fastSubmit" component={FastSubmit} />
-    <Route path="editor/:fileid" component={Editor_Container} />} />
+    <Route path="editor/:fileid" component={Editor_Container} />
     <Route path="error" component={errorPage} />
     <Route path=":shortid" component={sharePage} />
   </Route>

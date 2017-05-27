@@ -5,7 +5,7 @@ import { browserHistory, Link } from 'react-router'
 const errorPage = ({error}) => (
   <div className="ui container">
     <h1>{error}</h1>
-    {error.length > 0 ? <Link to="/">return home</Link> : null}
+    {error && error.length > 0 ? <Link to="/">return home</Link> : null}
   </div>
 )
 

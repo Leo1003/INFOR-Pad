@@ -24,18 +24,6 @@ const uiReducers = handleActions({
       redirectToError: false
     })
   },
-  PERMISSION_DENIED: (state) => {
-    return Object.assign({}, state, {
-      error: 'Permission Denied!',
-      redirectToError: true
-    })
-  },
-  FILE_IS_NOT_EXIST: (state) => {
-    return Object.assign({}, state, {
-      error: 'File is not exist!',
-      redirectToError: true
-    })
-  },
   CHANGE_MOVE_CONTENT: (state, { payload }) => {
     return Object.assign({}, state, {
       moveContent: {
@@ -50,7 +38,31 @@ const uiReducers = handleActions({
     Object.assign({}, state, {
       openedModal: file
     })
-  ) 
+  ), 
+  PERMISSION_DENIED: (state) => {
+    return Object.assign({}, state, {
+      error: 'Permission Denied!',
+      redirectToError: true
+    })
+  },
+  FILE_IS_NOT_EXIST: (state) => {
+    return Object.assign({}, state, {
+      error: 'File is not exist!',
+      redirectToError: true
+    })
+  },
+  DATA_IS_TOO_BIG: (state) => {
+    return Object.assign({}, state, {
+      error: 'Your Data is Too Big',
+      redirectToError: true
+    })
+  },
+  REDIRECT_ERROR: (state, { error }) => {
+    return Object.assign({}, state, {
+      error: error,
+      redirectToError: true
+    })
+  }
 }, ui)
 
 export default uiReducers

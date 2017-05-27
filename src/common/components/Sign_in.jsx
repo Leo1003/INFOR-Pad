@@ -49,14 +49,14 @@ class Sign_in extends React.Component {
       formData[field] = this.refs[field].value
     }
     console.log(formData)
-    this.props.handleSignIn(formData, (this.refs.autologin.checked ? 1 : 0))
+    this.props.handleSignIn(formData, this.refs.autologin.checked.toString())
   }
   render() {
     let renderMessage = () => {
       if (this.props.error_message.length == 0) return
       return (
         <div className="ui negative message">
-          <div class="header">{this.props.error_message}</div>
+          <div className="header">{this.props.error_message}</div>
         </div>
       )
     }

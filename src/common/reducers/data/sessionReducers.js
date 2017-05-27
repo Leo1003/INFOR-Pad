@@ -8,7 +8,7 @@ const sessionReducers = handleActions({
     let d = new Date()
     d.setTime(d.getTime() + (14 * 24 * 60 * 60 * 1000))
     cookie.save('sessionid', payload.data.sessionid, { path: '/' , expires: d})
-    browserHistory.replace({ pathname: '/' })
+    //browserHistory.replace({ pathname: '/' })
     return Object.assign({}, state, {
       error_message: '',
       isLogin: true,
