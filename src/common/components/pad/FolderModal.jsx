@@ -208,7 +208,7 @@ class FolderModal extends React.Component {
           <div className="content">
             <form className="ui form" id={this.props.file.id + '_descriptionForm'} ref="descriptionForm" onSubmit={this.handleDes}>
               <div className="field">
-                <input type="text" name="description" placeholder="Write new description" ref="descriptionValue" />
+                <textarea name="description" placeholder="Write new description" ref="descriptionValue" rows="2"></textarea>
               </div>
             </form>
           </div>
