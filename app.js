@@ -147,7 +147,7 @@ io.of('/lxtester').on('connection', socket => {
         }
     })
     socket.on('Name', data => {
-        lxtesterServer.setname(socket.id, data.name)
+        lxtesterServer.setName(socket.id, data.name)
     })
     socket.on('Suspend', data => {
         lxtesterServer.suspend(socket.id)
