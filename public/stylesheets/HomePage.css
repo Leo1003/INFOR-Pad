@@ -99,7 +99,7 @@ body > .grid {
     text-overflow: ellipsis;
 }
 
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 700px) {
     .lxtester {
         width: 50vw !important;
         max-width: 600px !important;
