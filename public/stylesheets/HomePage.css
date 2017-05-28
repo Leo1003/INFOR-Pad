@@ -81,9 +81,8 @@
         margin-top: 0.5em;
         font-size: 1.5em;
     }
+    
 }
-
-
 
 body > .grid {
     height: 100%;
@@ -98,4 +97,11 @@ body > .grid {
 .overflow tr td {
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+@media screen and (min-width: 800px) {
+    .lxtester {
+        width: 50vw !important;
+        max-width: 600px !important;
+    }
 }
