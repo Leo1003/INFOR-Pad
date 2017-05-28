@@ -141,8 +141,13 @@ io.of('/lxtester').on('connection', socket => {
     socket.on('Result', data => {
         let task = lxtesterServer.receiveJob(socket.id, data)
         let clientsocket = io.of('/client').connected[task.socketid]
-        clientsocket.emit('Result', task.result)
-        clientsocket.submission.id = undefined
+        if (clientsocket) {
+            clientsocket.emit('Result', task.result)
+            clientsocket.submission.id = undefined
+        }
+    })
+    socket.on('Name', data => {
+        lxtesterServer.setname(socket.id, data.name)
     })
     socket.on('Suspend', data => {
         lxtesterServer.suspend(socket.id)

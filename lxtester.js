@@ -8,10 +8,11 @@ Object.size = function(obj) {
 class lxtesterServer {
     constructor() {
         this.clients = {}
-        this.taskcounter = 0;
+        this.taskcounter = 0
     }
     push(socket) {
         let s = {
+            name: '',
             pending: 0,
             suspend: false,
             socket: socket,
@@ -34,6 +35,9 @@ class lxtesterServer {
             throw new Error('No lxtester available now.\nPlease contact the administrator.')
         }
         return id
+    }
+    setName(socketid, name) {
+        this.clients[socketid].name = name
     }
     sendJob(task) {
         let clientid = this.findIdlest()
