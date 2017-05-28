@@ -301,7 +301,12 @@ class EditorContent extends React.Component {
                         </div>
                     { this.state.compiling ? null : 
                     <div>
-                        { this.state.result.stderr === undefined ? null : <p>Stderr: {this.state.result.stderr} </p>}
+                        { this.state.result.stderr === undefined ? null : <div className="ui inverted stdin form">
+                            <div className="field">
+                                <p>Stderr:</p>
+                                <textarea value={this.state.compiling ? "" : this.state.result.stderr} readOnly></textarea>
+                            </div>
+                        </div>}
                         { this.state.result.status === undefined ? null : <p>Status: {this.state.result.status}</p>}
                         { this.state.result.exitcode === undefined ? null : <p>Process exited with status: {this.state.result.signal ? this.state.result.signal : this.state.result.exitcode}</p>}
                         { this.state.result.time === undefined ? null : <p>Execution time: {this.state.result.time / 1000}s</p>}
