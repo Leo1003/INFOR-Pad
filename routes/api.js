@@ -63,6 +63,7 @@ router.get('/lxtester', async ctx => {
             let lx = ctx.app.lxtesterServer.clients[id]
             ret.push({
                 id: id,
+                name: lx.name,
                 pending: lx.pending,
                 suspend: lx.suspend
             })
