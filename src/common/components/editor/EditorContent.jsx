@@ -125,6 +125,8 @@ class EditorContent extends React.Component {
                     result: err
                 })
             } else {
+                if(result.stdout.length > 10240) result.stdout = result.stdout.slice(0, 1048576);
+                if(result.stderr.length > 10240) result.stderr = result.stderr.slice(0, 1048576);
                 this.onResult(result => {
                     this.setState({
                         result: result,

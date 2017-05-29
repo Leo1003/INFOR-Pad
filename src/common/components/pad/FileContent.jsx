@@ -99,20 +99,24 @@ class FileContent extends React.Component {
           this.socketCallback();
       });
       socket.on('error', error => {
-          console.error(error)
+        //   console.error(error)
           this.socketCallback(error);
       });
       //clipboard
       let clipboard = new Clipboard('#shareLink');
   }
   socketCallback(err) {
-      if(this.state.mounted) {     
+    //   if(this.state.mounted) {     
         if (err) {
+            // console.log(err)
             this.setState({
                 result: err
             })
         } else {
             this.onResult(result => {
+                // console.log(result)
+                if(result.stdout.length > 10240) result.stdout = result.stdout.slice(0, 1048576);
+                if(result.stderr.length > 10240) result.stderr = result.stderr.slice(0, 1048576);
                 this.setState({
                     result: result,
                     compiling: false
@@ -120,10 +124,14 @@ class FileContent extends React.Component {
             });
             //   console.log("callback: connect!")
         }
-      }
+    //   }
+  }
+  componentWillUpdate(nextProps) {
+    //   console.log("jizz")
   }
   onResult(callback) {
       socket.on('Result', data => {
+          console.log(data)
           let result = {};
           result.id = data.id;
           if (data.type == 0) {
@@ -144,6 +152,7 @@ class FileContent extends React.Component {
       });
   }
   submit(fileid, language, stdin) {
+    //   console.log("submit")
       socket.emit('Submit', {
           fileid: fileid,
           language: language,
