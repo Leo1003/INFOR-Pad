@@ -10,6 +10,7 @@
     "webpack": "webpack --progress --color --watch"
   },
   "dependencies": {
+    "@koa/cors": "^2.2.1",
     "babel-core": "^6.24.1",
     "babel-polyfill": "^6.23.0",
     "clipboard": "^1.6.1",

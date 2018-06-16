@@ -6,6 +6,7 @@ const json = require('koa-json');
 const onerror = require('koa-onerror');
 const bodyparser = require('koa-bodyparser')();
 const logger = require('koa-logger');
+const cors = require('@koa/cors')
 const debug = require('debug')('INFOR-Pad:app');
 const mongoose = require('mongoose');
 const sessionCtrl = require('./controllers/session')
@@ -26,6 +27,7 @@ const router = require('./src/server/router.js')
 onerror(app);
 
 // middlewares
+app.use(cors());
 app.use(bodyparser);
 app.use(json());
 app.use(logger());
