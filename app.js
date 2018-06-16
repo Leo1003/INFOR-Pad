@@ -60,6 +60,7 @@ app.use(vaildation.routes(), vaildation.allowedMethods())
 app.use(serve(__dirname + '/dist'))
 app.use(serve(__dirname + '/semantic/dist'))
 app.use(router.routes())
+app.use(router.allowMethods())
 
 app.io = io
 io.of('/client').use((socket, next) => {
