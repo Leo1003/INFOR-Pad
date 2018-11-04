@@ -9,16 +9,16 @@
 module.exports = {
 
   /**
-   * Retrieve filesystem records.
+   * Retrieve filesystem records by short id
    *
    * @return {Object|Array}
    */
 
-  find: async (ctx) => {
-    if (ctx.query._q) {
-      return strapi.services.filesystem.search(ctx.query);
+  get: async (ctx) => {
+    if (ctx.query.shortid) {
+      return strapi.services.filesystem.findByShort(ctx.query.shortid)
     } else {
-      return strapi.services.filesystem.fetchAll(ctx.query);
+      ctx.response.badRequest("Short ID not Found")
     }
   },
 
@@ -37,23 +37,13 @@ module.exports = {
   },
 
   /**
-   * Count filesystem records.
-   *
-   * @return {Number}
-   */
-
-  count: async (ctx) => {
-    return strapi.services.filesystem.count(ctx.query);
-  },
-
-  /**
    * Create a/an filesystem record.
    *
    * @return {Object}
    */
 
   create: async (ctx) => {
-    return strapi.services.filesystem.add(ctx.request.body);
+    return strapi.services.filesystem.add(ctx.request.params._id, ctx.request.body);
   },
 
   /**

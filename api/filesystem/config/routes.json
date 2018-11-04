@@ -2,23 +2,15 @@
   "routes": [
     {
       "method": "GET",
-      "path": "/filesystems",
-      "handler": "Filesystem.find",
+      "path": "/api/filesystems",
+      "handler": "Filesystem.get",
       "config": {
         "policies": []
       }
     },
     {
       "method": "GET",
-      "path": "/filesystems/count",
-      "handler": "Filesystem.count",
-      "config": {
-        "policies": []
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/filesystems/:_id",
+      "path": "/api/filesystems/:_id",
       "handler": "Filesystem.findOne",
       "config": {
         "policies": []
@@ -26,7 +18,15 @@
     },
     {
       "method": "POST",
-      "path": "/filesystems",
+      "path": "/api/filesystems",
+      "handler": "Filesystem.createTmp",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/filesystems/:_id",
       "handler": "Filesystem.create",
       "config": {
         "policies": []
@@ -34,15 +34,23 @@
     },
     {
       "method": "PUT",
-      "path": "/filesystems/:_id",
+      "path": "/api/filesystems/:_id",
       "handler": "Filesystem.update",
       "config": {
         "policies": []
       }
     },
     {
+      "method": "PUT",
+      "path": "/api/filesystems/:_id/:tgfs",
+      "handler": "Filesystem.move",
+      "config": {
+        "policies": []
+      }
+    },
+    {
       "method": "DELETE",
-      "path": "/filesystems/:_id",
+      "path": "/api/filesystems/:_id",
       "handler": "Filesystem.destroy",
       "config": {
         "policies": []
