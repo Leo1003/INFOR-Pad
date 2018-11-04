@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/usersettings",
+      "handler": "Usersetting.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/usersettings/count",
+      "handler": "Usersetting.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/usersettings/:_id",
+      "handler": "Usersetting.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/usersettings",
+      "handler": "Usersetting.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/usersettings/:_id",
+      "handler": "Usersetting.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/usersettings/:_id",
+      "handler": "Usersetting.destroy",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

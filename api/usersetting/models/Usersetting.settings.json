@@ -1,0 +1,56 @@
+{
+  "connection": "default",
+  "collectionName": "",
+  "info": {
+    "name": "usersetting",
+    "description": ""
+  },
+  "options": {
+    "timestamps": true
+  },
+  "attributes": {
+    "theme": {
+      "default": "monokai",
+      "type": "string"
+    },
+    "fontSize": {
+      "default": 12,
+      "min": 1,
+      "type": "integer"
+    },
+    "showGutter": {
+      "default": true,
+      "type": "boolean"
+    },
+    "highlightActiveLine": {
+      "default": true,
+      "type": "boolean"
+    },
+    "wrapEnabled": {
+      "default": false,
+      "type": "boolean"
+    },
+    "enableBasicAutocompletion": {
+      "default": true,
+      "type": "boolean"
+    },
+    "enableLiveAutocompletion": {
+      "default": true,
+      "type": "boolean"
+    },
+    "tabSize": {
+      "default": 4,
+      "min": 1,
+      "type": "integer"
+    },
+    "keyboardHandler": {
+      "default": "Default",
+      "type": "string"
+    },
+    "user": {
+      "model": "user",
+      "via": "settings",
+      "plugin": "users-permissions"
+    }
+  }
+}

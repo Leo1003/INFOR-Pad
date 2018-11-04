@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/filesystems",
+      "handler": "Filesystem.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/filesystems/count",
+      "handler": "Filesystem.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/filesystems/:_id",
+      "handler": "Filesystem.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/filesystems",
+      "handler": "Filesystem.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/filesystems/:_id",
+      "handler": "Filesystem.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/filesystems/:_id",
+      "handler": "Filesystem.destroy",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

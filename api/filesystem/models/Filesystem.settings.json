@@ -1,0 +1,72 @@
+{
+  "connection": "default",
+  "collectionName": "",
+  "info": {
+    "name": "filesystem",
+    "description": ""
+  },
+  "options": {
+    "timestamps": true
+  },
+  "attributes": {
+    "name": {
+      "default": "",
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "default": "",
+      "type": "string"
+    },
+    "createDate": {
+      "default": "",
+      "type": "date"
+    },
+    "modifyDate": {
+      "default": "",
+      "type": "date"
+    },
+    "isFile": {
+      "default": false,
+      "type": "boolean",
+      "required": true
+    },
+    "isPublic": {
+      "default": false,
+      "type": "boolean"
+    },
+    "shortid": {
+      "default": "",
+      "unique": true,
+      "type": "string"
+    },
+    "editSecret": {
+      "default": "",
+      "type": "string"
+    },
+    "format": {
+      "default": "",
+      "type": "string"
+    },
+    "code": {
+      "default": "",
+      "type": "string"
+    },
+    "stdin": {
+      "default": "",
+      "type": "string"
+    },
+    "files": {
+      "collection": "filesystem",
+      "via": "parent"
+    },
+    "parent": {
+      "model": "filesystem",
+      "via": "files"
+    },
+    "owner": {
+      "model": "user",
+      "plugin": "users-permissions"
+    }
+  }
+}
