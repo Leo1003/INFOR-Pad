@@ -37,7 +37,7 @@
       "type": "boolean",
       "default": false,
       "configurable": false
-    }, 
+    },
     "blocked": {
       "type": "boolean",
       "default": false,
@@ -48,6 +48,22 @@
       "via": "users",
       "plugin": "users-permissions",
       "configurable": false
+    },
+    "createDate": {
+      "default": "",
+      "type": "date"
+    },
+    "lastLogin": {
+      "default": "",
+      "type": "date"
+    },
+    "settings": {
+      "model": "usersetting",
+      "via": "user"
+    },
+    "root": {
+      "model": "filesystem"
     }
-  }
+  },
+  "collectionName": "users-permissions_user"
 }

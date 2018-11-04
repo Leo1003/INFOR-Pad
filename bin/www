@@ -4,8 +4,8 @@
  * Module dependencies.
  */
 
- require('babel-core/register');
- require('babel-polyfill');
+ require('@babel/register');
+ require('@babel/polyfill');
 
 var app = require('../app');
 var debug = require('debug')('INFOR-Pad:server');

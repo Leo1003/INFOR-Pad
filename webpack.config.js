@@ -2,7 +2,7 @@ const webpack = require('webpack')
 
 module.exports = {
     entry: [
-    	'babel-polyfill',
+    	'@babel/polyfill',
         './src/client/index.jsx',
     ],
     output: {
@@ -16,7 +16,7 @@ module.exports = {
                 exclude: /node_modules/,
                 loader: 'babel-loader',
                 query: {
-                    presets: ['es2015','stage-0','react'],
+                    presets: ['@babel/preset-env', '@babel/preset-react'],
                 },
             }
         ],

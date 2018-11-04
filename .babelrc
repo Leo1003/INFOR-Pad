@@ -1,8 +1,9 @@
 {
     "presets": [
-    "es2015",
-    "stage-0",
-    "react",
+        "@babel/preset-env",
+        "@babel/preset-react"
     ],
-    "plugins": []
+    "plugins": [
+        "@babel/plugin-proposal-class-properties"
+    ]
 }
