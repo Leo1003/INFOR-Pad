@@ -14,23 +14,14 @@ module.exports = {
             {
                 test: /\.jsx?/,
                 exclude: /node_modules/,
-                loader: 'babel-loader',
-                query: {
-                    presets: ['@babel/preset-env', '@babel/preset-react'],
-                },
+                loader: 'babel-loader'
             }
         ],
     },
     devServer: {
+        color: true,
         inline: true,
         port: 8080,
     },
-    devtool: 'source-map',
-    // plugins: [
-    //         new webpack.optimize.UglifyJsPlugin({
-    //                 compress: {
-    //                         warnings: false
-    //                 }
-    //         })
-    // ]
+    devtool: 'source-map'
 };

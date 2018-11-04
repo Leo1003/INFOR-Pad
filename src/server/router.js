@@ -9,25 +9,24 @@ import { session, user, file, folder, ui, editor } from '../common/constants/mod
 import routes from '../common/routes/routes.jsx'
 
 router.get('*', (ctx, next) => {
-  match({ routes: routes, location: ctx.url}, (err, redirect, props) => {
+  match({ routes: routes, location: ctx.url }, (err, redirect, props) => {
     if (err) {
-     console.log(err.message)
-     }
-     else if (props) {
+     throw err
+    }
+    else if (props) {
 
-       const store = configureStore({ session, user, file, folder, ui, editor })
+      const store = configureStore({ session, user, file, folder, ui, editor })
 
-       const appHtml = renderToString(
-         <Provider store={store}>
-           <RouterContext {...props}/>
-         </Provider>
-       )
-       const preloadedState = store.getState()
-       ctx.body = renderPage(appHtml, preloadedState)
-     }
-     else {
-       return next()
-     }
+      const appHtml = renderToString(
+        <Provider store={store}>
+          <RouterContext {...props}/>
+        </Provider>
+      )
+      const preloadedState = store.getState()
+      ctx.body = renderPage(appHtml, preloadedState)
+    } else {
+      return next()
+    }
   })
 })
 

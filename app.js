@@ -33,10 +33,6 @@ app.use(json());
 app.use(logger());
 app.use(require('koa-static')(__dirname + '/public'));
 
-app.use(views(__dirname + '/views', {
-    extension: 'ejs'
-}));
-
 // logger
 app.use(async(ctx, next) => {
     const start = new Date();
@@ -48,7 +44,7 @@ app.use(async(ctx, next) => {
 mailCtrl.verifyConfig().then(verified => {
     if (verified == false) {
         console.error('Mail config verify failed!')
-        console.error('Mail verify will not work!') 
+        console.error('Mail verify will not work!')
     } else {
         console.error('Mail verify successfully!')
     }
@@ -59,10 +55,9 @@ app.lxtesterServer = lxtesterServer
 app.use(api.routes(), api.allowedMethods())
 app.use(vaildation.routes(), vaildation.allowedMethods())
 // react routes
-app.use(serve(__dirname + '/dist'))
 app.use(serve(__dirname + '/semantic/dist'))
-app.use(router.routes())
-app.use(router.allowedMethods())
+app.use(serve(__dirname + '/dist'))
+app.use(router.routes(), router.allowedMethods())
 
 app.io = io
 io.of('/client').use((socket, next) => {
