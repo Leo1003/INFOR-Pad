@@ -35,7 +35,7 @@
     {
       "method": "PUT",
       "path": "/api/filesystems/:_id",
-      "handler": "Filesystem.update",
+      "handler": "Filesystem.edit",
       "config": {
         "policies": []
       }
@@ -51,7 +51,7 @@
     {
       "method": "DELETE",
       "path": "/api/filesystems/:_id",
-      "handler": "Filesystem.destroy",
+      "handler": "Filesystem.delete",
       "config": {
         "policies": []
       }
